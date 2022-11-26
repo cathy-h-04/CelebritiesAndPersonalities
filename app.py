@@ -1,7 +1,6 @@
 # Cathy Hou Anh-Thu Le YAY 
 # Personal touch: requires password have at least 5 letters, 1 number, and 1 special character
 
-# jack 
 #heello my name is Jeff
 import os
 
@@ -41,6 +40,7 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+"this is where I addeed new code"
 
 @app.route("/")
 @login_required
