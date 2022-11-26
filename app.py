@@ -1,7 +1,5 @@
-# Cathy Hou Anh-Thu Le YAY 
-# Personal touch: requires password have at least 5 letters, 1 number, and 1 special character
+# Cathy Hou, Anh-Thu Le, Jack Cenovic
 
-#heello my name is Jeff
 import os
 
 from cs50 import SQL
@@ -40,9 +38,6 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-"this is where I addeed new code"
-
-# what is going on skdfhsodfha
 
 @app.route("/")
 @login_required
