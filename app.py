@@ -42,6 +42,8 @@ def after_request(response):
 
 "this is where I addeed new code"
 
+# what is going on skdfhsodfha
+
 @app.route("/")
 @login_required
 def index():
