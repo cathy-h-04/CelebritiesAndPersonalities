@@ -1,0 +1,35 @@
+Reminders: 
+- Always start with git pull
+- Save changes first (File -> Save)
+- git commit -am "your message here. be kinda detailed"
+- git push
+
+To Do:
+
+
+
+
+Semantics/Style/Practice
+- Commiting
+    - Commit for every "chunk" of work that makes sense. Better to commit more often than not. 
+        - Ex: one commit to code footer, or split it into two parts and label them in your message
+
+
+Aesthetics:
+- Color pallete #1: 
+
+
+- Color pallete #2:
+
+
+- Color pallete #3:
+
+
+
+
+
+
+Questions While Coding;
+- Should we test by copying and pasting this code into birthdays to use the API key of Birthdays lab?
+- Test database with php?
+- 
