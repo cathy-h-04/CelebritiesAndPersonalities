@@ -1,6 +1,6 @@
 # Cathy Hou Anh-Thu Le YAY 
 # Personal touch: requires password have at least 5 letters, 1 number, and 1 special character
-# heello my name is Jeff, not it isn't omg you cant do that
+# heello my name is Jeff, not it isn't omg you cant do thata
 import os
 
 from cs50 import SQL
