@@ -1,4 +1,5 @@
-# Cathy Hou, Anh-Thu Le, Jack Cenovic
+# Cathy Hou Anh-Thu Le YAY 
+# Personal touch: requires password have at least 5 letters, 1 number, and 1 special character
 
 import os
 
@@ -6,30 +7,32 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
+# TODO: use a different hash or import what is necessary for this hash
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-from helpers import apology, login_required, lookup, usd
+# importing helper functions
+from CelebritiesAndPersonalities.helpers import apology, login_required, lookup
 
 # Configure application
 app = Flask(__name__)
 
-# Custom filter
-app.jinja_env.filters["usd"] = usd
+# TODO: look into using custom filters with jinja if desired
+    # this filter was added for finance: app.jinja_env.filters["usd"] = usd
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Configure CS50 Library to use SQLite database
+# TODO: IN finance pset this code configures CS50 Library to use SQLite database, so adjust to our needs
 db = SQL("sqlite:///finance.db")
 
-# Make sure API key is set
+# TODO: This code in finance makes sure API key is set
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
-
+# TODO: adjust this code below from finance pset to what we want
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -39,113 +42,31 @@ def after_request(response):
     return response
 
 
+# TODO: add any input necessary, although I don't think there is any necessary
 @app.route("/")
-@login_required
+# @login_required
 def index():
-    # query for the sum of shares for a symbol and the symbol across all of the user's transactions
-    stock_data = db.execute(
-        "SELECT symbol, SUM(shares) AS shares FROM transactions WHERE user_id = ? GROUP BY symbol", session["user_id"])
 
-    # keeping track of a variable for the total value of all of the user's stocks
-    stock_total = 0
-
-    # looping through all of a user's transactions
-    for row in stock_data:
-
-        # looking up symbol to get a dictionary wth current name, price, symbol of stock
-        item = lookup(row["symbol"])
-
-        # calculating the total price for the row
-        total = item["price"] * row["shares"]
-
-        # adding a field total and corresponding value for the row
-        row["total"] = total
-
-        # updating total value of all the user's stocks
-        stock_total += total
-
-        # adding a field name and finding name value of the stock
-        row["name"] = item["name"]
-
-        # adding a field price and finding price value of the stock
-        row["price"] = item["price"]
-
-    # query to find the user's cash as key value pair
-    user_balance = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
-
-    # finding the actual cash value
-    cash = user_balance[0]["cash"]
-
-    grand_total = stock_total + cash
-
-    return render_template("index.html", stock_data=stock_data, grand_total=grand_total, cash=cash)
+    return render_template("index.html")
 
 
-@app.route("/buy", methods=["GET", "POST"])
-@login_required
-def buy():
-    if request.method == "POST":
-
-        # looking up the symbol from user input, getting a dictionary describing the stock in return
-        stock = lookup(request.form.get("symbol"))
-        symbol = request.form.get("symbol")
-
-        # finding the user's current cash amount
-        balance = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
-
-        # checking that user has inputted a symbol
-        if not symbol:
-            return apology("must provide symbol", 403)
-
-        # checking that symbol exists
-        elif not stock:
-            return apology("symbol does not exist", 400)
-
-        # checking that user has inputted number of shares they want
-        elif not request.form.get("shares"):
-            return apology("must provide number of shares", 403)
-
-        # checking that shares is a positive integer
-        elif not (request.form.get("shares").isdigit() and int(request.form.get("shares")) > 0):
-            return apology("shares must be a positive integer", 400)
-
-        shares = int(request.form.get("shares"))
-
-        # checking that stock price does not exceed user cash balance
-        if stock["price"] * shares > balance[0]["cash"]:
-            return apology("Insufficient balance to purchase stock", 403)
-
-        # assigning variables using dictionary of stock with user's symbol
-        currentPrice = stock["price"]
-        name = stock["name"]
-        # just in case lookup still runs but the symbol is slightly mispelled
-        symbol = stock["symbol"]
-
-        total = shares * currentPrice
-        timestamp = datetime.now()
-
-        # inserting row into transactions representing this purchase
-        db.execute("INSERT INTO transactions (user_id, shares, symbol, price, name, total, timestamp) VALUES(?, ?, ?, ?, ?, ?, ?)",
-                   session["user_id"], shares, symbol, currentPrice, name, total, timestamp)
-
-        # updating user's price after buying stock
-        db.execute("UPDATE users SET cash = cash - ? WHERE id = ?", total, session["user_id"])
-
-        # redirects them back to the portfolio after submitting
-        return redirect("/")
-
-    else:
+# TODO: adjust to what we want here (I think about is a static page though)
+@app.route("/about", methods=["GET", "POST"])
+def about():
         # User reached route via GET (as by clicking a link or via redirect)
-        return render_template("buy.html")
+        return render_template("about.html")
 
 
-@app.route("/history")
+# 
+@app.route("/match")
 @login_required
-def history():
+def match():
 
     # querying for all of the user's transactions
     user_transactions = db.execute("SELECT * FROM transactions WHERE user_id = ?", session["user_id"])
     return render_template("history.html", transactions=user_transactions)
+
+
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -193,9 +114,9 @@ def logout():
     return redirect("/")
 
 
-@app.route("/quote", methods=["GET", "POST"])
+@app.route("/compatibility", methods=["GET", "POST"])
 @login_required
-def quote():
+def compatibility():
 
     if request.method == "POST":
 
@@ -348,7 +269,7 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-from helpers import apology, login_required, lookup, usd
+from CelebritiesAndPersonalities.helpers import apology, login_required, lookup, usd
 
 # Configure application
 app = Flask(__name__)
