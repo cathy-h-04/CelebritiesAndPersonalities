@@ -2,6 +2,9 @@
 # Personal touch: requires password have at least 5 letters, 1 number, and 1 special character
 
 #heello my name is Jeff
+
+
+
 import os
 
 from cs50 import SQL
