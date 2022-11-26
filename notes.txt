@@ -14,7 +14,7 @@ Semantics/Style/Practice
 - Commiting
     - Commit for every "chunk" of work that makes sense. Better to commit more often than not. 
         - Ex: one commit to code footer, or split it into two parts and label them in your message
-    - No need to commit w/message if it's just minor edits 
+    - if just minor edits, just write "small details" as message
 
 
 Aesthetics:
