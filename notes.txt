@@ -1,6 +1,7 @@
 Reminders: 
 - Always start with git pull
 - Save changes first (File -> Save)
+- git add * if you added any files
 - git commit -am "your message here. be kinda detailed"
 - git push
 
