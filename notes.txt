@@ -14,6 +14,7 @@ Semantics/Style/Practice
 - Commiting
     - Commit for every "chunk" of work that makes sense. Better to commit more often than not. 
         - Ex: one commit to code footer, or split it into two parts and label them in your message
+    - No need to commit w/message if it's just minor edits 
 
 
 Aesthetics:
@@ -33,4 +34,4 @@ Aesthetics:
 Questions While Coding;
 - Should we test by copying and pasting this code into birthdays to use the API key of Birthdays lab?
 - Test database with php?
-- 
+- Do we want the navbar to be displayed the same for every page? Or only when a user registers they get access to the tests? 
