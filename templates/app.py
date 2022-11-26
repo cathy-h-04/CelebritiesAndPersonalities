@@ -1,4 +1,4 @@
-# Cathy Hou
+# Cathy Hou Anh-Thu Le YAY
 # Personal touch: requires password have at least 5 letters, 1 number, and 1 special character
 
 import os
