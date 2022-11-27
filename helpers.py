@@ -40,7 +40,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# TODO: this is where we will add our own special API Key
+# TODO: this is where we will add our own special API Key (SCRAPING!)
 def lookup(symbol):
     """Look up quote for symbol."""
 
