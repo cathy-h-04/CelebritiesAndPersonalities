@@ -55,16 +55,6 @@ def about():
         return render_template("about.html")
 
 
- # TODO: 
-@app.route("/match")
-@login_required
-def match():
-
-
-
-
-
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -129,6 +119,20 @@ def compatibility():
         mbti = request.form.get("mbti")
         enne = request.form.get("enne")
         astro = request.form.get("astro")
+
+        if not request.form.get("mbti_rating"):
+            return apology("must input your myers-briggs type")
+
+        if not request.form.get("enne_rating"):
+            return apology("must input your enneagram type")
+
+        if not request.form.get("astro_rating"):
+            return apology("must input your astrological sign")
+
+        # declaring each user's ratings as variables
+        mbti_rating = request.form.get("mbti_rating")
+        enne_rating = request.form.get("enne_rating")
+        astro_rating = request.form.get("astro_rating")
 
 
 
