@@ -115,13 +115,23 @@ def logout():
 def compatibility():
 
     if request.method == "POST":
+        # checking that user has inputted the three characteristics for assessment
+        if not request.form.get("mbti"):
+            return apology("must input your myers-briggs type")
 
-        # checking that user has inputted a symbol
-        if not request.form.get("symbol"):
-            return apology("must input a symbol")
+        if not request.form.get("enne"):
+            return apology("must input your enneagram type")
 
-        # looking up stock for user's symbol
-        stock = lookup(request.form.get("symbol"))
+        if not request.form.get("astro"):
+            return apology("must input your astrological sign")
+
+        # declaring each user's input as variables
+        mbti = request.form.get("mbti")
+        enne = request.form.get("enne")
+        astro = request.form.get("astro")
+
+
+
 
         # checking that symbol exists
         if not stock:
