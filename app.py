@@ -100,9 +100,9 @@ def logout():
     return redirect("/")
 
 
-@app.route("/compatibility", methods=["GET", "POST"])
+@app.route("/test", methods=["GET", "POST"])
 @login_required
-def compatibility():
+def test():
 
     if request.method == "POST":
         # checking that user has inputted the three characteristics for assessment
