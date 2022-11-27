@@ -134,7 +134,10 @@ def compatibility():
         enne_rating = request.form.get("enne_rating")
         astro_rating = request.form.get("astro_rating")
 
-
+        # TODO: change this for loop so that it actually cycles through celebrities
+        for celebrity in celebrities:
+            for mbti in celebrity:
+                 
 
 
         # checking that symbol exists
