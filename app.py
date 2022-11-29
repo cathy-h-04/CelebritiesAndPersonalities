@@ -111,6 +111,11 @@ def test():
     if request.method == "POST":
         # checking that user has inputted the three characteristics for assessment
         
+        # declaring each user's input as variables
+        mbti = request.form.get("mbti")
+        enne = request.form.get("enne")
+        astro = request.form.get("astro")
+ 
         if not mbti:
             return apology("Must input your myers-briggs type")
 
@@ -119,11 +124,6 @@ def test():
 
         if not astro:
             return apology("Must input your astrological sign")
-
-        # declaring each user's input as variables
-        mbti = request.form.get("mbti")
-        enne = request.form.get("enne")
-        astro = request.form.get("astro")
 
         if not mbti_rating:
             return apology("Must input your myers-briggs type")
@@ -183,7 +183,7 @@ def register():
         if len(rows) > 0:
             return apology("username already exists", 400)
 
-        # personal touch: checking that the password has at least one digit, 1 special character, and 5 letters in their password
+        # Checking that the password has at least one digit, 1 special character, and 5 letters in their password
         digits = 0
         letters = 0
         special_characters = 0
@@ -213,7 +213,7 @@ def register():
     else:
         return render_template("register.html")
 
-# !!!! may need to change route
+# TODO: !!!! may need to change route
 @app.route("/passwordchange", methods=["GET", "POST"])
 def passwordchange():
     """Change password"""
@@ -260,5 +260,20 @@ def results():
 
 
 # TODO: Code Compatibility Page 
+@app.route("/compatibility", methods=["GET", "POST"])
+@login_required
+def compatibility():
+
+    if request.method == "POST":
+        # checking that user has inputted the three characteristics for assessment
+        
+        # declaring each user's input as variables
+        celeb = request.form.get("name")
+        
+        if not celeb:
+            return apology("Must input a celebrity")
+
+        #TODO: finish implementation of compatibility
+
 
 # TODO: Code Test Page
