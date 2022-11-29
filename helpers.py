@@ -8,6 +8,9 @@ import urllib.parse
 from flask import redirect, render_template, request, session
 from functools import wraps
 
+import requests
+import json
+
 
 
 # TODO: alter apology to be specific to our website (if this is how we want to present edgecases)
@@ -64,3 +67,15 @@ def lookup(symbol):
     except (KeyError, TypeError, ValueError):
         return None
 
+def name_characteristics(name):
+ # Credit for the below code: https://forum.freecodecamp.org/t/extracting-data-from-json/452527
+# Takes the user's inputted name as the input
+    nationality = requests.get('https://api.nationalize.io/?name='+name)
+    gender = requests.get('https://api.genderize.io/?name='+name)
+    age = requests.get('https://api.agify.io/?name='+name)
+
+    nationality = (nationality.json()['country'][0])['country_id']
+    gender = gender.json()['gender']
+    age = age.json()['age']
+
+    return age, gender, nationality
