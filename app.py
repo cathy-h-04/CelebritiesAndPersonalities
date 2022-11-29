@@ -5,6 +5,7 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
+
 # TODO: use a different hash or import what is necessary for this hash
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
@@ -23,7 +24,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# TODO: IN finance pset this code configures CS50 Library to use SQLite database, so adjust to our needs
+# TODO: IN finance pset this code configures CS50 Library to use SQLite database, so adjust to our need
 db = SQL("sqlite:///finance.db")
 
 # TODO: This code in finance makes sure API key is set
@@ -106,28 +107,29 @@ def test():
 
     if request.method == "POST":
         # checking that user has inputted the three characteristics for assessment
-        if not request.form.get("mbti"):
-            return apology("must input your myers-briggs type")
+        
+        if not mbti:
+            return apology("Must input your myers-briggs type")
 
-        if not request.form.get("enne"):
-            return apology("must input your enneagram type")
+        if not enne:
+            return apology("Must input your enneagram type")
 
-        if not request.form.get("astro"):
-            return apology("must input your astrological sign")
+        if not astro:
+            return apology("Must input your astrological sign")
 
         # declaring each user's input as variables
         mbti = request.form.get("mbti")
         enne = request.form.get("enne")
         astro = request.form.get("astro")
 
-        if not request.form.get("mbti_rating"):
-            return apology("must input your myers-briggs type")
+        if not mbti_rating:
+            return apology("Must input your myers-briggs type")
 
-        if not request.form.get("enne_rating"):
-            return apology("must input your enneagram type")
+        if not enne_rating:
+            return apology("Must input your enneagram type")
 
-        if not request.form.get("astro_rating"):
-            return apology("must input your astrological sign")
+        if not astro_rating:
+            return apology("Must input your astrological sign")
 
         # declaring each user's ratings as variables
         mbti_rating = request.form.get("mbti_rating")
@@ -139,12 +141,6 @@ def test():
             for mbti in celebrity:
                  
 
-
-        # checking that symbol exists
-        if not stock:
-            return apology("symbol doesn't exist")
-        else:
-            return render_template("quoted.html", stock=stock)
 
      # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -161,7 +157,7 @@ def register():
 
         username = request.form.get("username")
         password = request.form.get("password")
-        confirmation = request.form.get("confirmation")
+        confirmation = request.form.get("confirmpassword")
 
         # Ensure password was submitted
         if not password:
@@ -214,58 +210,52 @@ def register():
     else:
         return render_template("register.html")
 
+# !!!! may need to change route
+@app.route("/passwordchange", methods=["GET", "POST"])
+def passwordchange():
+    """Change password"""
+    # user reached route via GET
+    session.clear()
 
+    if request.method == "GET":
+        return render_template("passwordchange.html")
+
+    # user reached route via POST
+    else:
+
+        # make sure user inputs a password, username and confirms password
+        if not username:
+            return apology("Must provide username.")
+
+        elif not newpassword:
+            return apology("Must provide a new password.")
+
+        elif not newconfirmation:
+            return apology("Must confirm new password.")
+
+        # get new password, password confirmation, & username
+        username = request.form.get("username")
+        newpassword = request.form.get("new_password")
+        newconfirmation = request.form.get("new_confirmation")
+
+        # check if old password equals new password
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        if check_password_hash(rows[0]["hash"], newpassword):
+            return apology("Repeated password", 403)
+
+        # update new password into database
+        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
+
+    # redirect to login page
+    return redirect("/login")
+
+
+# TODO: Code Result page
 @app.route("/results", methods=["GET", "POST"])
 @login_required
 def results():
 
-    # querying for all of the symbols corresponding to the stocks of the user for which there is at least 1 share
-    symbols = db.execute(
-        "SELECT symbol FROM transactions WHERE user_id = ? GROUP BY symbol HAVING SUM(shares) > 0", session["user_id"])
 
-    if request.method == "POST":
+# TODO: Code Compatibility Page 
 
-        symbol_input = request.form.get("symbol")
-
-        # finding the user's total shares of the stock corresponding to the inputted symbol
-        stock_shares = db.execute("SELECT SUM(shares) AS shares FROM transactions WHERE user_id = ? AND symbol = ? GROUP BY symbol",
-                                  session["user_id"], request.form.get("symbol"))[0]["shares"]
-
-        # checking that symbol has been inputted
-        if not symbol_input:
-            return apology("must select symbol", 400)
-
-        # checking that shares has been inputted
-        elif not request.form.get("shares"):
-            return apology("must input number of shares", 400)
-
-        # checking that shares is a positive integer
-        elif not (request.form.get("shares").isdigit() and int(request.form.get("shares")) > 0):
-            return apology("shares must be a positive integer", 400)
-
-        # checking that user has enough shares of stock that they want to sell
-        elif int(request.form.get("shares")) > stock_shares:
-            return apology("not enough shares of stock", 400)
-
-        adjust_shares = int(request.form.get("shares"))
-
-        stock = lookup(symbol_input)
-        currentPrice = stock["price"]
-        symbol = stock["symbol"]
-        name = stock["name"]
-        total = currentPrice * adjust_shares
-        timestamp = datetime.now()
-
-        # inputting user's sale into transactions database
-        db.execute("INSERT INTO transactions (user_id, shares, symbol, price, name, total, timestamp) VALUES(?, ?, ?, ?, ?, ?, ?)",
-                   session["user_id"], adjust_shares * -1, symbol, currentPrice, name, total, timestamp)
-
-    # updating user's cash value
-        db.execute("UPDATE users SET cash = cash + ? WHERE id = ?", total, session["user_id"])
-
-        return redirect("/")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("sell.html", symbols=symbols)
-
+# TODO: Code Test Page
