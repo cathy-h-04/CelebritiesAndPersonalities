@@ -1,6 +1,9 @@
 
 import os
 
+import sqlite3
+from sqlite3 import Error
+
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -24,12 +27,12 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# TODO: IN finance pset this code configures CS50 Library to use SQLite database, so adjust to our need
+# TODO: configure this for our database
 db = SQL("sqlite:///finance.db")
 
-# TODO: This code in finance makes sure API key is set
-if not os.environ.get("API_KEY"):
-    raise RuntimeError("API_KEY not set")
+# # TODO: This code in finance makes sure API key is set
+# if not os.environ.get("API_KEY"):
+#     raise RuntimeError("API_KEY not set")
 
 # TODO: adjust this code below from finance pset to what we want
 @app.after_request
