@@ -274,6 +274,3 @@ def compatibility():
             return apology("Must input a celebrity")
 
         #TODO: finish implementation of compatibility
-
-
-# TODO: Code Test Page
