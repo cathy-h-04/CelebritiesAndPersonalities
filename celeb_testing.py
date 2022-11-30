@@ -18,7 +18,7 @@ from sqlite3 import Error
 def create_connection(path):
     connection = None
     try:
-        connection = sqlite3.connect("/Users/jack.cenovic/Desktop/Programming/cs50_final_project/CelebritiesAndPersonalities/celebs.db")
+        connection = sqlite3.connect("/Users/pzhang/Desktop/CS_Final_Project/CelebritiesAndPersonalities/celebs.db")
         print("Connection to SQLite DB successful")
     except Error as e:
         print("The error occurred")
@@ -29,10 +29,8 @@ connection = create_connection("E:\\celebs.db")
 
 db = connection.cursor()
 
-#db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 
-
-
+db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 
 # User's input
 # user_name = input("Input your first name: ")
