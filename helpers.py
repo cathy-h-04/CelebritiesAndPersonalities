@@ -79,3 +79,4 @@ def name_characteristics(name):
     age = age.json()['age']
 
     return age, gender, nationality
+
