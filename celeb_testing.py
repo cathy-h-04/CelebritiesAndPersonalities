@@ -4,7 +4,7 @@
 import json
 import os
 
-import requests
+import pip._vendor.requests 
 
 
 #from flask import Flask, flash, redirect, render_template, request, session
@@ -30,14 +30,14 @@ connection = create_connection("E:\\celebs.db")
 db = connection.cursor()
 
 
-db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
+#db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 
 # User's input
 # user_name = input("Input your first name: ")
 
 # Nationality
 
-celebs = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
+celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
 
 celeb_data = (celebs.json()["profiles"])
 
