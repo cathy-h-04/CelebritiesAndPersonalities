@@ -52,8 +52,7 @@ for celeb in celeb_data:
     celeb_personality = celeb["personality_type"]
     mbti = celeb_personality.split()[0]
     enne = celeb_personality.split()[1]
-    print(celeb_name,mbti,enne)
-    db.execute("INSERT into celebs (name, MBTI, enne, points) VALUES (?, ?, ?, ?)", celeb_name, mbti, enne, '0')
+    db.execute("INSERT into celebs (id, name, MBTI, enne, points) VALUES (?, ?, ?, ?)", celeb_name, mbti, enne, '0')
 
 
     
