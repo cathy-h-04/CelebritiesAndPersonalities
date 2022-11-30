@@ -137,14 +137,6 @@ def test():
         astro_rating = request.form.get("astro_rating")
 
         # TODO: change this for loop so that it actually cycles through celebrities
-        for celebrity in celebrities:
-            for mbti in celebrity:
-                 
-
-
-     # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
