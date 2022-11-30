@@ -4,7 +4,7 @@
 import json
 import os
 
-import requests
+import pip._vendor.requests 
 
 
 #from flask import Flask, flash, redirect, render_template, request, session
@@ -18,7 +18,7 @@ from sqlite3 import Error
 def create_connection(path):
     connection = None
     try:
-        connection = sqlite3.connect("/Users/jack.cenovic/Desktop/Programming/cs50_final_project/CelebritiesAndPersonalities/celebs.db")
+        connection = sqlite3.connect("/Users/pzhang/Desktop/CS_Final_Project/CelebritiesAndPersonalities/celebs.db")
         print("Connection to SQLite DB successful")
     except Error as e:
         print("The error occurred")
@@ -29,17 +29,16 @@ connection = create_connection("E:\\celebs.db")
 
 db = connection.cursor()
 
+
 #db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
-
-
-
 
 # User's input
 # user_name = input("Input your first name: ")
 
 # Nationality
 
-celebs = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
+celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
+
 
 celeb_data = (celebs.json()["profiles"])
 
@@ -54,9 +53,12 @@ for celeb in celeb_data:
     enne = celeb_personality.split()[1]
     print(celeb_name,mbti,enne)
     db.execute("INSERT INTO celebs (name, MBTI, enne, points) VALUES (?, ?, ?, ?)", (celeb_name, mbti, enne, '0'))
+    
+    connection.commit()
 
 
     
     #print(celeb_name, celeb_personality)
+db.close()
     
 
