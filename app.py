@@ -175,7 +175,9 @@ def test():
         
         points = 0
         
-        for i in range(200):
+        celeb_count = db.execute("SELECT count(id) FROM celebs")
+        
+        for i in range(celeb_count):
             celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
             
             for i in range(0, 3):
