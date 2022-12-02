@@ -173,17 +173,17 @@ def test():
         user_age = age.json()['age']
 
         db.execute("SELECT * FROM celebs")
-        
-        points = 0
-        celeb_enne = 0
-        celeb_mbti = 0
-        celeb_count = 0
+    
         
         celeb_count = db.execute("SELECT count(id) FROM celebs")
         
         for i in range(celeb_count):
-            celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
+            points = 0
+            celeb_enne = 0
+            celeb_mbti = 0
+            celeb_count = 0
             
+            celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
             for i in range(0, 3):
                 if celeb_mbti[i] == mbti[i]:
                     points += 0.25(mbti_rating)
