@@ -7,12 +7,6 @@ import os
 
 import pip._vendor.requests 
 
-
-#from flask import Flask, flash, redirect, render_template, request, session
-#from flask_session import Session
-#from tempfile import mkdtemp
-#app = Flask(__name__)
-
 import sqlite3
 from sqlite3 import Error
 
@@ -31,7 +25,8 @@ connection = create_connection("E:\\celebs.db")
 
 db = connection.cursor()
 
-db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
+
+db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 
 celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
 characters = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
@@ -41,10 +36,7 @@ character_data = (characters.json()["profiles"])
 
 data = celeb_data + character_data
 
-
-
-
-#print(len(celeb_data))
+#print(len(data))
 
 # for i in range(100):
 # for celeb in celeb_data:
@@ -67,12 +59,15 @@ for person in data:
     mbti = person_personality.split()[0]
     enne = person_personality.split()[1]
     #print(person_name,mbti,enne)
-    db.execute("INSERT INTO celebs (name, MBTI, enne, points) VALUES (?, ?, ?, ?)", (person_name, mbti, enne, '0'))
+    
+    ("SELECT COUNT from celebs WHERE name = ?", person_name) == 0
+    
+    
+    if ("SELECT COUNT from celebs WHERE name = ?", person_name) == 0:
+        db.execute("INSERT INTO celebs (name, MBTI, enne, points) VALUES (?, ?, ?, ?)", (person_name, mbti, enne, '0'))
     
     connection.commit()
 
-
-db.execute("DROP TABLE celebs")
 
 db.close()
     
