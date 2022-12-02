@@ -27,10 +27,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# TODO: configure this for our database
-db = SQL("sqlite:///finance.db")
+# TODO: configure this for our database as necessary (not sure if this is okay or if we need change)
+db = SQL("sqlite:///celebs.db")
 
-# # TODO: This code in finance makes sure API key is set
+# # TODO: This code in finance makes sure API key is set, so we may want similar code
 # if not os.environ.get("API_KEY"):
 #     raise RuntimeError("API_KEY not set")
 
