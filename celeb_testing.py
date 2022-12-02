@@ -1,6 +1,7 @@
 # Credit for the below code: https://forum.freecodecamp.org/t/extracting-data-from-json/452527
 # Profiler guesses your age, gender and nationality
 
+
 import json
 import os
 
