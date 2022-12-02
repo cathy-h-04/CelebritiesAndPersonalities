@@ -1,3 +1,4 @@
+# TODO: clean up and determine which packages are actually necessary
 
 import os
 
@@ -9,7 +10,6 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 
-# TODO: use a different hash or import what is necessary for this hash
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
