@@ -43,10 +43,21 @@ def create_connection(path):
     return connection
 
 connection = create_connection("E:\\celebs.db")
+connection2 = sqlite3.connect("users.db")
 
 db = connection.cursor()
+db2 = connection2.cursor()
 
 db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
+db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL)")
+
+celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
+characters = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
+
+celeb_data = (celebs.json()["profiles"])
+character_data = (characters.json()["profiles"])
+
+data = celeb_data + character_data
 
 # Configure application
 app = Flask(__name__)
@@ -109,7 +120,7 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = db2.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
@@ -242,7 +253,7 @@ def register():
 
         # checking that username is unique
         # TODO: fix this implementation of the users database 
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
         if len(rows) > 0:
             return apology("username already exists", 400)
 
@@ -267,8 +278,7 @@ def register():
             return apology("Password must not contain username")
 
         # adding user's username and hashed password into database
-        # TODO: fix this implementation for the users database
-        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, generate_password_hash(password))
+        db2.execute("INSERT INTO users (username, hash) VALUES(?, ?)", (username, generate_password_hash(password)))
 
         # Confirm registration
         return redirect("/login")
@@ -306,13 +316,12 @@ def passwordchange():
         newconfirmation = request.form.get("new_confirmation")
 
         # check if old password equals new password
-        # TODO: fix this implementation of the users database 
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
         if check_password_hash(rows[0]["hash"], newpassword):
             return apology("Repeated password", 403)
 
         # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
+        db2.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
 
     # redirect to login page
     return redirect("/login")
