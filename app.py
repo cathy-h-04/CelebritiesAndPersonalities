@@ -171,7 +171,24 @@ def test():
 
 
         # TODO: change this for loop so that it actually cycles through celebrities
-
+        db.execute("SELECT * FROM celebs")
+        
+        points = 0
+        
+        for i in range(200):
+            celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
+            
+            for i in range(0, 3):
+                if celeb_mbti[i] == mbti[i]:
+                    points += 0.25(mbti_rating)
+                 
+            
+            celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
+            
+            if celeb_enne[0] == enne:
+                points += enne_rating
+            
+            db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
 
 
      # User reached route via GET (as by clicking a link or via redirect)
