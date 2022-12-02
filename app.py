@@ -14,7 +14,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
 # importing helper functions
-from CelebritiesAndPersonalities.helpers import apology, login_required, lookup
+from CelebritiesAndPersonalities.helpers import apology, login_required
 
 import json
 
@@ -208,10 +208,10 @@ def test():
             if celeb_nat == user_nat:
                 points += 1/3(name_rating)
             
-            if celeb_gen == user_nat:
+            if celeb_gen == user_gen:
                 points += 1/3(name_rating)
             
-            if celeb_age == user_nat:
+            if celeb_age == user_age:
                 points += 1/3(name_rating)
             
             db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
@@ -329,11 +329,11 @@ def passwordchange():
 
 
 # TODO: Code Result page
-@app.route("/results", methods=["GET", "POST"])
-@login_required
-def results():
-    if request.method == "POST":        
-        # TODO: add code for results here as necessary
+# @app.route("/results", methods=["GET", "POST"])
+# @login_required
+# def results():
+#     if request.method == "POST":        
+#         # TODO: add code for results here as necessary
 
 
 # TODO: Code Compatibility Page 
