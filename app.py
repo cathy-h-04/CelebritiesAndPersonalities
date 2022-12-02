@@ -214,7 +214,8 @@ def test():
             if celeb_age == user_nat:
                 points += 1/3(name_rating)
             
-            db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
+            db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
+            #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
 
 
      # User reached route via GET (as by clicking a link or via redirect)
