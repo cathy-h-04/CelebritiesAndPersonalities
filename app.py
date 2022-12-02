@@ -1,15 +1,15 @@
+# TODO: clean up and determine which packages are actually necessary
 
 import os
 
 import sqlite3
 from sqlite3 import Error
 
-from cs50 import SQL
+# from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
-from flask_session import Session
+# from flask_session import Session
 from tempfile import mkdtemp
 
-# TODO: use a different hash or import what is necessary for this hash
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
@@ -27,10 +27,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# TODO: configure this for our database
-db = SQL("sqlite:///finance.db")
+# TODO: configure this for our database as necessary (not sure if this is okay or if we need change)
+db = SQL("sqlite:///celebs.db")
 
-# # TODO: This code in finance makes sure API key is set
+# # TODO: This code in finance makes sure API key is set, so we may want similar code
 # if not os.environ.get("API_KEY"):
 #     raise RuntimeError("API_KEY not set")
 
@@ -108,14 +108,18 @@ def logout():
 @login_required
 def test():
 
-    if request.method == "POST":
-        # checking that user has inputted the three characteristics for assessment
-        
+    if request.method == "POST":        
         # declaring each user's input as variables
         mbti = request.form.get("mbti")
         enne = request.form.get("enne")
         astro = request.form.get("astro")
+        
+        # declaring each user's ratings as variables
+        mbti_rating = request.form.get("mbti_rating")
+        enne_rating = request.form.get("enne_rating")
+        astro_rating = request.form.get("astro_rating")
  
+        # checking that user has inputted the three characteristics for assessment
         if not mbti:
             return apology("Must input your myers-briggs type")
 
@@ -125,21 +129,24 @@ def test():
         if not astro:
             return apology("Must input your astrological sign")
 
+        # checking that user has rated each characteristic
         if not mbti_rating:
-            return apology("Must input your myers-briggs type")
+            return apology("Must input your myers-briggs rating")
 
         if not enne_rating:
-            return apology("Must input your enneagram type")
+            return apology("Must input your enneagram rating")
 
         if not astro_rating:
-            return apology("Must input your astrological sign")
+            return apology("Must input your astrological rating")
 
-        # declaring each user's ratings as variables
-        mbti_rating = request.form.get("mbti_rating")
-        enne_rating = request.form.get("enne_rating")
-        astro_rating = request.form.get("astro_rating")
 
         # TODO: change this for loop so that it actually cycles through celebrities
+
+
+
+     # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("test.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -171,6 +178,7 @@ def register():
             return apology("passwords must match", 400)
 
         # checking that username is unique
+        # TODO: fix this implementation of the users database 
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         if len(rows) > 0:
             return apology("username already exists", 400)
@@ -196,6 +204,7 @@ def register():
             return apology("Password must not contain username")
 
         # adding user's username and hashed password into database
+        # TODO: fix this implementation for the users database
         db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, generate_password_hash(password))
 
         # Confirm registration
@@ -234,6 +243,7 @@ def passwordchange():
         newconfirmation = request.form.get("new_confirmation")
 
         # check if old password equals new password
+        # TODO: fix this implementation of the users database 
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         if check_password_hash(rows[0]["hash"], newpassword):
             return apology("Repeated password", 403)
@@ -249,6 +259,8 @@ def passwordchange():
 @app.route("/results", methods=["GET", "POST"])
 @login_required
 def results():
+    if request.method == "POST":        
+        # TODO: add code for results here as necessary
 
 
 # TODO: Code Compatibility Page 
@@ -266,3 +278,5 @@ def compatibility():
             return apology("Must input a celebrity")
 
         #TODO: finish implementation of compatibility
+    return render_template("compatibility.html")
+
