@@ -194,3 +194,36 @@ body {
     color: #a5a5a5;
     letter-spacing: 1px;
 }
+
+.left
+{
+    text-align: left;
+}
+
+.boxed
+{
+    border: 3px solid steelblue;
+}
+
+.column {
+    border: 3px solid steelblue;
+    float: left;
+    width: 32.75%;
+    padding: 10px;
+  }
+
+  .marginleft
+  {
+    margin-left: 12px;
+  }
+
+  .marginright
+  {
+    margin-right: 12px;
+  }
+
+  .btn-color
+  {
+    background-color: #7AAAA3;
+    color: white;
+  }

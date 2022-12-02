@@ -39,6 +39,7 @@ db = connection.cursor()
 
 celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
 
+
 celeb_data = (celebs.json()["profiles"])
 
 
@@ -52,9 +53,12 @@ for celeb in celeb_data:
     enne = celeb_personality.split()[1]
     print(celeb_name,mbti,enne)
     db.execute("INSERT INTO celebs (name, MBTI, enne, points) VALUES (?, ?, ?, ?)", (celeb_name, mbti, enne, '0'))
+    
+    connection.commit()
 
 
     
     #print(celeb_name, celeb_personality)
+db.close()
     
 

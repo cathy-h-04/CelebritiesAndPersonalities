@@ -141,13 +141,10 @@ def test():
 
 
         # TODO: change this for loop so that it actually cycles through celebrities
-        for celebrity in celebrities:
-            for mbti in celebrity:
-                 
+
 
 
      # User reached route via GET (as by clicking a link or via redirect)
-     # TODO: get this else statement functioning (pylance is giving me an error)
     else:
         return render_template("test.html")
 
