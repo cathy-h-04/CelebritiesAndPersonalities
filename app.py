@@ -16,6 +16,36 @@ from datetime import datetime
 # importing helper functions
 from CelebritiesAndPersonalities.helpers import apology, login_required, lookup
 
+import json
+
+import pip._vendor.requests 
+
+
+#from flask import Flask, flash, redirect, render_template, request, session
+#from flask_session import Session
+#from tempfile import mkdtemp
+#app = Flask(__name__)
+
+import sqlite3
+from sqlite3 import Error
+
+def create_connection(path):
+    connection = None
+    try:
+        connection = sqlite3.connect("os.path.basename(celebs.db)")
+        #connection = sqlite3.connect("/Users/pzhang/Desktop/CS_Final_Project/CelebritiesAndPersonalities/celebs.db")
+        print("Connection to SQLite DB successful")
+    except Error as e:
+        print("The error occurred")
+
+    return connection
+
+connection = create_connection("E:\\celebs.db")
+
+db = connection.cursor()
+
+db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
+
 # Configure application
 app = Flask(__name__)
 
@@ -153,6 +183,7 @@ def test():
 def register():
 
     # Forget any user_id
+    # TODO: consider whether using session.clear might be problematic since a user could misclick on a file
     session.clear()
 
     if request.method == "POST":
