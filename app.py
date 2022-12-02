@@ -14,7 +14,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
 # importing helper functions
-from CelebritiesAndPersonalities.helpers import apology, login_required
+from helpers import apology, login_required
 
 import json
 
