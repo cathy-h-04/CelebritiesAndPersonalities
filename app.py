@@ -69,6 +69,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+
 # TODO: configure this for our database as necessary (not sure if this is okay or if we need change)
 #db = SQL("sqlite:///celebs.db")
 
@@ -88,17 +89,23 @@ def after_request(response):
 
 # TODO: add any input necessary, although I don't think there is any necessary
 @app.route("/")
-# @login_required
 def index():
 
     return render_template("index.html")
 
 
 # TODO: adjust to what we want here (I think about is a static page though)
-@app.route("/about", methods=["GET", "POST"])
+@app.route("/about", methods=["GET"])
+#@app.route("/about", methods=["GET", "POST"])
 def about():
         # User reached route via GET (as by clicking a link or via redirect)
-        return render_template("templates/about.html")
+        return render_template("about.html")
+
+@app.route("/methodology", methods=["GET"])
+def methodology():
+        # User reached route via GET (as by clicking a link or via redirect)
+        return render_template("methodology.html")
+    
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -350,5 +357,6 @@ def compatibility():
             return apology("Must input a celebrity")
 
         #TODO: finish implementation of compatibility
-    return render_template("compatibility.html")
+    if request.method == "GET":
+        return render_template("compatibility.html")
 
