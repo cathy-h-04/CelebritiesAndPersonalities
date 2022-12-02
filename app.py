@@ -5,9 +5,9 @@ import os
 import sqlite3
 from sqlite3 import Error
 
-from cs50 import SQL
+# from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
-from flask_session import Session
+# from flask_session import Session
 from tempfile import mkdtemp
 
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -278,3 +278,5 @@ def compatibility():
             return apology("Must input a celebrity")
 
         #TODO: finish implementation of compatibility
+    return render_template("compatibility.html")
+
