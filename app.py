@@ -18,6 +18,8 @@ from CelebritiesAndPersonalities.helpers import apology, login_required, lookup
 
 import json
 
+import requests
+
 import pip._vendor.requests 
 
 
@@ -142,38 +144,29 @@ def test():
         # declaring each user's input as variables
         mbti = request.form.get("mbti")
         enne = request.form.get("enne")
-        astro = request.form.get("astro")
+        name = request.form.get("name")
         
         # declaring each user's ratings as variables
         mbti_rating = request.form.get("mbti_rating")
         enne_rating = request.form.get("enne_rating")
-        astro_rating = request.form.get("astro_rating")
- 
-        # checking that user has inputted the three characteristics for assessment
-        if not mbti:
-            return apology("Must input your myers-briggs type")
+        name_rating = request.form.get("name_rating")
+        
+        # User initial api information
+        nationality = requests.get('https://api.nationalize.io/?name='+name)
+        gender = requests.get('https://api.genderize.io/?name='+name)
+        age = requests.get('https://api.agify.io/?name='+name)
 
-        if not enne:
-            return apology("Must input your enneagram type")
+        # user-specific ai-generated nationality, gender, and age
+        user_nat = (nationality.json()['country'][0])['country_id']
+        user_gen = gender.json()['gender']
+        user_age = age.json()['age']
 
-        if not astro:
-            return apology("Must input your astrological sign")
-
-        # checking that user has rated each characteristic
-        if not mbti_rating:
-            return apology("Must input your myers-briggs rating")
-
-        if not enne_rating:
-            return apology("Must input your enneagram rating")
-
-        if not astro_rating:
-            return apology("Must input your astrological rating")
-
-
-        # TODO: change this for loop so that it actually cycles through celebrities
         db.execute("SELECT * FROM celebs")
         
         points = 0
+        celeb_enne = 0
+        celeb_mbti = 0
+        celeb_count = 0
         
         celeb_count = db.execute("SELECT count(id) FROM celebs")
         
@@ -189,6 +182,26 @@ def test():
             
             if celeb_enne[0] == enne:
                 points += enne_rating
+
+            celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
+            
+            celeb_nationality_search = requests.get('https://api.nationalize.io/?name='+celeb_name)
+            celeb_gender_search = requests.get('https://api.genderize.io/?name='+celeb_name)
+            celeb_age_search = requests.get('https://api.agify.io/?name='+celeb_name)
+
+            # user-specific ai-generated nationality, gender, and age
+            celeb_nat = (nationality.json()['country'][0])['country_id']
+            celeb_gen = gender.json()['gender']
+            celeb_age = age.json()['age']
+            
+            if celeb_nat == user_nat:
+                points += 1/3(name_rating)
+            
+            if celeb_gen == user_nat:
+                points += 1/3(name_rating)
+            
+            if celeb_age == user_nat:
+                points += 1/3(name_rating)
             
             db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
 
