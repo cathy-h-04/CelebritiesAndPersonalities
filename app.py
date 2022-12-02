@@ -246,6 +246,16 @@ def test():
     mbti_rating = 3
     enne_rating = 4
     name_rating = 5
+    
+    #    # declaring each user's input as variables
+#         mbti = request.form.get("mbti")
+#         enne = request.form.get("enne")
+#         name = request.form.get("name")
+        
+#         # declaring each user's ratings as variables
+#         mbti_rating = request.form.get("mbti_rating")
+#         enne_rating = request.form.get("enne_rating")
+#         name_rating = request.form.get("name_rating")
         
         # User initial api information
     nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
@@ -261,22 +271,25 @@ def test():
         
     for i in range(celeb_count):
         points = 0
+        
         celeb_enne = 0
         celeb_mbti = 0
         celeb_count = 0
-            
-        celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
+           
+        celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+        # celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
         for i in range(0, 3):
             if celeb_mbti[i] == mbti[i]:
                 points += 0.25 * mbti_rating 
                  
-            
-        celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
+        celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+        # celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
             
         if celeb_enne[0] == enne:
             points += enne_rating
 
-        celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
+        celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+        # celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
             
         celeb_nationality_search = requests.get('https://api.nationalize.io/?name='+celeb_name)
         celeb_gender_search = requests.get('https://api.genderize.io/?name='+celeb_name)
