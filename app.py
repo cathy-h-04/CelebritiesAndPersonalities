@@ -108,14 +108,18 @@ def logout():
 @login_required
 def test():
 
-    if request.method == "POST":
-        # checking that user has inputted the three characteristics for assessment
-        
+    if request.method == "POST":        
         # declaring each user's input as variables
         mbti = request.form.get("mbti")
         enne = request.form.get("enne")
         astro = request.form.get("astro")
+        
+        # declaring each user's ratings as variables
+        mbti_rating = request.form.get("mbti_rating")
+        enne_rating = request.form.get("enne_rating")
+        astro_rating = request.form.get("astro_rating")
  
+        # checking that user has inputted the three characteristics for assessment
         if not mbti:
             return apology("Must input your myers-briggs type")
 
@@ -125,19 +129,16 @@ def test():
         if not astro:
             return apology("Must input your astrological sign")
 
+        # checking that user has rated each characteristic
         if not mbti_rating:
-            return apology("Must input your myers-briggs type")
+            return apology("Must input your myers-briggs rating")
 
         if not enne_rating:
-            return apology("Must input your enneagram type")
+            return apology("Must input your enneagram rating")
 
         if not astro_rating:
-            return apology("Must input your astrological sign")
+            return apology("Must input your astrological rating")
 
-        # declaring each user's ratings as variables
-        mbti_rating = request.form.get("mbti_rating")
-        enne_rating = request.form.get("enne_rating")
-        astro_rating = request.form.get("astro_rating")
 
         # TODO: change this for loop so that it actually cycles through celebrities
         for celebrity in celebrities:
@@ -146,8 +147,9 @@ def test():
 
 
      # User reached route via GET (as by clicking a link or via redirect)
+     # TODO: get this else statement functioning (pylance is giving me an error)
     else:
-        return render_template("quote.html")
+        return render_template("test.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -179,6 +181,7 @@ def register():
             return apology("passwords must match", 400)
 
         # checking that username is unique
+        # TODO: fix this implementation of the users database 
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         if len(rows) > 0:
             return apology("username already exists", 400)
@@ -204,6 +207,7 @@ def register():
             return apology("Password must not contain username")
 
         # adding user's username and hashed password into database
+        # TODO: fix this implementation for the users database
         db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, generate_password_hash(password))
 
         # Confirm registration
@@ -242,6 +246,7 @@ def passwordchange():
         newconfirmation = request.form.get("new_confirmation")
 
         # check if old password equals new password
+        # TODO: fix this implementation of the users database 
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         if check_password_hash(rows[0]["hash"], newpassword):
             return apology("Repeated password", 403)
@@ -257,6 +262,8 @@ def passwordchange():
 @app.route("/results", methods=["GET", "POST"])
 @login_required
 def results():
+    if request.method == "POST":        
+        # TODO: add code for results here as necessary
 
 
 # TODO: Code Compatibility Page 
