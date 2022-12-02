@@ -42,11 +42,6 @@ character_data = (characters.json()["profiles"])
 data = celeb_data + character_data
 
 
-#data = [{}]
-#data.append(celebs.json()["profiles"])
-#data.append(characters.json()["profiles"])
-#print(data)
-
 
 
 #print(len(celeb_data))
@@ -71,14 +66,11 @@ for person in data:
     person_personality = person["personality_type"]
     mbti = person_personality.split()[0]
     enne = person_personality.split()[1]
-    print(person_name,mbti,enne)
+    #print(person_name,mbti,enne)
     db.execute("INSERT INTO celebs (name, MBTI, enne, points) VALUES (?, ?, ?, ?)", (person_name, mbti, enne, '0'))
     
     connection.commit()
 
-
-    
-    #print(celeb_name, celeb_personality)
 
 db.execute("DROP TABLE celebs")
 
