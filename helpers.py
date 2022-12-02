@@ -2,13 +2,14 @@
 
 
 import os
-import requests
+#import requests
+import pip._vendor.requests 
 import urllib.parse
 
 from flask import redirect, render_template, request, session
 from functools import wraps
 
-import requests
+#import requests
 import json
 
 
@@ -43,36 +44,13 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# TODO: this is where we will add our own special API Key (SCRAPING!)
-def lookup(symbol):
-    """Look up quote for symbol."""
-
-    # Contact API
-    try:
-        api_key = os.environ.get("API_KEY")
-        url = f"https://cloud.iexapis.com/stable/stock/{urllib.parse.quote_plus(symbol)}/quote?token={api_key}"
-        response = requests.get(url)
-        response.raise_for_status()
-    except requests.RequestException:
-        return None
-
-    # Parse response
-    try:
-        quote = response.json()
-        return {
-            "name": quote["companyName"],
-            "price": float(quote["latestPrice"]),
-            "symbol": quote["symbol"]
-        }
-    except (KeyError, TypeError, ValueError):
-        return None
 
 def name_characteristics(name):
  # Credit for the below code: https://forum.freecodecamp.org/t/extracting-data-from-json/452527
 # Takes the user's inputted name as the input
-    nationality = requests.get('https://api.nationalize.io/?name='+name)
-    gender = requests.get('https://api.genderize.io/?name='+name)
-    age = requests.get('https://api.agify.io/?name='+name)
+    nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
+    gender = pip._vendor.requests.get('https://api.genderize.io/?name='+name)
+    age = pip._vendor.requests.get('https://api.agify.io/?name='+name)
 
     nationality = (nationality.json()['country'][0])['country_id']
     gender = gender.json()['gender']

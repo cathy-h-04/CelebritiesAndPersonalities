@@ -18,12 +18,10 @@ from helpers import apology, login_required
 
 import json
 
-import requests
+#import requests
 
 import pip._vendor.requests 
 
-
-from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 #from tempfile import mkdtemp
 #app = Flask(__name__)
@@ -186,7 +184,7 @@ def test():
             celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
             for i in range(0, 3):
                 if celeb_mbti[i] == mbti[i]:
-                    points += 0.25(mbti_rating)
+                    points += 0.25 * mbti_rating 
                  
             
             celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
@@ -206,13 +204,13 @@ def test():
             celeb_age = celeb_age_search.json()['age']
             
             if celeb_nat == user_nat:
-                points += 1/3(name_rating)
+                points += 1/3 * name_rating
             
             if celeb_gen == user_gen:
-                points += 1/3(name_rating)
+                points += 1/3 * name_rating
             
             if celeb_age == user_age:
-                points += 1/3(name_rating)
+                points += 1/3 * name_rating
             
             db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
             #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
