@@ -46,6 +46,7 @@ connection2 = sqlite3.connect("users.db")
 db = connection.cursor()
 db2 = connection2.cursor()
 
+db.execute("DROP TABLE celebs")
 db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL)")
 
@@ -97,7 +98,7 @@ def index():
 @app.route("/about", methods=["GET", "POST"])
 def about():
         # User reached route via GET (as by clicking a link or via redirect)
-        return render_template("about.html")
+        return render_template("templates/about.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -161,9 +162,9 @@ def test():
         name_rating = request.form.get("name_rating")
         
         # User initial api information
-        nationality = requests.get('https://api.nationalize.io/?name='+name)
-        gender = requests.get('https://api.genderize.io/?name='+name)
-        age = requests.get('https://api.agify.io/?name='+name)
+        nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
+        gender = pip._vendor.requests.get('https://api.genderize.io/?name='+name)
+        age = pip._vendor.requests.get('https://api.agify.io/?name='+name)
 
         # user-specific ai-generated nationality, gender, and age
         user_nat = (nationality.json()['country'][0])['country_id']
