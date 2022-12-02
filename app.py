@@ -18,7 +18,7 @@ from helpers import apology, login_required
 
 import json
 
-#import requests
+import requests
 
 import pip._vendor.requests 
 
