@@ -190,9 +190,9 @@ def test():
             celeb_age_search = requests.get('https://api.agify.io/?name='+celeb_name)
 
             # user-specific ai-generated nationality, gender, and age
-            celeb_nat = (nationality.json()['country'][0])['country_id']
-            celeb_gen = gender.json()['gender']
-            celeb_age = age.json()['age']
+            celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
+            celeb_gen = celeb_gender_search.json()['gender']
+            celeb_age = celeb_age_search.json()['age']
             
             if celeb_nat == user_nat:
                 points += 1/3(name_rating)
