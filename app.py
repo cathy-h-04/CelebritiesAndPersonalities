@@ -436,7 +436,6 @@ def account():
         return render_template("account.html")
 
 
-
 # TODO: Code Compatibility Page 
 @app.route("/compatibility", methods=["GET", "POST"])
 @login_required
