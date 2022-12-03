@@ -6,13 +6,13 @@ Forgot Password
 
 {% block main %}
 <body>
-<section class="vh-100 gradient-custom">
+<section class="vh-100">
     <div class="container py-5 h-100">
       <div class="row justify-content-center align-items-center h-100">
         <div class="col-12 col-lg-9 col-xl-7">
-          <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+          <div class="card shadow-2-strong card-registration backdrop" style="border-radius: 15px;">
             <div class="card-body p-4 p-md-5">
-              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Register</h3>
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 rhythmBlue">Register</h3>
               <form>
 
                 <div class="row">
@@ -29,7 +29,7 @@ Forgot Password
                   </div>
                 </div>
 
-                <div>
+                <div class="row">
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
                         <input type="text" autocomplete="off" autofocus id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" class="form-control form-control-lg" />
@@ -40,19 +40,25 @@ Forgot Password
                     <div class="form-outline">
                         <input type="text" id="email" name="email" placeholder="Email Address" class="form-control form-control-lg" />
                     </div>
-
-                <strong class="left">Security Question: What is your mother's maiden name?</strong>
-                <div class="form-outline">
-                    <input type="text" autocomplete="off" autofocus id="securityq1" name="securityq1" placeholder="Answer" class="form-control form-control-lg" />
                 </div>
 
-                <strong class="left">Security Question: What is your childhood nickname?</strong>
-                <div class="form-outline">
-                    <input type="text" autocomplete="off" autofocus id="securityq2" name="securityq2" placeholder="Answer" class="form-control form-control-lg" />
-                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <strong class="left rhythmBlue">Security Question: What is your mother's maiden name?</strong>
+                          <input type="text" autocomplete="off" autofocus id="securityq1" name="securityq1" placeholder="Answer" class="form-control form-control-lg" />
+                      </div>
+
+                    </div>
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <strong class="left rhythmBlue">Security Question: What is your childhood nickname?</strong>
+                          <input type="text" id="securityq2" name="securityq2" placeholder="Answer" class="form-control form-control-lg" />
+                      </div>
+                  </div>
 
                 <div class="mt-4 pt-2">
-                  <input class="btn btn-primary btn-lg" type="submit" value="Submit" />
+                  <input class="btn btn-color btn-lg" type="submit" value="Submit" />
                 </div>
               </form>
             </div>
