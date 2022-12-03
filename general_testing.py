@@ -69,7 +69,6 @@ for person in data:
     person_personality = person["personality_type"]
     mbti = person_personality.split()[0]
     enne = person_personality.split()[1]
-    #print(person_name,mbti,enne)
     
     
     db.execute("INSERT INTO celebs (name, MBTI, enne, points) VALUES (?, ?, ?, ?)", (person_name, mbti, enne, '0'))
@@ -101,10 +100,7 @@ print(user_age)
 
 for i in range(1, 10):
     points = 0
-    mbti_points = 0
-    enne_points = 0
-    name_points = 0
-    
+ 
     celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i,)).fetchone()[0]
     celeb_full_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i,)).fetchone()[0]
     celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i,)).fetchone()[0]
@@ -113,10 +109,10 @@ for i in range(1, 10):
     
     for i in range(0, 4):
         if celeb_mbti[i] == mbti[i]:
-            mbti_points += (0.25 * mbti_rating )
+            points += (0.25 * mbti_rating )
             
     if int(celeb_enne[0]) == enne:
-        enne_points += enne_rating
+        points += enne_rating
         
 
     name_exists = True
@@ -136,17 +132,18 @@ for i in range(1, 10):
         
         
         if celeb_nat == user_nat:
-            name_points += 1/3 * name_rating
+            points += 1/3 * name_rating
         
         if celeb_gen == user_gen:
-            name_points += 1/3 * name_rating
+            points += 1/3 * name_rating
             
         if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
-            name_points += 1/3 * name_rating
+            points += 1/3 * name_rating
             
-    print(celeb_name, celeb_nat, celeb_gen, celeb_age, celeb_mbti, celeb_enne, mbti_points, enne_points, name_points)
+    #print(celeb_name, celeb_nat, celeb_gen, celeb_age, celeb_mbti, celeb_enne, points)
     db.execute("UPDATE celebs SET points = ? WHERE id = ?", (points, i))
-            
+    connection.commit()
+    
     
 
     # db.execute("UPDATE celebs SET points = ? WHERE id = ?", (points, i))
