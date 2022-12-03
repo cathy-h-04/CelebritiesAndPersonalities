@@ -121,9 +121,13 @@ for i in range(1, 20):
     celeb_gender_search = pip._vendor.requests.get('https://api.genderize.io/?name='+celeb_name)
     celeb_age_search = pip._vendor.requests.get('https://api.agify.io/?name='+celeb_name)
     
+    # celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
     celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
     celeb_gen = celeb_gender_search.json()['gender']
     celeb_age = celeb_age_search.json()['age']
+    print(celeb_nat)
+    print(celeb_gen)
+    print(celeb_age)
         
     # if celeb_nat == user_nat:
     #     points += 1/3 * name_rating
