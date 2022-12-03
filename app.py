@@ -289,9 +289,9 @@ def test():
         celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
         # celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
             
-        celeb_nationality_search = requests.get('https://api.nationalize.io/?name='+celeb_name)
-        celeb_gender_search = requests.get('https://api.genderize.io/?name='+celeb_name)
-        celeb_age_search = requests.get('https://api.agify.io/?name='+celeb_name)
+        celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
+        celeb_gender_search = pip._vendor.requests.get('https://api.genderize.io/?name='+celeb_name)
+        celeb_age_search = pip._vendor.requests.get('https://api.agify.io/?name='+celeb_name)
 
             # user-specific ai-generated nationality, gender, and age
         celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
