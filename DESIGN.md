@@ -21,14 +21,13 @@ Assessing Enneagram similarities between users and celebrities: In order to asse
 Assessing name analysis similarities between users and celebrities: Finally, we use the agify, genderize, and nationalize APIs to compute the most likely age, gender, and nationality, respectively, for both the user and all celebrities that we assess. These APIs compute these three factors based on first names. To determine how much the user wants this name analysis to factor into their match, we request a rating on a scale of 1-10 (called name_rating). We then iterate through the celebrities and determine how much overlap exists between the the age, gender, and nationality computed for the user and each celebrity. For each of the three matches, we reward (1/3 * name_rating) points to the celebrity. For example, if these APIs use a user's name to determine that they are likely 34, male, and Russian, a celebrity whom the APIs determine to be 45, male, and Russian would receive points = 2/3 * name_rating (because the celebrity matches on 2 out of 3 categories). We designed the algorithm this way so that each component of name analysis contributes equally to the algorithm, but the user has ultimate control over how name analysis contributes to the algorithm. 
 
 
-
 # Login and Registration Decisions 
 
 Our group wanted users to be able to view our site without logging in or creating an account first so that they can learn about the project and what the site offers, but we also did not want users to be able to take our test or view results without creating an account. Therefore, our website contains login and registration pages within the site, rather than when a user first enters the site (like how was implemented in the finance pset). 
 
 # Other Layout Decisions
 
-Our group wanted a simple yet effective layout for our website. We also wanted it to be clear for users how to use our site. 
+Our group wanted a simple yet effective layout for our website. We also wanted it to be clear for users how to use our site. That's why we decided to add a navbar containing Home, Methodology, Match Test, Compatibility Test, Register, Login, and About Us pages
 
 # SQL Decisions
 
