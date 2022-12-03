@@ -233,7 +233,7 @@ def logout():
     
     
 @app.route("/test", methods=["GET", "POST"])
-@login_required
+# @login_required
 def test():
      
         # declaring each user's input as variables
