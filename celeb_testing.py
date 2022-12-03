@@ -82,7 +82,7 @@ name = "Cathy"
         # declaring each user's ratings as variables
 mbti_rating = 3
 enne_rating = 4
-name_rating = 5
+name_rating = 9
     
     # User initial api information
 nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
@@ -94,7 +94,12 @@ user_nat = nationality.json()['country'][0]['country_id']
 user_gen = gender.json()['gender']
 user_age = age.json()['age']
     
-for i in range(1, 20):
+
+print(user_nat)
+print(user_gen)
+print(user_age)
+
+for i in range(1, 10):
     points = 0
     mbti_points = 0
     enne_points = 0
@@ -113,41 +118,42 @@ for i in range(1, 20):
     if int(celeb_enne[0]) == enne:
         enne_points += enne_rating
         
-    print(celeb_name, celeb_mbti, celeb_enne, enne_points)
-        
-        
-    name_exists = True
 
+    name_exists = True
     
-    celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
+
     celeb_gender_search = pip._vendor.requests.get('https://api.genderize.io/?name='+celeb_name)
     celeb_age_search = pip._vendor.requests.get('https://api.agify.io/?name='+celeb_name)
     
     if celeb_gender_search.json()['count'] == 0:
         name_exists = False
-        print(celeb_gender_search.json()['count'])
     
-    # celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
     if name_exists:
-        #celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
-        #celeb_gen = celeb_gender_search.json()['gender']
-        #celeb_age = celeb_age_search.json()['age']
-        print(celeb_nat)
-        print(celeb_gen)
-        print(celeb_age)
+        celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
+        celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
+        celeb_gen = celeb_gender_search.json()['gender']
+        celeb_age = celeb_age_search.json()['age']
         
-    # if celeb_nat == user_nat:
-    #     points += 1/3 * name_rating
         
-    # if celeb_gen == user_gen:
-    #     points += 1/3 * name_rating
+        if celeb_nat == user_nat:
+            name_points += 1/3 * name_rating
         
-    # if celeb_age == user_age:
-    #     points += 1/3 * name_rating
-        
+        if celeb_gen == user_gen:
+            name_points += 1/3 * name_rating
+            
+        if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
+            name_points += 1/3 * name_rating
+            
+    #print(celeb_name, celeb_nat, celeb_gen, celeb_age, celeb_mbti, celeb_enne, mbti_points, enne_points, name_points)
+    db.execute("UPDATE celebs SET points = ? WHERE id = ?", (points, i))
+            
+    
+
     # db.execute("UPDATE celebs SET points = ? WHERE id = ?", (points, i))
     #     #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
 
+
+db.execute("SELECT * FROM celebs")
 
 db.close()
 db2.close()
