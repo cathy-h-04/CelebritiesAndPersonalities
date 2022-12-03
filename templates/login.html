@@ -7,6 +7,7 @@ Login
 
 {% block main %}
 <body class>
+  <form action="/login" method="post">
   <section class="backdrop vh-100">
     <div class="backdrop container py-5 h-100">
       <div class="backdrop row d-flex justify-content-center align-items-center h-100">
@@ -20,7 +21,7 @@ Login
                 <p class="shadowBlue text-dark-50 mb-5">Please enter your login and password!</p>
 
                 <div class="form-outline form-dark mb-4">
-                  <input type="email" id="username" class="form-control form-control-lg" />
+                  <input type="username" id="username" class="form-control form-control-lg" />
                   <label class="shadowBlue form-label" for="username">Username</label>
                 </div>
 
@@ -29,13 +30,13 @@ Login
                   <label class="shadowBlue form-label" for="password">Password</label>
                 </div>
 
-                <p class="small mb-5 pb-lg-2"><a class="shadowBlue text-dark-50" href="#!">Forgot password?</a></p>
+                <p class="small mb-5 pb-lg-2"><a class="shadowBlue text-dark-50" href="/changepassword">Forgot password?</a></p>
 
                 <button class="btn btn-submit btn-lg px-5" type="submit">Login</button>
               </div>
 
               <div>
-                <p class="mb-0 shadowBlue">Don't have an account? <a href="#!" class="shadowBlue text-dark-50 fw-bold">Sign Up</a>
+                <p class="mb-0 shadowBlue">Don't have an account? <a href="/account" class="shadowBlue text-dark-50 fw-bold">Sign Up</a>
                 </p>
               </div>
 
@@ -45,5 +46,6 @@ Login
       </div>
     </div>
   </section>
+  </form>
 </body>
 {% endblock %}
