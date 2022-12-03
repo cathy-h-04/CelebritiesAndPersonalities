@@ -10,6 +10,7 @@ import pip._vendor.requests
 import sqlite3
 from sqlite3 import Error
 
+
 def create_connection(path):
     connection = None
     try:
