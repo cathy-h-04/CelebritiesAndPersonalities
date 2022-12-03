@@ -8,3 +8,6 @@ Our group decided to take on this project because of how we were fascinated by w
 
 # How to Run Cap App
 
+# Explanatory Video
+
+Here is the link to our explanatory video for our project: LINK HERE
