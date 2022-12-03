@@ -5,179 +5,180 @@ Match Test
 {% endblock %}
 
 {% block main %}
-<h2>MBTI (Myers-Briggs Type Indicator)</h2>
-<h5>Description: </h5>
-<strong for="MBTI">Select your</strong>
-<select name="MBTIs" id="MBTIs" required>
-  <option disabled selected value="">MBTI</option>
-  <option value="INTJ">INTJ</option>
-  <option value="INTP">INTP</option>
-  <option value="INFJ">INFJ</option>
-  <option value="INFP">INFP</option>
-  <option value="ISTJ">ISTJ</option>
-  <option value="ISFJ">ISFJ</option>
-  <option value="ISTP">ISTP</option>
-  <option value="ISFP">ISFP</option>
-  <option value="ENTJ">ENTJ</option>
-  <option value="ENTP">ENTP</option>
-  <option value="ENFJ">ENFJ</option>
-  <option value="ENFP">ENFP</option>
-  <option value="ESTJ">ESTJ</option>
-  <option value="ESFJ">ESFJ</option>
-  <option value="ESTP">ESTP</option>
-  <option value="ESFP">ESFP</option>
-</select>
+<body>
+  <h2>MBTI (Myers-Briggs Type Indicator)</h2>
+  <h5>Description: </h5>
+  <strong for="MBTI">Select your</strong>
+  <select name="MBTIs" id="MBTIs" required>
+    <option disabled selected value="">MBTI</option>
+    <option value="INTJ">INTJ</option>
+    <option value="INTP">INTP</option>
+    <option value="INFJ">INFJ</option>
+    <option value="INFP">INFP</option>
+    <option value="ISTJ">ISTJ</option>
+    <option value="ISFJ">ISFJ</option>
+    <option value="ISTP">ISTP</option>
+    <option value="ISFP">ISFP</option>
+    <option value="ENTJ">ENTJ</option>
+    <option value="ENTP">ENTP</option>
+    <option value="ENFJ">ENFJ</option>
+    <option value="ENFP">ENFP</option>
+    <option value="ESTJ">ESTJ</option>
+    <option value="ESFJ">ESFJ</option>
+    <option value="ESTP">ESTP</option>
+    <option value="ESFP">ESFP</option>
+  </select>
 
-<br></br>
-<div class="mx-0 mx-sm-auto">
-  <div class="text-center">
-    <p>
-      <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like MBTI to factor into your celebrity match rating?</strong>
-    </p>
+  <br></br>
+  <div class="mx-0 mx-sm-auto">
+    <div class="text-center">
+      <p>
+        <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like MBTI to factor into your celebrity match rating?</strong>
+      </p>
+    </div>
+    <div class="btn-group" id="mbtiranking">
+      <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption1" autocomplete="off" />
+      <label class="btn btn-secondary" for="mbtioption1">1</label>
+      <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption2" autocomplete="off" />
+      <label class="btn btn-secondary" for="mbtioption2">2</label>
+      <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption3" autocomplete="off" />
+      <label class="btn btn-secondary" for="mbtioption3">3</label>
+      <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption4" autocomplete="off" />
+      <label class="btn btn-secondary" for="mbtioption4">4</label>
+      <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption5" autocomplete="off" />
+      <label class="btn btn-secondary" for="mbtioption5">5</label>
+      <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption6" autocomplete="off" />
+      <label class="btn btn-secondary" for="mbtioption6">6</label>
+      <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption7" autocomplete="off" />
+      <label class="btn btn-secondary" for="mbtioption7">7</label>
+      <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption8" autocomplete="off" />
+      <label class="btn btn-secondary" for="mbtioption8">8</label>
+      <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption9" autocomplete="off" />
+      <label class="btn btn-secondary" for="mbtioption9">9</label>
+      <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption10" autocomplete="off" checked/>
+      <label class="btn btn-secondary" for="mbtioption10">10</label>
+    </div>
   </div>
-  <div class="btn-group" id="mbtiranking">
-    <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption1" autocomplete="off" />
-    <label class="btn btn-secondary" for="mbtioption1">1</label>
-    <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption2" autocomplete="off" />
-    <label class="btn btn-secondary" for="mbtioption2">2</label>
-    <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption3" autocomplete="off" />
-    <label class="btn btn-secondary" for="mbtioption3">3</label>
-    <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption4" autocomplete="off" />
-    <label class="btn btn-secondary" for="mbtioption4">4</label>
-    <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption5" autocomplete="off" />
-    <label class="btn btn-secondary" for="mbtioption5">5</label>
-    <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption6" autocomplete="off" />
-    <label class="btn btn-secondary" for="mbtioption6">6</label>
-    <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption7" autocomplete="off" />
-    <label class="btn btn-secondary" for="mbtioption7">7</label>
-    <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption8" autocomplete="off" />
-    <label class="btn btn-secondary" for="mbtioption8">8</label>
-    <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption9" autocomplete="off" />
-    <label class="btn btn-secondary" for="mbtioption9">9</label>
-    <input type="radio" class="btn-check" name="mbtioptions" id="mbtioption10" autocomplete="off" checked/>
-    <label class="btn btn-secondary" for="mbtioption10">10</label>
+
+  <br></br>
+  <h2>Enneagrams</h2>
+  <h5>Description: </h5>
+  <strong for="Enne">Select your</strong>
+  <select name="ENNEs" id="ENNEs">
+    <option disabled selected value="">Enneagrams</option>
+    <option value="1w9">1w9</option>
+    <option value="1w2">1w2</option>
+    <option value="2w1">2w1</option>
+    <option value="2w3">2w3</option>
+    <option value="3w2">3w2</option>
+    <option value="3w4">3w4</option>
+    <option value="4w3">4w3</option>
+    <option value="4w5">4w5</option>
+    <option value="5w4">5w4</option>
+    <option value="5w6">5w6</option>
+    <option value="6w5">6w5</option>
+    <option value="6w7">6w7</option>
+    <option value="7w6">7w6</option>
+    <option value="7w8">7w8</option>
+    <option value="8w7">8w9</option>
+    <option value="8w9">8w9</option>
+    <option value="9w8">9w8</option>
+    <option value="9w1">9w1</option>
+  </select>
+
+  <br></br>
+  <div class="mx-0 mx-sm-auto">
+    <div class="text-center">
+      <p>
+        <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like Enneagram to factor into your celebrity match rating?</strong>
+      </p>
+    </div>
+    <div class="btn-group" id="enneranking">
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption1" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption1">1</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption2" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption2">2</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption3" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption3">3</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption4" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption4">4</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption5" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption5">5</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption6" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption6">6</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption7" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption7">7</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption8" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption8">8</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption9" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption9">9</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption10" autocomplete="off" checked/>
+        <label class="btn btn-secondary" for="enneoption10">10</label>
+    </div>
   </div>
-</div>
 
-<br></br>
-<h2>Enneagrams</h2>
-<h5>Description: </h5>
-<strong for="Enne">Select your</strong>
-<select name="ENNEs" id="ENNEs">
-  <option disabled selected value="">Enneagrams</option>
-  <option value="1w9">1w9</option>
-  <option value="1w2">1w2</option>
-  <option value="2w1">2w1</option>
-  <option value="2w3">2w3</option>
-  <option value="3w2">3w2</option>
-  <option value="3w4">3w4</option>
-  <option value="4w3">4w3</option>
-  <option value="4w5">4w5</option>
-  <option value="5w4">5w4</option>
-  <option value="5w6">5w6</option>
-  <option value="6w5">6w5</option>
-  <option value="6w7">6w7</option>
-  <option value="7w6">7w6</option>
-  <option value="7w8">7w8</option>
-  <option value="8w7">8w9</option>
-  <option value="8w9">8w9</option>
-  <option value="9w8">9w8</option>
-  <option value="9w1">9w1</option>
-</select>
+  <br></br>
+  <h2>Nationality, Gender, & Age (Based on Name Generator)</h2>
+  <h5>Description: </h5>
+  <input type="text" class="form-control" id="firstname" placeholder="First name">
 
-<br></br>
-<div class="mx-0 mx-sm-auto">
-  <div class="text-center">
-    <p>
-      <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like Enneagram to factor into your celebrity match rating?</strong>
-    </p>
+  <br></br>
+  <div class="mx-0 mx-sm-auto">
+    <div class="text-center">
+      <p>
+        <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like Enneagram to factor into your celebrity match rating?</strong>
+      </p>
+    </div>
+    <div class="btn-group" id="enneranking">
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption1" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption1">1</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption2" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption2">2</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption3" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption3">3</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption4" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption4">4</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption5" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption5">5</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption6" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption6">6</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption7" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption7">7</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption8" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption8">8</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption9" autocomplete="off" />
+        <label class="btn btn-secondary" for="enneoption9">9</label>
+        <input type="radio" class="btn-check" name="enneoptions" id="enneoption10" autocomplete="off" checked/>
+        <label class="btn btn-secondary" for="enneoption10">10</label>
+    </div>
   </div>
-  <div class="btn-group" id="enneranking">
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption1" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption1">1</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption2" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption2">2</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption3" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption3">3</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption4" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption4">4</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption5" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption5">5</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption6" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption6">6</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption7" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption7">7</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption8" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption8">8</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption9" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption9">9</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption10" autocomplete="off" checked/>
-      <label class="btn btn-secondary" for="enneoption10">10</label>
-  </div>
-</div>
 
-<br></br>
-<h2>Nationality, Gender, & Age (Based on Name Generator)</h2>
-<h5>Description: </h5>
-<input type="text" class="form-control" id="firstname" placeholder="First name">
+  <br></br>
+  <button type="button" id="submit" class="btn btn-submit" onclick="return Validate()">Submit</button>
 
-<br></br>
-<div class="mx-0 mx-sm-auto">
-  <div class="text-center">
-    <p>
-      <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like Enneagram to factor into your celebrity match rating?</strong>
-    </p>
-  </div>
-  <div class="btn-group" id="enneranking">
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption1" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption1">1</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption2" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption2">2</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption3" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption3">3</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption4" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption4">4</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption5" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption5">5</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption6" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption6">6</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption7" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption7">7</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption8" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption8">8</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption9" autocomplete="off" />
-      <label class="btn btn-secondary" for="enneoption9">9</label>
-      <input type="radio" class="btn-check" name="enneoptions" id="enneoption10" autocomplete="off" checked/>
-      <label class="btn btn-secondary" for="enneoption10">10</label>
-  </div>
-</div>
+  <script type="text/javascript">
+    function Validate() {
+      var ENNEs = document.getElementById("ENNEs");
+      var MBTIs = document.getElementById("MBTIs");
+      var name = document.getElementById("firstname");
 
-<br></br>
-<button type="button" id="submit" class="btn btn-submit" onclick="return Validate()">Submit</button>
-
-<script type="text/javascript">
-  function Validate() {
-    var ENNEs = document.getElementById("ENNEs");
-    var MBTIs = document.getElementById("MBTIs");
-    var name = document.getElementById("firstname");
-
-      if (MBTIs.value == "") {
-        alert("Please select your MBTI type.");
-        return false;
-      }
-
-      if (ENNEs.value == "") {
-          alert("Please select your Enneagram type.");
+        if (MBTIs.value == "") {
+          alert("Please select your MBTI type.");
           return false;
-      }
+        }
 
-      if (firstname.value == "") {
-          alert("Please select your First name.");
-          return false;
-      }
-      return true;
+        if (ENNEs.value == "") {
+            alert("Please select your Enneagram type.");
+            return false;
+        }
 
-  }
-</script>
+        if (firstname.value == "") {
+            alert("Please select your First name.");
+            return false;
+        }
+        return true;
 
+    }
+  </script>
+</body>
 {% endblock %}
