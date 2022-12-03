@@ -100,40 +100,47 @@ celeb_count = 20
     
 for i in range(celeb_count):
     points = 0
-        
+    
     celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
-    print(celeb_mbti)
-    for i in range(0, 3):
-        if celeb_mbti[i] == mbti[i]:
-            points += 0.25 * mbti_rating 
-                
+    celeb_full_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+    celeb_name = celeb_full_name.split()[0]
     celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+    print(celeb_name, len(celeb_mbti), celeb_mbti, celeb_enne)
+    
+    for i in range(0, 4):
+        if celeb_mbti[i] == mbti[i]:
+            points += (0.25 * mbti_rating )
+    
+    print(points)
+                
         
     if celeb_enne[0] == enne:
         points += enne_rating
-
-    celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
         
-    celeb_nationality_search = requests.get('https://api.nationalize.io/?name='+celeb_name)
-    celeb_gender_search = requests.get('https://api.genderize.io/?name='+celeb_name)
-    celeb_age_search = requests.get('https://api.agify.io/?name='+celeb_name)
+    celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
+    celeb_gender_search = pip._vendor.requests.get('https://api.genderize.io/?name='+celeb_name)
+    celeb_age_search = pip._vendor.requests.get('https://api.agify.io/?name='+celeb_name)
 
         # user-specific ai-generated nationality, gender, and age
-    celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
-    celeb_gen = celeb_gender_search.json()['gender']
-    celeb_age = celeb_age_search.json()['age']
+    #user_nat = (nationality.json()['country'][0])['country_id']
+    
+    #celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
+    #print(celeb_nat)
+    # celeb_gen = celeb_gender_search.json()['gender']
+    # print(celeb_gen)
+    # celeb_age = celeb_age_search.json()['age']
         
-    if celeb_nat == user_nat:
-        points += 1/3 * name_rating
+    # if celeb_nat == user_nat:
+    #     points += 1/3 * name_rating
         
-    if celeb_gen == user_gen:
-        points += 1/3 * name_rating
+    # if celeb_gen == user_gen:
+    #     points += 1/3 * name_rating
         
-    if celeb_age == user_age:
-        points += 1/3 * name_rating
+    # if celeb_age == user_age:
+    #     points += 1/3 * name_rating
         
-    db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
-        #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
+    # db.execute("UPDATE celebs SET points = ? WHERE id = ?", (points, i))
+    #     #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
 
 
 db.close()
