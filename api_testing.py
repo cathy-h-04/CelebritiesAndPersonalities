@@ -1,6 +1,6 @@
 # Credit for the below code: https://forum.freecodecamp.org/t/extracting-data-from-json/452527
 # Profiler guesses your age, gender and nationality
-import requests
+from pip._vendor import requests
 import json
 
 # User's input
@@ -11,6 +11,7 @@ nationality = requests.get('https://api.nationalize.io/?name='+user_name)
 gender = requests.get('https://api.genderize.io/?name='+user_name)
 age = requests.get('https://api.agify.io/?name='+user_name)
 
+#print(nationality.json()['country'][0])
 nat_data = (nationality.json()['country'][0])['country_id']
 age_data = gender.json()['gender']
 gen_data = age.json()['age']

@@ -117,21 +117,24 @@ for i in range(1, 20):
         
         
     name_exists = True
-    
-    if celeb_gender_search.json()['count'] == 0:
-        name_exists = False
+
     
     celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
     celeb_gender_search = pip._vendor.requests.get('https://api.genderize.io/?name='+celeb_name)
     celeb_age_search = pip._vendor.requests.get('https://api.agify.io/?name='+celeb_name)
     
+    if celeb_gender_search.json()['count'] == 0:
+        name_exists = False
+        print(celeb_gender_search.json()['count'])
+    
     # celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
-    celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
-    celeb_gen = celeb_gender_search.json()['gender']
-    celeb_age = celeb_age_search.json()['age']
-    print(celeb_nat)
-    print(celeb_gen)
-    print(celeb_age)
+    if name_exists:
+        #celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
+        #celeb_gen = celeb_gender_search.json()['gender']
+        #celeb_age = celeb_age_search.json()['age']
+        print(celeb_nat)
+        print(celeb_gen)
+        print(celeb_age)
         
     # if celeb_nat == user_nat:
     #     points += 1/3 * name_rating
