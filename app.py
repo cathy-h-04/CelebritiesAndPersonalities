@@ -18,7 +18,7 @@ from helpers import apology, login_required
 
 import json
 
-#import requests
+import requests
 
 import pip._vendor.requests 
 
@@ -47,7 +47,9 @@ db = connection.cursor()
 db2 = connection2.cursor()
 
 db.execute("DROP TABLE celebs")
-db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
+
+db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
+# db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL)")
 
 celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
@@ -153,74 +155,161 @@ def logout():
     return redirect("/")
 
 
+# @app.route("/test", methods=["GET", "POST"])
+# @login_required
+# def test():
+
+#     if request.method == "POST":        
+#         # declaring each user's input as variables
+#         mbti = request.form.get("mbti")
+#         enne = request.form.get("enne")
+#         name = request.form.get("name")
+        
+#         # declaring each user's ratings as variables
+#         mbti_rating = request.form.get("mbti_rating")
+#         enne_rating = request.form.get("enne_rating")
+#         name_rating = request.form.get("name_rating")
+        
+#         # User initial api information
+#         nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
+#         gender = pip._vendor.requests.get('https://api.genderize.io/?name='+name)
+#         age = pip._vendor.requests.get('https://api.agify.io/?name='+name)
+
+#         # user-specific ai-generated nationality, gender, and age
+#         user_nat = (nationality.json()['country'][0])['country_id']
+#         user_gen = gender.json()['gender']
+#         user_age = age.json()['age']
+
+#         db.execute("SELECT * FROM celebs")
+    
+        
+#         celeb_count = db.execute("SELECT count(id) FROM celebs")
+        
+#         for i in range(celeb_count):
+#             points = 0
+#             celeb_enne = 0
+#             celeb_mbti = 0
+#             celeb_count = 0
+            
+#             celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
+#             for i in range(0, 3):
+#                 if celeb_mbti[i] == mbti[i]:
+#                     points += 0.25 * mbti_rating 
+                 
+            
+#             celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
+            
+#             if celeb_enne[0] == enne:
+#                 points += enne_rating
+
+#             celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
+            
+#             celeb_nationality_search = requests.get('https://api.nationalize.io/?name='+celeb_name)
+#             celeb_gender_search = requests.get('https://api.genderize.io/?name='+celeb_name)
+#             celeb_age_search = requests.get('https://api.agify.io/?name='+celeb_name)
+
+#             # user-specific ai-generated nationality, gender, and age
+#             celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
+#             celeb_gen = celeb_gender_search.json()['gender']
+#             celeb_age = celeb_age_search.json()['age']
+            
+#             if celeb_nat == user_nat:
+#                 points += 1/3 * name_rating
+            
+#             if celeb_gen == user_gen:
+#                 points += 1/3 * name_rating
+            
+#             if celeb_age == user_age:
+#                 points += 1/3 * name_rating
+            
+#             db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
+#             #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
+
+
+#      # User reached route via GET (as by clicking a link or via redirect)
+#     else:
+#         return render_template("test.html")
+    
+    
+    
+    
 @app.route("/test", methods=["GET", "POST"])
 @login_required
 def test():
-
-    if request.method == "POST":        
+     
         # declaring each user's input as variables
-        mbti = request.form.get("mbti")
-        enne = request.form.get("enne")
-        name = request.form.get("name")
+    mbti = "INTJ"
+    enne = 5
+    name = "Cathy"
         
         # declaring each user's ratings as variables
-        mbti_rating = request.form.get("mbti_rating")
-        enne_rating = request.form.get("enne_rating")
-        name_rating = request.form.get("name_rating")
+    mbti_rating = 3
+    enne_rating = 4
+    name_rating = 5
+    
+    #    # declaring each user's input as variables
+#         mbti = request.form.get("mbti")
+#         enne = request.form.get("enne")
+#         name = request.form.get("name")
+        
+#         # declaring each user's ratings as variables
+#         mbti_rating = request.form.get("mbti_rating")
+#         enne_rating = request.form.get("enne_rating")
+#         name_rating = request.form.get("name_rating")
         
         # User initial api information
-        nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
-        gender = pip._vendor.requests.get('https://api.genderize.io/?name='+name)
-        age = pip._vendor.requests.get('https://api.agify.io/?name='+name)
+    nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
+    gender = pip._vendor.requests.get('https://api.genderize.io/?name='+name)
+    age = pip._vendor.requests.get('https://api.agify.io/?name='+name)
 
         # user-specific ai-generated nationality, gender, and age
-        user_nat = (nationality.json()['country'][0])['country_id']
-        user_gen = gender.json()['gender']
-        user_age = age.json()['age']
-
-        db.execute("SELECT * FROM celebs")
+    user_nat = (nationality.json()['country'][0])['country_id']
+    user_gen = gender.json()['gender']
+    user_age = age.json()['age']
     
+    celeb_count = 20
         
-        celeb_count = db.execute("SELECT count(id) FROM celebs")
+    for i in range(celeb_count):
+        points = 0
         
-        for i in range(celeb_count):
-            points = 0
-            celeb_enne = 0
-            celeb_mbti = 0
-            celeb_count = 0
-            
-            celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
-            for i in range(0, 3):
-                if celeb_mbti[i] == mbti[i]:
-                    points += 0.25 * mbti_rating 
+        celeb_enne = 0
+        celeb_mbti = 0
+        celeb_count = 0
+           
+        celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+        # celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
+        for i in range(0, 3):
+            if celeb_mbti[i] == mbti[i]:
+                points += 0.25 * mbti_rating 
                  
+        celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+        # celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
             
-            celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
-            
-            if celeb_enne[0] == enne:
-                points += enne_rating
+        if celeb_enne[0] == enne:
+            points += enne_rating
 
-            celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
+        celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+        # celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
             
-            celeb_nationality_search = requests.get('https://api.nationalize.io/?name='+celeb_name)
-            celeb_gender_search = requests.get('https://api.genderize.io/?name='+celeb_name)
-            celeb_age_search = requests.get('https://api.agify.io/?name='+celeb_name)
+        celeb_nationality_search = requests.get('https://api.nationalize.io/?name='+celeb_name)
+        celeb_gender_search = requests.get('https://api.genderize.io/?name='+celeb_name)
+        celeb_age_search = requests.get('https://api.agify.io/?name='+celeb_name)
 
             # user-specific ai-generated nationality, gender, and age
-            celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
-            celeb_gen = celeb_gender_search.json()['gender']
-            celeb_age = celeb_age_search.json()['age']
+        celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
+        celeb_gen = celeb_gender_search.json()['gender']
+        celeb_age = celeb_age_search.json()['age']
             
-            if celeb_nat == user_nat:
-                points += 1/3 * name_rating
+        if celeb_nat == user_nat:
+            points += 1/3 * name_rating
             
-            if celeb_gen == user_gen:
-                points += 1/3 * name_rating
+        if celeb_gen == user_gen:
+            points += 1/3 * name_rating
             
-            if celeb_age == user_age:
-                points += 1/3 * name_rating
+        if celeb_age == user_age:
+            points += 1/3 * name_rating
             
-            db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
+        db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
             #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
 
 
