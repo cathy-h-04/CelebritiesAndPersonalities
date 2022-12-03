@@ -23,7 +23,7 @@ Assessing name analysis similarities between users and celebrities: Finally, we 
 
 # Login and Registration Decisions 
 
-Our group wanted users to be able to view our site without logging in or creating an account first so that they can learn about the project and what the site offers, but we also did not want users to be able to take our test or view results without creating an account. Therefore, our website contains login and registration pages within the site, rather than when a user first enters the site (like how was implemented in the finance pset). 
+Our group wanted users to be able to view our site without logging in or creating an account first so that they can learn about the project and what the site offers, but we also did not want users to be able to take our test or view results without creating an account. Therefore, our website contains login and registration pages within the site, rather than when a user first enters the site (like how was implemented in the finance pset). Some of our pages (like match test) require that the user first logs in (or registers if they have not done so) so that their results can be stored. 
 
 # Other Layout Decisions
 
@@ -31,5 +31,7 @@ Our group wanted a simple yet effective layout for our website. We also wanted i
 
 # SQL Decisions
 
-Our group wanted to challenge ourselves in regard to SQL so that we could learn to implement SQL in the future without being dependent on any CS50 imports. So, we used SQLite and created custom connections for our SQL databases. We created databases in order to store information about celebrities (their names, mbti type, enneagram type, a custom id, and a points value corresponding to the degree to which a celebrity is a match for a certain user)
+Our group wanted to challenge ourselves in regard to SQL so that we could learn to implement SQL in the future without being dependent on any CS50 imports. So, we used SQLite and created custom connections for our SQL databases. We created databases in order to store information about users (their username and password) and celebrities (their names, mbti type, enneagram type, a custom id, and a points value corresponding to the degree to which a celebrity is a match for a certain user). 
+
+
 
