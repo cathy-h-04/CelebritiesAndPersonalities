@@ -429,6 +429,13 @@ def passwordchange():
 #     if request.method == "POST":        
 #         # TODO: add code for results here as necessary
 
+@app.route("/account", methods=["GET", "POST"])
+# @login_required
+def account():
+    if request.method == "GET":
+        return render_template("account.html")
+
+
 
 # TODO: Code Compatibility Page 
 @app.route("/compatibility", methods=["GET", "POST"])
