@@ -119,12 +119,16 @@ def login():
     if request.method == "POST":
 
         # Ensure email was submitted
-        if not request.form.get("email"):
+        if not email:
             return apology("must provide email", 403)
 
         # Ensure password was submitted
-        elif not request.form.get("password"):
+        elif not password:
             return apology("must provide password", 403)
+        
+        # Get User Input
+        email = request.form.get("email")
+        password = request.form.get("password")
 
         # Query database for email
         rows = db2.execute("SELECT * FROM users WHERE email = ?", request.form.get("email"))
@@ -141,7 +145,7 @@ def login():
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("login.html")
+        return render_template("login.html", email=email)
 
 
 @app.route("/logout")
