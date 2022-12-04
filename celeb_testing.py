@@ -199,26 +199,15 @@ for i in range(1, 10):
     # connection.commit()
     
     
-    
+#SELECT * FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = 24 ORDER BY points DESC LIMIT 5;
 
-
-
-
-
-
-
-    
 #SELECT * FROM celebs WHERE id IN(SELECT celeb_id FROM points WHERE user_id = 24 ORDER BY points DESC LIMIT 5)
                                  
                                  
-top5 = db.execute("SELECT * FROM celebs WHERE id IN(SELECT celeb_id FROM points WHERE user_id = ? ORDER BY points DESC LIMIT 5 )", (24,))
+top5 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 5", (24,))
 for celeb in top5:
-    celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-    celeb_full_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-    celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-    celeb_name = celeb_full_name.split()[0]
-    print(i, celeb_name, celeb_nat, celeb_gen, celeb_age, celeb_mbti, celeb_enne, points)
-
+    
+    print(celeb)
           
     
 
