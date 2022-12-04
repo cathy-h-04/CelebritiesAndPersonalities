@@ -452,6 +452,43 @@ def changepass():
     else:
 
         # make sure user inputs a password, username and confirms password
+        password = request.form.get("password")
+        newpass = request.form.get("newpass")
+        repeatpass = request.form.get("repeatpass")
+        
+        if not password:
+            return apology("Must provide username.")
+
+        elif not newpass:
+            return apology("Must provide a new password.")
+
+        elif not repeatpass:
+            return apology("Must confirm new password.")
+
+        # check if old password equals new password
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        if check_password_hash(rows[0]["hash"], newpassword):
+            return apology("Repeated password", 403)
+
+        # update new password into database
+        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
+
+    # redirect to login page
+    return redirect("/login")
+
+
+@app.route("/changepass", methods=["GET", "POST"])
+# @login_required
+def forgotpass():
+    """Forgot password"""
+
+    if request.method == "GET":
+        return render_template("changepass.html")
+
+    # user reached route via POST
+    else:
+        
+        # make sure user input's a password, username and confirms password
         if not username:
             return apology("Must provide username.")
 
