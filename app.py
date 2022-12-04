@@ -344,6 +344,8 @@ def register():
         email = request.form.get("email")
         password = request.form.get("password")
         confirmation = request.form.get("confirmpassword")
+        securityques1 = request.form.get("securityques1")
+        securityques2 = request.form.get("securityques2")
 
         # Ensure password was submitted
         if not password:
@@ -356,6 +358,12 @@ def register():
         # Checking that user has confirmed password
         elif not confirmation:
             return apology("must confirm password", 400)
+        
+        elif not securityques1:
+            return apology("Must confirm new password.")
+
+        elif not securityques2:
+            return apology("Must confirm new password.")
 
         # Checking that email and password match
         elif password != confirmation:
@@ -398,14 +406,14 @@ def register():
         return render_template("register.html")
 
 # TODO: !!!! may need to change route
-@app.route("/passwordchange", methods=["GET", "POST"])
-def passwordchange():
+@app.route("/changepass", methods=["GET", "POST"])
+def changepass():
     """Change password"""
     # user reached route via GET
     session.clear()
 
     if request.method == "GET":
-        return render_template("passwordchange.html")
+        return render_template("changepass.html")
 
     # user reached route via POST
     else:
@@ -422,8 +430,8 @@ def passwordchange():
 
         # get new password, password confirmation, & email
         email = request.form.get("email")
-        newpassword = request.form.get("new_password")
-        newconfirmation = request.form.get("new_confirmation")
+        newpassword = request.form.get("newpass")
+        newconfirmation = request.form.get("repeatpass")
 
         # check if old password equals new password
         rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
