@@ -329,7 +329,9 @@ def register():
         email = request.form.get("email")
         password = request.form.get("password")
         confirmation = request.form.get("confirmpassword")
-
+        securityq1 = request.form.get("securityq1")
+        securityq2 = request.form.get("securityq2")
+        
         # Ensure username was submitted
         if not email:
             return apology("must provide username", 400)
@@ -341,6 +343,12 @@ def register():
         # Checking that user has confirmed password
         elif not confirmation:
             return apology("must confirm password", 400)
+        
+        elif not securityq1:
+            return apology("must answer security question #1", 400)
+        
+        elif not securityq1:
+            return apology("must answer security question #2", 400)
 
         # Checking that username and password match
         elif password != confirmation:
