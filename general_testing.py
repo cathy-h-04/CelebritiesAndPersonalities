@@ -33,9 +33,7 @@ db = connection.cursor()
 db2 = connection2.cursor()
 # db2 = connection2.cursor()
 
-db.execute("DROP TABLE celebs")
 db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
-
 db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL)")
 
 celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
@@ -143,8 +141,17 @@ for i in range(1, 10):
     #print(celeb_name, celeb_nat, celeb_gen, celeb_age, celeb_mbti, celeb_enne, points)
     db.execute("UPDATE celebs SET points = ? WHERE id = ?", (points, i))
     connection.commit()
+
     
-    
+    celeb_points = db.execute("SELECT points FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+    print(celeb_points)
+
+short_list = db.execute("SELECT * FROM celebs").fetchall()
+
+for celeb in short_list:
+    print(celeb)
+
+
 
     # db.execute("UPDATE celebs SET points = ? WHERE id = ?", (points, i))
     #     #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
