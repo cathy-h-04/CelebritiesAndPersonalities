@@ -471,11 +471,11 @@ def changepass():
 
         # check if old password equals new password
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
-        if check_password_hash(rows[0]["hash"], newpassword):
-            return apology("Repeated password", 403)
+        if check_password_hash(rows[0]["hash"], newpass):
+            return apology("The inputted password is not a new password.", 403)
 
         # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
+        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpass), username)
 
     # redirect to login page
     return redirect("/login")
