@@ -374,7 +374,7 @@ def test():
 
      # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("test.html")
+        return render_template("account.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -498,7 +498,7 @@ def changepass():
 #         # TODO: add code for results here as necessary
 
 @app.route("/account", methods=["GET", "POST"])
-# @login_required
+@login_required
 def account():
     if request.method == "GET":
         return render_template("account.html")
