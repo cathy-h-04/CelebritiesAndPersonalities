@@ -138,6 +138,51 @@ def methodology():
         return render_template("methodology.html")
     
 
+def forgotpass():
+    """Forgot password"""
+
+    if request.method == "GET":
+        return render_template("forgotpass.html")
+
+    # user reached route via POST
+    else:
+
+        # get new password, password confirmation, & email
+        email = request.form.get("email")
+        newpass = request.form.get("newpass")
+        confirmpass = request.form.get("confirmpass")
+        securityques1 = request.form.get("securityques1")
+        securityques2 = request.form.get("securityques2")
+
+
+        # make sure user input's a password, email and confirms password
+        if not email:
+            return apology("Must provide email.")
+
+        elif not newpass:
+            return apology("Must provide a new password.")
+
+        elif not confirmpass:
+            return apology("Must confirm new password.")
+
+        elif not securityques1:
+            return apology("Must confirm new password.")
+
+        elif not securityques2:
+            return apology("Must confirm new password.")
+
+        # check if old password equals new password
+        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+        if check_password_hash(rows[0]["hash"], newpass):
+            return apology("Repeated password", 403)
+
+        # update new password into database
+        db.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
+
+    # redirect to login page
+    return redirect("/login")
+
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -418,6 +463,11 @@ def changepass():
     # user reached route via POST
     else:
 
+        # get new password, password confirmation, & email
+        email = request.form.get("email")
+        newpassword = request.form.get("newpass")
+        newconfirmation = request.form.get("repeatpass")
+        
         # make sure user inputs a password, email and confirms password
         if not email:
             return apology("Must provide email.")
@@ -427,11 +477,6 @@ def changepass():
 
         elif not newconfirmation:
             return apology("Must confirm new password.")
-
-        # get new password, password confirmation, & email
-        email = request.form.get("email")
-        newpassword = request.form.get("newpass")
-        newconfirmation = request.form.get("repeatpass")
 
         # check if old password equals new password
         rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
@@ -474,6 +519,11 @@ def changepass():
     # user reached route via POST
     else:
 
+        # get new password, password confirmation, & email
+        email = request.form.get("email")
+        newpassword = request.form.get("new_password")
+        newconfirmation = request.form.get("new_confirmation")
+
         # make sure user inputs a password, email and confirms password
         if not email:
             return apology("Must provide email.")
@@ -483,11 +533,6 @@ def changepass():
 
         elif not newconfirmation:
             return apology("Must confirm new password.")
-
-        # get new password, password confirmation, & email
-        email = request.form.get("email")
-        newpassword = request.form.get("new_password")
-        newconfirmation = request.form.get("new_confirmation")
 
         # check if old password equals new password
         rows = db.execute("SELECT * FROM users WHERE email = ?", email)
