@@ -84,7 +84,7 @@ db = connection.cursor()
 
 
 #BEFORE RUNNING:
-# db.execute("DELETE FROM points")
+db.execute("DELETE FROM points")
 db.execute("DELETE FROM sqlite_sequence where name='points'")
 # DELETE FROM points;
 # DELETE FROM sqlite_sequence where name='points';
@@ -231,12 +231,11 @@ def login():
         print(password)
 
         # Query database for email
-        rows = db.execute("SELECT * FROM users WHERE email = ?", (request.form.get("email"),)).fetchone()
-        print(rows)
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
 
 
         # Ensure email exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], password):
             return apology("invalid email and/or password", 403)
 
         # Remember which user has logged in
