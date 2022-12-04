@@ -1,4 +1,4 @@
-# test
+# TODO: clean up and determine which packages are actually necessary
 
 import os
 
@@ -40,45 +40,15 @@ def create_connection(path):
 
 connection = create_connection("E:\\celebs.db")
 connection2 = sqlite3.connect("users.db")
-connection3 = sqlite3.connect("points.db")
 
 db = connection.cursor()
 db2 = connection2.cursor()
-db3 = connection3.cursor()
 
-# CREATE TABLE celebs (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-#                 name TEXT NOT NULL, 
-#                 MBTI TEXT NOT NULL, 
-#                 enne TEXT NOT NULL
-#             );
+db.execute("DROP TABLE celebs")
 
-
-
-# CREATE TABLE users (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-#                 email TEXT NOT NULL, 
-#                 password TEXT NOT NULL, 
-#                 maiden TEXT NOT NULL, 
-#                 nickname TEXT NOT NULL
-#             );
-
-
-
-# CREATE TABLE points (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-#                 celeb_id INTEGER NOT NULL,
-#                 user_id INTEGER NOT NULL,
-#                 points NUMERIC,
-#                 FOREIGN KEY(celeb_id) REFERENCES celebs(id),
-#                 FOREIGN KEY(user_id) REFERENCES users(id)
-#             );
-
-#db.execute("DROP TABLE celebs")
-
-#db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
+db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 # db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
-#db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, maiden TEXT NOT NULL, nickname TEXT NOT NULL)")
+db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, maiden TEXT NOT NULL, nickname TEXT NOT NULL)")
     
 # TODO: create a third table in which a user's top 20 matches are stored (include name as foreign key, celeb names, and percent matches)
 celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
@@ -155,17 +125,17 @@ def login():
         # Ensure password was submitted
         elif not password:
             return apology("must provide password", 403)
-        
-        # Get User Input
+
+        # User Input
         email = request.form.get("email")
         password = request.form.get("password")
 
-        # Query database for email
-        rows = db2.execute("SELECT * FROM users WHERE email = ?", request.form.get("email"))
+        # Query database for username
+        rows = db2.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
-        # Ensure email exists and password is correct
+        # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid email and/or password", 403)
+            return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -261,75 +231,89 @@ def logout():
     
     
     
-@app.route("/test", methods=["GET", "POST"])
-# @login_required
-def test():
+# @app.route("/test", methods=["GET", "POST"])
+# # @login_required
+# def test():
      
-    if request.method == "POST":        
+#         # declaring each user's input as variables
+#     mbti = "INTJ"
+#     enne = 5
+#     name = "Cathy"
+        
+#         # declaring each user's ratings as variables
+#     mbti_rating = 3
+#     enne_rating = 4
+#     name_rating = 5
     
-        # declaring each user's input as variables
-        mbti = request.form.get("mbti")
-        enne = request.form.get("enne")
-        name = request.form.get("name")
+#     # declaring each user's input as variables
+#     mbti = request.form.get("mbti")
+#     enne = request.form.get("enne")
+#     name = request.form.get("name")
+    
+#     # declaring each user's ratings as variables
+#     mbti_rating = request.form.get("mbti_rating")
+#     enne_rating = request.form.get("enne_rating")
+#     name_rating = request.form.get("name_rating")
         
-        # declaring each user's ratings as variables
-        mbti_rating = request.form.get("mbti_rating")
-        enne_rating = request.form.get("enne_rating")
-        name_rating = request.form.get("name_rating")
-            
-            # User initial api information
-        nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
-        gender = pip._vendor.requests.get('https://api.genderize.io/?name='+name)
-        age = pip._vendor.requests.get('https://api.agify.io/?name='+name)
+#         # User initial api information
+#     nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
+#     gender = pip._vendor.requests.get('https://api.genderize.io/?name='+name)
+#     age = pip._vendor.requests.get('https://api.agify.io/?name='+name)
 
-            # user-specific ai-generated nationality, gender, and age
-        user_nat = (nationality.json()['country'][0])['country_id']
-        user_gen = gender.json()['gender']
-        user_age = age.json()['age']
+#         # user-specific ai-generated nationality, gender, and age
+#     user_nat = (nationality.json()['country'][0])['country_id']
+#     user_gen = gender.json()['gender']
+#     user_age = age.json()['age']
+    
+#     celeb_count = 20
         
-        celeb_count = 10
+#     for i in range(celeb_count):
+#         points = 0
+        
+#         celeb_enne = 0
+#         celeb_mbti = 0
+#         celeb_count = 0
+           
+#         celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+#         # celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
+#         for i in range(0, 3):
+#             if celeb_mbti[i] == mbti[i]:
+#                 points += 0.25 * mbti_rating 
+                 
+#         celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+#         # celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
             
-        for i in range(celeb_count):
-            points = 0
+#         if celeb_enne[0] == enne:
+#             points += enne_rating
+
+#         celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+#         # celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
             
-            celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+#         celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
+#         celeb_gender_search = pip._vendor.requests.get('https://api.genderize.io/?name='+celeb_name)
+#         celeb_age_search = pip._vendor.requests.get('https://api.agify.io/?name='+celeb_name)
 
-            for i in range(0, 4):
-                if celeb_mbti[i] == mbti[i]:
-                    points += (0.25 * mbti_rating)
-                    
-            celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
-                
-            if celeb_enne[0] == enne:
-                points += enne_rating
-
-            celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
-                
-            celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
-            celeb_gender_search = pip._vendor.requests.get('https://api.genderize.io/?name='+celeb_name)
-            celeb_age_search = pip._vendor.requests.get('https://api.agify.io/?name='+celeb_name)
-
-                # user-specific ai-generated nationality, gender, and age
-            celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
-            celeb_gen = celeb_gender_search.json()['gender']
-            celeb_age = celeb_age_search.json()['age']
-                
-            if celeb_nat == user_nat:
-                points += 1/3 * name_rating
-                
-            if celeb_gen == user_gen:
-                points += 1/3 * name_rating
-                
-            if celeb_age == user_age:
-                points += 1/3 * name_rating
-                
-            db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
-                #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
+#             # user-specific ai-generated nationality, gender, and age
+#         celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
+#         celeb_gen = celeb_gender_search.json()['gender']
+#         celeb_age = celeb_age_search.json()['age']
+            
+#         if celeb_nat == user_nat:
+#             points += 1/3 * name_rating
+            
+#         if celeb_gen == user_gen:
+#             points += 1/3 * name_rating
+            
+#         if celeb_age == user_age:
+#             points += 1/3 * name_rating
+            
+#         db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
+#             #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
 
 
-     # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("test.html")
+#      # User reached route via GET (as by clicking a link or via redirect)
+#     else:
+#         return render_template("test.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -341,7 +325,7 @@ def register():
 
     if request.method == "POST":
 
-        email = request.form.get("email")
+        username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmpassword")
 
@@ -349,23 +333,23 @@ def register():
         if not password:
             return apology("must provide password", 400)
 
-        # Ensure email was submitted
-        elif not email:
-            return apology("must provide email", 400)
+        # Ensure username was submitted
+        elif not username:
+            return apology("must provide username", 400)
 
         # Checking that user has confirmed password
         elif not confirmation:
             return apology("must confirm password", 400)
 
-        # Checking that email and password match
+        # Checking that username and password match
         elif password != confirmation:
             return apology("passwords must match", 400)
 
-        # checking that email is unique
+        # checking that username is unique
         # TODO: fix this implementation of the users database 
-        rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
+        rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
         if len(rows) > 0:
-            return apology("email already exists", 400)
+            return apology("username already exists", 400)
 
         # Checking that the password has at least one digit, 1 special character, and 5 letters in their password
         digits = 0
@@ -383,12 +367,12 @@ def register():
         if letters < 5 or digits < 1 or special_characters < 1:
             return apology("Password must contain at least 5 letters, 1 digit, and 1 special character.")
 
-        # 2nd personal touch, checks that password does not contain email
-        elif password.find(email) != -1:
-            return apology("Password must not contain email")
+        # 2nd personal touch, checks that password does not contain username
+        elif password.find(username) != -1:
+            return apology("Password must not contain username")
 
-        # adding user's email and hashed password into database
-        db2.execute("INSERT INTO users (email, hash) VALUES(?, ?)", (email, generate_password_hash(password)))
+        # adding user's username and hashed password into database
+        db2.execute("INSERT INTO users (username, hash) VALUES(?, ?)", (username, generate_password_hash(password)))
 
         # Confirm registration
         return redirect("/login")
@@ -410,9 +394,9 @@ def passwordchange():
     # user reached route via POST
     else:
 
-        # make sure user inputs a password, email and confirms password
-        if not email:
-            return apology("Must provide email.")
+        # make sure user inputs a password, username and confirms password
+        if not username:
+            return apology("Must provide username.")
 
         elif not newpassword:
             return apology("Must provide a new password.")
@@ -420,18 +404,18 @@ def passwordchange():
         elif not newconfirmation:
             return apology("Must confirm new password.")
 
-        # get new password, password confirmation, & email
-        email = request.form.get("email")
+        # get new password, password confirmation, & username
+        username = request.form.get("username")
         newpassword = request.form.get("new_password")
         newconfirmation = request.form.get("new_confirmation")
 
         # check if old password equals new password
-        rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
+        rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
         if check_password_hash(rows[0]["hash"], newpassword):
             return apology("Repeated password", 403)
 
         # update new password into database
-        db2.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpassword), email)
+        db2.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
 
     # redirect to login page
     return redirect("/login")
@@ -466,9 +450,9 @@ def changepass():
     # user reached route via POST
     else:
 
-        # make sure user inputs a password, email and confirms password
-        if not email:
-            return apology("Must provide email.")
+        # make sure user inputs a password, username and confirms password
+        if not username:
+            return apology("Must provide username.")
 
         elif not newpassword:
             return apology("Must provide a new password.")
@@ -476,18 +460,18 @@ def changepass():
         elif not newconfirmation:
             return apology("Must confirm new password.")
 
-        # get new password, password confirmation, & email
-        email = request.form.get("email")
+        # get new password, password confirmation, & username
+        username = request.form.get("username")
         newpassword = request.form.get("new_password")
         newconfirmation = request.form.get("new_confirmation")
 
         # check if old password equals new password
-        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         if check_password_hash(rows[0]["hash"], newpassword):
             return apology("Repeated password", 403)
 
         # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpassword), email)
+        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
 
     # redirect to login page
     return redirect("/login")
