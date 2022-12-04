@@ -452,12 +452,16 @@ def changepass():
     else:
 
         # make sure user inputs a password, username and confirms password
+        username = request.form.get("username")
         password = request.form.get("password")
         newpass = request.form.get("newpass")
         repeatpass = request.form.get("repeatpass")
         
-        if not password:
+        if not username:
             return apology("Must provide username.")
+        
+        if not password:
+            return apology("Must provide current password.")
 
         elif not newpass:
             return apology("Must provide a new password.")
