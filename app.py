@@ -492,24 +492,39 @@ def forgotpass():
     # user reached route via POST
     else:
         
+        # get new password, password confirmation, & username
+        username = request.form.get("username")
+        newpass = request.form.get("newpass")
+        confirmpass = request.form.get("confirmpass")
+        securityques1 = request.form.get("securityques1")
+        securityques2 = request.form.get("securityques2")
+        
+        
         # make sure user input's a password, username and confirms password
         if not username:
             return apology("Must provide username.")
 
-        elif not newpassword:
+        elif not newpass:
             return apology("Must provide a new password.")
 
-        elif not newconfirmation:
+        elif not confirmpass:
             return apology("Must confirm new password.")
-
-        # get new password, password confirmation, & username
-        username = request.form.get("username")
-        newpassword = request.form.get("new_password")
-        newconfirmation = request.form.get("new_confirmation")
+        
+        elif not confirmpass:
+            return apology("Must confirm new password.")
+        
+        elif not confirmpass:
+            return apology("Must confirm new password.")
+        
+        elif not securityques1:
+            return apology("Must confirm new password.")
+        
+        elif not securityques2:
+            return apology("Must confirm new password.")
 
         # check if old password equals new password
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
-        if check_password_hash(rows[0]["hash"], newpassword):
+        if check_password_hash(rows[0]["hash"], newpass):
             return apology("Repeated password", 403)
 
         # update new password into database
