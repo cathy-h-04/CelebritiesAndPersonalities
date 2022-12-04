@@ -458,7 +458,7 @@ def changepass():
     session.clear()
 
     if request.method == "GET":
-        return render_template("changepass.html")
+        return render_template("account.html")
 
     # user reached route via POST
     else:
@@ -503,47 +503,6 @@ def account():
     if request.method == "GET":
         return render_template("account.html")
 
-
-#TODO copied from finance
-# Personal Touch
-@app.route("/changepass", methods=["GET", "POST"])
-# @login_required
-def changepass():
-    """Change password"""
-    # # user reached route via GET
-    # session.clear()
-
-    if request.method == "GET":
-        return render_template("passwordchange.html")
-
-    # user reached route via POST
-    else:
-
-        # get new password, password confirmation, & email
-        email = request.form.get("email")
-        newpassword = request.form.get("new_password")
-        newconfirmation = request.form.get("new_confirmation")
-
-        # make sure user inputs a password, email and confirms password
-        if not email:
-            return apology("Must provide email.")
-
-        elif not newpassword:
-            return apology("Must provide a new password.")
-
-        elif not newconfirmation:
-            return apology("Must confirm new password.")
-
-        # check if old password equals new password
-        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
-        if check_password_hash(rows[0]["hash"], newpassword):
-            return apology("Repeated password", 403)
-
-        # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpassword), email)
-
-    # redirect to login page
-    return redirect("/login")
 
 # TODO: Code Compatibility Page 
 @app.route("/compatibility", methods=["GET", "POST"])
