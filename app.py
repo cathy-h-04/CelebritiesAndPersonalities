@@ -441,8 +441,8 @@ def account():
 @app.route("/passwordchange", methods=["GET", "POST"])
 def passwordchange():
     """Change password"""
-    # user reached route via GET
-    session.clear()
+    # # user reached route via GET
+    # session.clear()
 
     if request.method == "GET":
         return render_template("passwordchange.html")
