@@ -517,4 +517,3 @@ def compatibility():
         #TODO: finish implementation of compatibility
     if request.method == "GET":
         return render_template("compatibility.html")
-
