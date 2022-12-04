@@ -27,24 +27,26 @@ from flask_session import Session
 import sqlite3
 from sqlite3 import Error
 
-def create_connection(path):
-    connection = None
-    try:
-        connection = sqlite3.connect("os.path.basename(celebs.db)")
-        #connection = sqlite3.connect("/Users/pzhang/Desktop/CS_Final_Project/CelebritiesAndPersonalities/celebs.db")
-        print("Connection to SQLite DB successful")
-    except Error as e:
-        print("The error occurred")
+# def create_connection(path):
+#     connection = None
+#     try:
+#         connection = sqlite3.connect("os.path.basename(database.db)")
+#         #connection = sqlite3.connect("/Users/pzhang/Desktop/CS_Final_Project/CelebritiesAndPersonalities/celebs.db")
+#         print("Connection to SQLite DB successful")
+#     except Error as e:
+#         print("The error occurred")
 
-    return connection
+#     return connection
 
-connection = create_connection("E:\\celebs.db")
-connection2 = sqlite3.connect("users.db")
-connection3 = sqlite3.connect("points.db")
+# connection = create_connection("E:\\database.db")
+
+connection = sqlite3.connect("database.db")
+# connection2 = sqlite3.connect("users.db")
+# connection3 = sqlite3.connect("points.db")
 
 db = connection.cursor()
-db2 = connection2.cursor()
-db3 = connection3.cursor()
+# db2 = connection2.cursor()
+# db3 = connection3.cursor()
 
 # CREATE TABLE celebs (
 #                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
@@ -88,6 +90,20 @@ celeb_data = (celebs.json()["profiles"])
 character_data = (characters.json()["profiles"])
 
 data = celeb_data + character_data
+
+
+#QUESTION: SHOULD I JUST RUN THIS IN SQLITE?
+# for person in data:
+#     person_name = person["mbti_profile"]
+#     person_personality = person["personality_type"]
+#     mbti = person_personality.split()[0]
+#     enne = person_personality.split()[1]
+#     #print(person_name,mbti,enne)
+
+#     #QUESTION: WHY DOESN'T THIS WORK WITH OTHER TYPE OF CONNECTION?
+#     db.execute("INSERT INTO celebs (name, MBTI, enne) VALUES (?, ?, ?)", (person_name, mbti, enne))
+#     connection.commit()
+
 
 # Configure application
 app = Flask(__name__)
@@ -206,7 +222,8 @@ def login():
         password = request.form.get("password")
 
         # Query database for email
-        rows = db2.execute("SELECT * FROM users WHERE email = ?", request.form.get("email"))
+        #CHANGE NEEDED
+        rows = db.execute("SELECT * FROM users WHERE email = ?", request.form.get("email"))
 
         # Ensure email exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
@@ -331,45 +348,52 @@ def test():
         user_nat = (nationality.json()['country'][0])['country_id']
         user_gen = gender.json()['gender']
         user_age = age.json()['age']
-        
-        celeb_count = 10
-            
-        for i in range(celeb_count):
+                
+        for i in range(1, 10):
             points = 0
-            
-            celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+        
+            celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_full_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_name = celeb_full_name.split()[0]
 
+            
             for i in range(0, 4):
                 if celeb_mbti[i] == mbti[i]:
-                    points += (0.25 * mbti_rating)
+                    points += (0.25 * mbti_rating )
                     
-            celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
-                
-            if celeb_enne[0] == enne:
+            if int(celeb_enne[0]) == enne:
                 points += enne_rating
-
-            celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
                 
-            celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
+
+            name_exists = True
+            
             celeb_gender_search = pip._vendor.requests.get('https://api.genderize.io/?name='+celeb_name)
             celeb_age_search = pip._vendor.requests.get('https://api.agify.io/?name='+celeb_name)
-
-                # user-specific ai-generated nationality, gender, and age
-            celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
-            celeb_gen = celeb_gender_search.json()['gender']
-            celeb_age = celeb_age_search.json()['age']
+            
+            if celeb_gender_search.json()['count'] == 0:
+                name_exists = False
+            
+            if name_exists:
+                celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
+                celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
+                celeb_gen = celeb_gender_search.json()['gender']
+                celeb_age = celeb_age_search.json()['age']
                 
-            if celeb_nat == user_nat:
-                points += 1/3 * name_rating
                 
-            if celeb_gen == user_gen:
-                points += 1/3 * name_rating
+                if celeb_nat == user_nat:
+                    points += 1/3 * name_rating
                 
-            if celeb_age == user_age:
-                points += 1/3 * name_rating
-                
-            db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
-                #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
+                if celeb_gen == user_gen:
+                    points += 1/3 * name_rating
+                    
+                if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
+                    points += 1/3 * name_rating
+                    
+            #print(celeb_name, celeb_nat, celeb_gen, celeb_age, celeb_mbti, celeb_enne, points)
+            
+            db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, 24, points))
+            connection.commit()
 
 
      # User reached route via GET (as by clicking a link or via redirect)
