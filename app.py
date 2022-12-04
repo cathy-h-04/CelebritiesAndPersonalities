@@ -438,8 +438,9 @@ def account():
 
 #TODO copied from finance
 # Personal Touch
-@app.route("/passwordchange", methods=["GET", "POST"])
-def passwordchange():
+@app.route("/changepass", methods=["GET", "POST"])
+# @login_required
+def changepass():
     """Change password"""
     # # user reached route via GET
     # session.clear()
