@@ -106,3 +106,13 @@ nav .navbar-brand
     padding: 3px 20px;
     text-align: left;
   }
+
+.navbar-color {
+    color: dimgray;
+}
+
+.titlecolor {
+    background: -webkit-linear-gradient(#788AA3, #92B6B1, white);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
