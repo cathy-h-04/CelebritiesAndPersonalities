@@ -231,12 +231,19 @@ def login():
         print(password)
 
         # Query database for email
+        # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
+        # rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+        # row = db.fetchone()
 
-
-        # Ensure email exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], password):
-            return apology("invalid email and/or password", 403)
+        # while rows is not None:
+        #     print(rows)
+        #     rows = db.fetchone()
+        
+        # TODO: implement this!!
+        # # Ensure email exists and password is correct
+        # if len(str(rows)) != 1 or not check_password_hash(rows[0]["hash"], password):
+        #     return apology("invalid email and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
