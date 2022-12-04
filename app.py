@@ -389,19 +389,43 @@ def register():
     else:
         return render_template("register.html")
 
-# TODO: !!!! may need to change route
-@app.route("/passwordchange", methods=["GET", "POST"])
-def passwordchange():
-    """Change password"""
-    # user reached route via GET
-    session.clear()
+# # TODO: !!!! may need to change route
+# @app.route("/passwordchange", methods=["GET", "POST"])
+# def passwordchange():
+#     """Change password"""
+#     # user reached route via GET
+#     session.clear()
 
-    if request.method == "GET":
-        return render_template("passwordchange.html")
+#     if request.method == "GET":
+#         return render_template("passwordchange.html")
 
-    # user reached route via POST
-    else:
+#     # user reached route via POST
+#     else:
 
+<<<<<<< HEAD
+#         # make sure user inputs a password, username and confirms password
+#         if not username:
+#             return apology("Must provide username.")
+
+#         elif not newpassword:
+#             return apology("Must provide a new password.")
+
+#         elif not newconfirmation:
+#             return apology("Must confirm new password.")
+
+#         # get new password, password confirmation, & username
+#         username = request.form.get("username")
+#         newpassword = request.form.get("new_password")
+#         newconfirmation = request.form.get("new_confirmation")
+
+#         # check if old password equals new password
+#         rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
+#         if check_password_hash(rows[0]["hash"], newpassword):
+#             return apology("Repeated password", 403)
+
+#         # update new password into database
+#         db2.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
+=======
         # get new password, password confirmation, & email
         email = request.form.get("email")
         currentpass = request.form.get("password")
@@ -428,9 +452,10 @@ def passwordchange():
 
         # update new password into database
         db2.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
+>>>>>>> 9d5d1bded1d769a93bed40d6927801eda6f03e22
 
-    # redirect to login page
-    return redirect("/login")
+#     # redirect to login page
+#     return redirect("/login")
 
 
 # TODO: Code Result page
