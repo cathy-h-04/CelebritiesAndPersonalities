@@ -326,17 +326,17 @@ def register():
 
     if request.method == "POST":
 
-        username = request.form.get("username")
+        email = request.form.get("email")
         password = request.form.get("password")
         confirmation = request.form.get("confirmpassword")
 
-        # Ensure password was submitted
-        if not password:
-            return apology("must provide password", 400)
-
         # Ensure username was submitted
-        elif not username:
+        if not email:
             return apology("must provide username", 400)
+        
+        # Ensure password was submitted
+        elif not password:
+            return apology("must provide password", 400)
 
         # Checking that user has confirmed password
         elif not confirmation:
