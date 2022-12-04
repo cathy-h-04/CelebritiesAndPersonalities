@@ -347,7 +347,7 @@ def register():
         elif not securityq1:
             return apology("must answer security question #1", 400)
         
-        elif not securityq1:
+        elif not securityq2:
             return apology("must answer security question #2", 400)
 
         # Checking that username and password match
@@ -356,9 +356,9 @@ def register():
 
         # checking that username is unique
         # TODO: fix this implementation of the users database 
-        rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
+        rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
         if len(rows) > 0:
-            return apology("username already exists", 400)
+            return apology("email has already been used for another account", 400)
 
         # Checking that the password has at least one digit, 1 special character, and 5 letters in their password
         digits = 0
