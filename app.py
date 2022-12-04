@@ -481,13 +481,13 @@ def changepass():
     return redirect("/login")
 
 
-@app.route("/changepass", methods=["GET", "POST"])
+@app.route("/forgotpass", methods=["GET", "POST"])
 # @login_required
 def forgotpass():
     """Forgot password"""
 
     if request.method == "GET":
-        return render_template("changepass.html")
+        return render_template("forgotpass.html")
 
     # user reached route via POST
     else:
