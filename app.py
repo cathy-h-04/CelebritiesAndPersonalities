@@ -446,7 +446,7 @@ def changepass():
     # session.clear()
 
     if request.method == "GET":
-        return render_template("passwordchange.html")
+        return render_template("changepass.html")
 
     # user reached route via POST
     else:
