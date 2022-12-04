@@ -48,7 +48,7 @@ db.execute("DROP TABLE celebs")
 
 db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 # db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
-db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, maiden TEXT NOT NULL, nickname TEXT NOT NULL)")
+db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, maiden TEXT NOT NULL, nickname TEXT NOT NULL)")
 
 # TODO: create a third table in which a user's top 20 matches are stored (include name as foreign key, celeb names, and percent matches)
 celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
@@ -118,20 +118,20 @@ def login():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
+        # Ensure email was submitted
+        if not request.form.get("email"):
+            return apology("must provide email", 403)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
-        # Query database for username
-        rows = db2.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        # Query database for email
+        rows = db2.execute("SELECT * FROM users WHERE email = ?", request.form.get("email"))
 
-        # Ensure username exists and password is correct
+        # Ensure email exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return apology("invalid email and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -332,7 +332,7 @@ def register():
         securityq1 = request.form.get("securityq1")
         securityq2 = request.form.get("securityq2")
         
-        # Ensure username was submitted
+        # Ensure email was submitted
         if not email:
             return apology("must provide email address", 400)
         
@@ -402,13 +402,13 @@ def passwordchange():
     # user reached route via POST
     else:
 
-        # get new password, password confirmation, & username
+        # get new password, password confirmation, & email
         email = request.form.get("email")
         currentpass = request.form.get("password")
         newpass = request.form.get("newpass")
         repeatpass = request.form.get("repeatpass")
         
-        # make sure user inputs a password, username and confirms password
+        # make sure user inputs a password, email and confirms password
         if not email:
             return apology("Must provide email.")
                 
@@ -503,7 +503,7 @@ def forgotpass():
     # user reached route via POST
     else:
         
-        # get new password, password confirmation, & username
+        # get new password, password confirmation, & email
         email = request.form.get("email")
         newpass = request.form.get("newpass")
         confirmpass = request.form.get("confirmpass")
@@ -511,19 +511,13 @@ def forgotpass():
         securityques2 = request.form.get("securityques2")
         
         
-        # make sure user input's a password, username and confirms password
+        # make sure user input's a password, email and confirms password
         if not email:
             return apology("Must provide email.")
 
         elif not newpass:
             return apology("Must provide a new password.")
 
-        elif not confirmpass:
-            return apology("Must confirm new password.")
-        
-        elif not confirmpass:
-            return apology("Must confirm new password.")
-        
         elif not confirmpass:
             return apology("Must confirm new password.")
         
@@ -534,12 +528,12 @@ def forgotpass():
             return apology("Must confirm new password.")
 
         # check if old password equals new password
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
         if check_password_hash(rows[0]["hash"], newpass):
             return apology("Repeated password", 403)
 
         # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
+        db.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
 
     # redirect to login page
     return redirect("/login")
