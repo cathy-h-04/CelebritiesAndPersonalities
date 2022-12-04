@@ -377,11 +377,11 @@ def register():
             return apology("Password must contain at least 5 letters, 1 digit, and 1 special character.")
 
         # 2nd personal touch, checks that password does not contain username
-        elif password.find(username) != -1:
-            return apology("Password must not contain username")
+        elif password.find(email) != -1:
+            return apology("Password must not contain email")
 
         # adding user's username and hashed password into database
-        db2.execute("INSERT INTO users (username, hash) VALUES(?, ?)", (username, generate_password_hash(password)))
+        db2.execute("INSERT INTO users (email, hash) VALUES(?, ?)", (email, generate_password_hash(password)))
 
         # Confirm registration
         return redirect("/login")
