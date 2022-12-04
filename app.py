@@ -84,7 +84,7 @@ db = connection.cursor()
 
 
 #BEFORE RUNNING:
-db.execute("DELETE FROM points")
+# db.execute("DELETE FROM points")
 db.execute("DELETE FROM sqlite_sequence where name='points'")
 # DELETE FROM points;
 # DELETE FROM sqlite_sequence where name='points';
@@ -220,17 +220,20 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        # Ensure email was submitted
-        if not email:
-            return apology("must provide email", 403)
+        # # Ensure email was submitted
+        # if not email:
+        #     return apology("must provide email", 403)
 
-        # Ensure password was submitted
-        elif not password:
-            return apology("must provide password", 403)
-        
+        # # Ensure password was submitted
+        # elif not password:
+        #     return apology("must provide password", 403)
+        print(email)
+        print(password)
 
         # Query database for email
-        rows = db.execute("SELECT * FROM users WHERE email = ?", (request.form.get("email"),)).fetchone()[0]
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (request.form.get("email"),)).fetchone()
+        print(rows)
+
 
         # Ensure email exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
@@ -422,14 +425,14 @@ def register():
     if request.method == "POST":
 
         email = request.form.get("email")
-        print(email)
+        # print(email)
         password = request.form.get("password")
-        print(password)
+        # print(password)
         confirmation = request.form.get("confirmpassword")
         securityques1 = request.form.get("securityques1")
-        print(securityques1)
+        # print(securityques1)
         securityques2 = request.form.get("securityques2")
-        print(securityques2)
+        # print(securityques2)
 
         # # Ensure password was submitted
         # if not password:
