@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Forgot Password
+Register
 {% endblock %}
 
 {% block main %}
@@ -13,7 +13,7 @@ Forgot Password
           <div class="card shadow-2-strong card-registration backdrop" style="border-radius: 15px;">
             <div class="card-body p-4 p-md-5">
               <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 rhythmBlue">Register</h3>
-              <form>
+              <form action="/register" method = "post">
 
                 <div class="row">
                   <div class="col-md-6 mb-4">
@@ -40,14 +40,14 @@ Forgot Password
                     <div class="col-md-6 mb-4">
                       <div class="form-outline">
                         <strong class="left rhythmBlue">Security Question: What is your mother's maiden name?</strong>
-                          <input type="text" autocomplete="off" autofocus id="securityq1" name="securityq1" placeholder="Answer" class="form-control form-control-lg" />
+                          <input type="text" autocomplete="off" autofocus id="securityques1" name="securityques1" placeholder="Answer" class="form-control form-control-lg" />
                       </div>
 
                     </div>
                     <div class="col-md-6 mb-4">
                       <div class="form-outline">
                         <strong class="left rhythmBlue">Security Question: What is your childhood nickname?</strong>
-                          <input type="text" id="securityq2" name="securityq2" placeholder="Answer" class="form-control form-control-lg" />
+                          <input type="text" id="securityques2" name="securityques2" placeholder="Answer" class="form-control form-control-lg" />
                       </div>
                   </div>
 
