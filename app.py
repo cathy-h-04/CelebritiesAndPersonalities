@@ -452,12 +452,12 @@ def changepass():
     else:
 
         # make sure user inputs a password, username and confirms password
-        username = request.form.get("username")
+        email = request.form.get("email")
         password = request.form.get("password")
         newpass = request.form.get("newpass")
         repeatpass = request.form.get("repeatpass")
         
-        if not username:
+        if not email:
             return apology("Must provide username.")
         
         if not password:
@@ -470,12 +470,12 @@ def changepass():
             return apology("Must confirm new password.")
 
         # check if old password equals new password
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
         if check_password_hash(rows[0]["hash"], newpass):
             return apology("The inputted password is not a new password.", 403)
 
         # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpass), username)
+        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpass), email)
 
     # redirect to login page
     return redirect("/login")
