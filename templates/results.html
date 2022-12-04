@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Match Results
+{% endblock %} 
+
+{% block main %} 
+<div class="container light-style flex-grow-1 container-p-y">
+
+  <h4 class="font-weight-bold py-3 mb-4">
+    Match Results
+  </h4>
+
+  <div class="card overflow-hidden">
+    <div class="row no-gutters row-bordered row-border-light">
+      <div class="col-md-3 pt-0">
+            
+            </div>
+          </div>
+          <div class="tab-pane fade" id="account-results">
+            <div class="card-body pb-2">
+              <section class="vh-100" style="background-color: #eee;">
+                <div class="container py-5 h-100">
+                  <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col col-lg-9 col-xl-7">
+                      <div class="card rounded-3">
+                        <div class="card-body p-4">
+              
+                          <h4 class="text-center my-3 pb-3">Match Results</h4>
+  
+                          <table class="table mb-4">
+                            <thead>
+                              <tr>
+                                <th scope="col">Rank</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Match Percentage</th>
+                              </tr>
+                            </thead>
+                            <!-- Jinja to loop through top 10 -->
+                            <tbody>
+                              <tr>
+                                <th scope="row">1</th>
+                                <td>Ur Mom</td>
+                                <td>100%</td>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+            </div>
+{% endblock %}
