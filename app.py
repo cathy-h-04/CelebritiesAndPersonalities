@@ -49,7 +49,7 @@ db.execute("DROP TABLE celebs")
 db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 # db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, maiden TEXT NOT NULL, nickname TEXT NOT NULL)")
-
+    
 # TODO: create a third table in which a user's top 20 matches are stored (include name as foreign key, celeb names, and percent matches)
 celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
 characters = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
@@ -126,12 +126,12 @@ def login():
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
-        # Query database for email
-        rows = db2.execute("SELECT * FROM users WHERE email = ?", request.form.get("email"))
+        # Query database for username
+        rows = db2.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
-        # Ensure email exists and password is correct
+        # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid email and/or password", 403)
+            return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -178,12 +178,11 @@ def logout():
 #         user_nat = (nationality.json()['country'][0])['country_id']
 #         user_gen = gender.json()['gender']
 #         user_age = age.json()['age']
-
-#         db.execute("SELECT * FROM celebs")
     
         
-#         celeb_count = db.execute("SELECT count(id) FROM celebs")
         
+#         celeb_count = db.execute("SELECT count(id) FROM celebs")
+            
 #         for i in range(celeb_count):
 #             points = 0
 #             celeb_enne = 0
@@ -194,33 +193,29 @@ def logout():
 #             for i in range(0, 3):
 #                 if celeb_mbti[i] == mbti[i]:
 #                     points += 0.25 * mbti_rating 
-                 
             
+        
 #             celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
-            
+        
 #             if celeb_enne[0] == enne:
 #                 points += enne_rating
-
+        
 #             celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
-            
+        
 #             celeb_nationality_search = requests.get('https://api.nationalize.io/?name='+celeb_name)
 #             celeb_gender_search = requests.get('https://api.genderize.io/?name='+celeb_name)
 #             celeb_age_search = requests.get('https://api.agify.io/?name='+celeb_name)
-
-#             # user-specific ai-generated nationality, gender, and age
-#             celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
-#             celeb_gen = celeb_gender_search.json()['gender']
-#             celeb_age = celeb_age_search.json()['age']
+            
             
 #             if celeb_nat == user_nat:
 #                 points += 1/3 * name_rating
             
 #             if celeb_gen == user_gen:
 #                 points += 1/3 * name_rating
-            
+                
 #             if celeb_age == user_age:
 #                 points += 1/3 * name_rating
-            
+                
 #             db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
 #             #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
 
@@ -232,89 +227,89 @@ def logout():
     
     
     
-@app.route("/test", methods=["GET", "POST"])
-# @login_required
-def test():
+# @app.route("/test", methods=["GET", "POST"])
+# # @login_required
+# def test():
      
-        # declaring each user's input as variables
-    mbti = "INTJ"
-    enne = 5
-    name = "Cathy"
-        
-        # declaring each user's ratings as variables
-    mbti_rating = 3
-    enne_rating = 4
-    name_rating = 5
-    
-    #    # declaring each user's input as variables
-#         mbti = request.form.get("mbti")
-#         enne = request.form.get("enne")
-#         name = request.form.get("name")
+#         # declaring each user's input as variables
+#     mbti = "INTJ"
+#     enne = 5
+#     name = "Cathy"
         
 #         # declaring each user's ratings as variables
-#         mbti_rating = request.form.get("mbti_rating")
-#         enne_rating = request.form.get("enne_rating")
-#         name_rating = request.form.get("name_rating")
-        
-        # User initial api information
-    nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
-    gender = pip._vendor.requests.get('https://api.genderize.io/?name='+name)
-    age = pip._vendor.requests.get('https://api.agify.io/?name='+name)
-
-        # user-specific ai-generated nationality, gender, and age
-    user_nat = (nationality.json()['country'][0])['country_id']
-    user_gen = gender.json()['gender']
-    user_age = age.json()['age']
+#     mbti_rating = 3
+#     enne_rating = 4
+#     name_rating = 5
     
-    celeb_count = 20
+#     # declaring each user's input as variables
+#     mbti = request.form.get("mbti")
+#     enne = request.form.get("enne")
+#     name = request.form.get("name")
+    
+#     # declaring each user's ratings as variables
+#     mbti_rating = request.form.get("mbti_rating")
+#     enne_rating = request.form.get("enne_rating")
+#     name_rating = request.form.get("name_rating")
         
-    for i in range(celeb_count):
-        points = 0
+#         # User initial api information
+#     nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
+#     gender = pip._vendor.requests.get('https://api.genderize.io/?name='+name)
+#     age = pip._vendor.requests.get('https://api.agify.io/?name='+name)
+
+#         # user-specific ai-generated nationality, gender, and age
+#     user_nat = (nationality.json()['country'][0])['country_id']
+#     user_gen = gender.json()['gender']
+#     user_age = age.json()['age']
+    
+#     celeb_count = 20
         
-        celeb_enne = 0
-        celeb_mbti = 0
-        celeb_count = 0
+#     for i in range(celeb_count):
+#         points = 0
+        
+#         celeb_enne = 0
+#         celeb_mbti = 0
+#         celeb_count = 0
            
-        celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
-        # celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
-        for i in range(0, 3):
-            if celeb_mbti[i] == mbti[i]:
-                points += 0.25 * mbti_rating 
+#         celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+#         # celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
+#         for i in range(0, 3):
+#             if celeb_mbti[i] == mbti[i]:
+#                 points += 0.25 * mbti_rating 
                  
-        celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
-        # celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
+#         celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+#         # celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
             
-        if celeb_enne[0] == enne:
-            points += enne_rating
+#         if celeb_enne[0] == enne:
+#             points += enne_rating
 
-        celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
-        # celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
+#         celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i + 1,)).fetchone()[0]
+#         # celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
             
-        celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
-        celeb_gender_search = pip._vendor.requests.get('https://api.genderize.io/?name='+celeb_name)
-        celeb_age_search = pip._vendor.requests.get('https://api.agify.io/?name='+celeb_name)
+#         celeb_nationality_search = pip._vendor.requests.get('https://api.nationalize.io/?name='+celeb_name)
+#         celeb_gender_search = pip._vendor.requests.get('https://api.genderize.io/?name='+celeb_name)
+#         celeb_age_search = pip._vendor.requests.get('https://api.agify.io/?name='+celeb_name)
 
-            # user-specific ai-generated nationality, gender, and age
-        celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
-        celeb_gen = celeb_gender_search.json()['gender']
-        celeb_age = celeb_age_search.json()['age']
+#             # user-specific ai-generated nationality, gender, and age
+#         celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
+#         celeb_gen = celeb_gender_search.json()['gender']
+#         celeb_age = celeb_age_search.json()['age']
             
-        if celeb_nat == user_nat:
-            points += 1/3 * name_rating
+#         if celeb_nat == user_nat:
+#             points += 1/3 * name_rating
             
-        if celeb_gen == user_gen:
-            points += 1/3 * name_rating
+#         if celeb_gen == user_gen:
+#             points += 1/3 * name_rating
             
-        if celeb_age == user_age:
-            points += 1/3 * name_rating
+#         if celeb_age == user_age:
+#             points += 1/3 * name_rating
             
-        db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
-            #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
+#         db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
+#             #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
 
 
-     # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("test.html")
+#      # User reached route via GET (as by clicking a link or via redirect)
+#     else:
+#         return render_template("test.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -326,38 +321,31 @@ def register():
 
     if request.method == "POST":
 
-        email = request.form.get("email")
+        username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmpassword")
-        securityq1 = request.form.get("securityq1")
-        securityq2 = request.form.get("securityq2")
-        
-        # Ensure email was submitted
-        if not email:
-            return apology("must provide email address", 400)
-        
+
         # Ensure password was submitted
-        elif not password:
+        if not password:
             return apology("must provide password", 400)
+
+        # Ensure username was submitted
+        elif not username:
+            return apology("must provide username", 400)
 
         # Checking that user has confirmed password
         elif not confirmation:
             return apology("must confirm password", 400)
-        
-        elif not securityq1:
-            return apology("must answer security question #1", 400)
-        
-        elif not securityq2:
-            return apology("must answer security question #2", 400)
 
-        # Checking that password and password confirmation match
+        # Checking that username and password match
         elif password != confirmation:
             return apology("passwords must match", 400)
 
-        # checking that email address is unique
-        rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
+        # checking that username is unique
+        # TODO: fix this implementation of the users database 
+        rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
         if len(rows) > 0:
-            return apology("email has already been used for another account", 400)
+            return apology("username already exists", 400)
 
         # Checking that the password has at least one digit, 1 special character, and 5 letters in their password
         digits = 0
@@ -375,12 +363,12 @@ def register():
         if letters < 5 or digits < 1 or special_characters < 1:
             return apology("Password must contain at least 5 letters, 1 digit, and 1 special character.")
 
-        # 2nd personal touch, checks that password does not contain email address
-        elif password.find(email) != -1:
-            return apology("Password must not contain email")
+        # 2nd personal touch, checks that password does not contain username
+        elif password.find(username) != -1:
+            return apology("Password must not contain username")
 
-        # adding user's email and hashed password into database
-        db2.execute("INSERT INTO users (email, hash) VALUES(?, ?)", (email, generate_password_hash(password)))
+        # adding user's username and hashed password into database
+        db2.execute("INSERT INTO users (username, hash) VALUES(?, ?)", (username, generate_password_hash(password)))
 
         # Confirm registration
         return redirect("/login")
@@ -389,73 +377,44 @@ def register():
     else:
         return render_template("register.html")
 
-# # TODO: !!!! may need to change route
-# @app.route("/passwordchange", methods=["GET", "POST"])
-# def passwordchange():
-#     """Change password"""
-#     # user reached route via GET
-#     session.clear()
+# TODO: !!!! may need to change route
+@app.route("/passwordchange", methods=["GET", "POST"])
+def passwordchange():
+    """Change password"""
+    # user reached route via GET
+    session.clear()
 
-#     if request.method == "GET":
-#         return render_template("passwordchange.html")
+    if request.method == "GET":
+        return render_template("passwordchange.html")
 
-#     # user reached route via POST
-#     else:
+    # user reached route via POST
+    else:
 
-<<<<<<< HEAD
-#         # make sure user inputs a password, username and confirms password
-#         if not username:
-#             return apology("Must provide username.")
+        # make sure user inputs a password, username and confirms password
+        if not username:
+            return apology("Must provide username.")
 
-#         elif not newpassword:
-#             return apology("Must provide a new password.")
-
-#         elif not newconfirmation:
-#             return apology("Must confirm new password.")
-
-#         # get new password, password confirmation, & username
-#         username = request.form.get("username")
-#         newpassword = request.form.get("new_password")
-#         newconfirmation = request.form.get("new_confirmation")
-
-#         # check if old password equals new password
-#         rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
-#         if check_password_hash(rows[0]["hash"], newpassword):
-#             return apology("Repeated password", 403)
-
-#         # update new password into database
-#         db2.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
-=======
-        # get new password, password confirmation, & email
-        email = request.form.get("email")
-        currentpass = request.form.get("password")
-        newpass = request.form.get("newpass")
-        repeatpass = request.form.get("repeatpass")
-        
-        # make sure user inputs a password, email and confirms password
-        if not email:
-            return apology("Must provide email.")
-                
-        elif not currentpass:
-            return apology("Must provide current password.")
-        
-        elif not newpass:
+        elif not newpassword:
             return apology("Must provide a new password.")
 
-        elif not repeatpass:
+        elif not newconfirmation:
             return apology("Must confirm new password.")
 
+        # get new password, password confirmation, & username
+        username = request.form.get("username")
+        newpassword = request.form.get("new_password")
+        newconfirmation = request.form.get("new_confirmation")
+
         # check if old password equals new password
-        rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
-        if check_password_hash(rows[0]["hash"], newpass):
+        rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
+        if check_password_hash(rows[0]["hash"], newpassword):
             return apology("Repeated password", 403)
 
         # update new password into database
-        db2.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
->>>>>>> 9d5d1bded1d769a93bed40d6927801eda6f03e22
+        db2.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
 
-#     # redirect to login page
-#     return redirect("/login")
+    # redirect to login page
+    return redirect("/login")
 
 
 # TODO: Code Result page
@@ -482,83 +441,33 @@ def changepass():
     # session.clear()
 
     if request.method == "GET":
-        return render_template("changepass.html")
+        return render_template("passwordchange.html")
 
     # user reached route via POST
     else:
 
-        # make sure user inputs a password, email and confirms password
-        email = request.form.get("email")
-        password = request.form.get("password")
-        newpass = request.form.get("newpass")
-        repeatpass = request.form.get("repeatpass")
-        
-        if not email:
-            return apology("Must provide email.")
-        
-        if not password:
-            return apology("Must provide current password.")
+        # make sure user inputs a password, username and confirms password
+        if not username:
+            return apology("Must provide username.")
 
-        elif not newpass:
+        elif not newpassword:
             return apology("Must provide a new password.")
 
-        elif not repeatpass:
+        elif not newconfirmation:
             return apology("Must confirm new password.")
+
+        # get new password, password confirmation, & username
+        username = request.form.get("username")
+        newpassword = request.form.get("new_password")
+        newconfirmation = request.form.get("new_confirmation")
 
         # check if old password equals new password
-        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
-        if check_password_hash(rows[0]["hash"], newpass):
-            return apology("The inputted password is not a new password.", 403)
-
-        # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
-
-    # redirect to login page
-    return redirect("/login")
-
-
-@app.route("/forgotpass", methods=["GET", "POST"])
-# @login_required
-def forgotpass():
-    """Forgot password"""
-
-    if request.method == "GET":
-        return render_template("forgotpass.html")
-
-    # user reached route via POST
-    else:
-        
-        # get new password, password confirmation, & email
-        email = request.form.get("email")
-        newpass = request.form.get("newpass")
-        confirmpass = request.form.get("confirmpass")
-        securityques1 = request.form.get("securityques1")
-        securityques2 = request.form.get("securityques2")
-        
-        
-        # make sure user input's a password, email and confirms password
-        if not email:
-            return apology("Must provide email.")
-
-        elif not newpass:
-            return apology("Must provide a new password.")
-
-        elif not confirmpass:
-            return apology("Must confirm new password.")
-        
-        elif not securityques1:
-            return apology("Must confirm new password.")
-        
-        elif not securityques2:
-            return apology("Must confirm new password.")
-
-        # check if old password equals new password
-        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
-        if check_password_hash(rows[0]["hash"], newpass):
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        if check_password_hash(rows[0]["hash"], newpassword):
             return apology("Repeated password", 403)
 
         # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
+        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
 
     # redirect to login page
     return redirect("/login")
