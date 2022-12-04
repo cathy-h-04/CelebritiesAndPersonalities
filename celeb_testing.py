@@ -207,7 +207,7 @@ for i in range(1, 10):
 top5 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 5", (24,))
 for celeb in top5:
     
-    print(celeb)
+    print(celeb[0]["name"])
           
     
 
