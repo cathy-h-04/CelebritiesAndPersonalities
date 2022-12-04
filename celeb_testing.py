@@ -199,7 +199,16 @@ for i in range(1, 10):
     # connection.commit()
     
     
-SELECT * FROM celebs WHERE id IN(SELECT celeb_id FROM points WHERE user_id = 24 ORDER BY points DESC LIMIT 5)
+    
+
+
+
+
+
+
+
+    
+#SELECT * FROM celebs WHERE id IN(SELECT celeb_id FROM points WHERE user_id = 24 ORDER BY points DESC LIMIT 5)
                                  
                                  
 top5 = db.execute("SELECT * FROM celebs WHERE id IN(SELECT celeb_id FROM points WHERE user_id = ? ORDER BY points DESC LIMIT 5 )", (24,))
