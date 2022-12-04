@@ -48,7 +48,7 @@ db.execute("DROP TABLE celebs")
 
 db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 # db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
-db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, maiden TEXT NOT NULL, nickname TEXT NOT NULL)")
+db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, maiden TEXT NOT NULL, nickname TEXT NOT NULL)")
 
 # TODO: create a third table in which a user's top 20 matches are stored (include name as foreign key, celeb names, and percent matches)
 celebs = pip._vendor.requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
@@ -118,20 +118,20 @@ def login():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
+        # Ensure email was submitted
+        if not request.form.get("email"):
+            return apology("must provide email", 403)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
-        # Query database for username
-        rows = db2.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        # Query database for email
+        rows = db2.execute("SELECT * FROM users WHERE email = ?", request.form.get("email"))
 
-        # Ensure username exists and password is correct
+        # Ensure email exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return apology("invalid email and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -326,31 +326,38 @@ def register():
 
     if request.method == "POST":
 
-        username = request.form.get("username")
+        email = request.form.get("email")
         password = request.form.get("password")
         confirmation = request.form.get("confirmpassword")
-
+        securityq1 = request.form.get("securityq1")
+        securityq2 = request.form.get("securityq2")
+        
+        # Ensure email was submitted
+        if not email:
+            return apology("must provide email address", 400)
+        
         # Ensure password was submitted
-        if not password:
+        elif not password:
             return apology("must provide password", 400)
-
-        # Ensure username was submitted
-        elif not username:
-            return apology("must provide username", 400)
 
         # Checking that user has confirmed password
         elif not confirmation:
             return apology("must confirm password", 400)
+        
+        elif not securityq1:
+            return apology("must answer security question #1", 400)
+        
+        elif not securityq2:
+            return apology("must answer security question #2", 400)
 
-        # Checking that username and password match
+        # Checking that password and password confirmation match
         elif password != confirmation:
             return apology("passwords must match", 400)
 
-        # checking that username is unique
-        # TODO: fix this implementation of the users database 
-        rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
+        # checking that email address is unique
+        rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
         if len(rows) > 0:
-            return apology("username already exists", 400)
+            return apology("email has already been used for another account", 400)
 
         # Checking that the password has at least one digit, 1 special character, and 5 letters in their password
         digits = 0
@@ -368,12 +375,12 @@ def register():
         if letters < 5 or digits < 1 or special_characters < 1:
             return apology("Password must contain at least 5 letters, 1 digit, and 1 special character.")
 
-        # 2nd personal touch, checks that password does not contain username
-        elif password.find(username) != -1:
-            return apology("Password must not contain username")
+        # 2nd personal touch, checks that password does not contain email address
+        elif password.find(email) != -1:
+            return apology("Password must not contain email")
 
-        # adding user's username and hashed password into database
-        db2.execute("INSERT INTO users (username, hash) VALUES(?, ?)", (username, generate_password_hash(password)))
+        # adding user's email and hashed password into database
+        db2.execute("INSERT INTO users (email, hash) VALUES(?, ?)", (email, generate_password_hash(password)))
 
         # Confirm registration
         return redirect("/login")
@@ -395,6 +402,7 @@ def register():
 #     # user reached route via POST
 #     else:
 
+<<<<<<< HEAD
 #         # make sure user inputs a password, username and confirms password
 #         if not username:
 #             return apology("Must provide username.")
@@ -417,6 +425,34 @@ def register():
 
 #         # update new password into database
 #         db2.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
+=======
+        # get new password, password confirmation, & email
+        email = request.form.get("email")
+        currentpass = request.form.get("password")
+        newpass = request.form.get("newpass")
+        repeatpass = request.form.get("repeatpass")
+        
+        # make sure user inputs a password, email and confirms password
+        if not email:
+            return apology("Must provide email.")
+                
+        elif not currentpass:
+            return apology("Must provide current password.")
+        
+        elif not newpass:
+            return apology("Must provide a new password.")
+
+        elif not repeatpass:
+            return apology("Must confirm new password.")
+
+        # check if old password equals new password
+        rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
+        if check_password_hash(rows[0]["hash"], newpass):
+            return apology("Repeated password", 403)
+
+        # update new password into database
+        db2.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
+>>>>>>> 9d5d1bded1d769a93bed40d6927801eda6f03e22
 
 #     # redirect to login page
 #     return redirect("/login")
@@ -438,40 +474,91 @@ def account():
 
 #TODO copied from finance
 # Personal Touch
-@app.route("/passwordchange", methods=["GET", "POST"])
-def passwordchange():
+@app.route("/changepass", methods=["GET", "POST"])
+# @login_required
+def changepass():
     """Change password"""
-    # user reached route via GET
-    session.clear()
+    # # user reached route via GET
+    # session.clear()
 
     if request.method == "GET":
-        return render_template("passwordchange.html")
+        return render_template("changepass.html")
 
     # user reached route via POST
     else:
 
-        # make sure user inputs a password, username and confirms password
-        if not username:
-            return apology("Must provide username.")
+        # make sure user inputs a password, email and confirms password
+        email = request.form.get("email")
+        password = request.form.get("password")
+        newpass = request.form.get("newpass")
+        repeatpass = request.form.get("repeatpass")
+        
+        if not email:
+            return apology("Must provide email.")
+        
+        if not password:
+            return apology("Must provide current password.")
 
-        elif not newpassword:
+        elif not newpass:
             return apology("Must provide a new password.")
 
-        elif not newconfirmation:
+        elif not repeatpass:
             return apology("Must confirm new password.")
 
-        # get new password, password confirmation, & username
-        username = request.form.get("username")
-        newpassword = request.form.get("new_password")
-        newconfirmation = request.form.get("new_confirmation")
+        # check if old password equals new password
+        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+        if check_password_hash(rows[0]["hash"], newpass):
+            return apology("The inputted password is not a new password.", 403)
+
+        # update new password into database
+        db.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
+
+    # redirect to login page
+    return redirect("/login")
+
+
+@app.route("/forgotpass", methods=["GET", "POST"])
+# @login_required
+def forgotpass():
+    """Forgot password"""
+
+    if request.method == "GET":
+        return render_template("forgotpass.html")
+
+    # user reached route via POST
+    else:
+        
+        # get new password, password confirmation, & email
+        email = request.form.get("email")
+        newpass = request.form.get("newpass")
+        confirmpass = request.form.get("confirmpass")
+        securityques1 = request.form.get("securityques1")
+        securityques2 = request.form.get("securityques2")
+        
+        
+        # make sure user input's a password, email and confirms password
+        if not email:
+            return apology("Must provide email.")
+
+        elif not newpass:
+            return apology("Must provide a new password.")
+
+        elif not confirmpass:
+            return apology("Must confirm new password.")
+        
+        elif not securityques1:
+            return apology("Must confirm new password.")
+        
+        elif not securityques2:
+            return apology("Must confirm new password.")
 
         # check if old password equals new password
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
-        if check_password_hash(rows[0]["hash"], newpassword):
+        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+        if check_password_hash(rows[0]["hash"], newpass):
             return apology("Repeated password", 403)
 
         # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
+        db.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
 
     # redirect to login page
     return redirect("/login")

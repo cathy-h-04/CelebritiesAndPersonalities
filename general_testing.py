@@ -6,6 +6,7 @@ import json
 import os
 
 import pip._vendor.requests 
+# there's another way to import this that looks less janky
 
 import sqlite3
 from sqlite3 import Error
@@ -72,14 +73,14 @@ for person in data:
     db.execute("INSERT INTO celebs (name, MBTI, enne, points) VALUES (?, ?, ?, ?)", (person_name, mbti, enne, '0'))
     connection.commit()
 
-mbti = "INTJ"
-enne = 5
-name = "Cathy"
+#mbti = "INTJ"
+#enne = 5
+#name = "Cathy"
         
         # declaring each user's ratings as variables
-mbti_rating = 3
-enne_rating = 4
-name_rating = 9
+#mbti_rating = 3
+#enne_rating = 4
+#name_rating = 9
     
     # User initial api information
 nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
