@@ -422,12 +422,12 @@ def passwordchange():
             return apology("Must confirm new password.")
 
         # check if old password equals new password
-        rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
-        if check_password_hash(rows[0]["hash"], newpassword):
+        rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
+        if check_password_hash(rows[0]["hash"], newpass):
             return apology("Repeated password", 403)
 
         # update new password into database
-        db2.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpassword), username)
+        db2.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
 
     # redirect to login page
     return redirect("/login")
@@ -462,14 +462,14 @@ def changepass():
     # user reached route via POST
     else:
 
-        # make sure user inputs a password, username and confirms password
+        # make sure user inputs a password, email and confirms password
         email = request.form.get("email")
         password = request.form.get("password")
         newpass = request.form.get("newpass")
         repeatpass = request.form.get("repeatpass")
         
         if not email:
-            return apology("Must provide username.")
+            return apology("Must provide email.")
         
         if not password:
             return apology("Must provide current password.")
@@ -486,7 +486,7 @@ def changepass():
             return apology("The inputted password is not a new password.", 403)
 
         # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE username = ?", generate_password_hash(newpass), email)
+        db.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpass), email)
 
     # redirect to login page
     return redirect("/login")
@@ -504,7 +504,7 @@ def forgotpass():
     else:
         
         # get new password, password confirmation, & username
-        username = request.form.get("username")
+        email = request.form.get("email")
         newpass = request.form.get("newpass")
         confirmpass = request.form.get("confirmpass")
         securityques1 = request.form.get("securityques1")
@@ -512,8 +512,8 @@ def forgotpass():
         
         
         # make sure user input's a password, username and confirms password
-        if not username:
-            return apology("Must provide username.")
+        if not email:
+            return apology("Must provide email.")
 
         elif not newpass:
             return apology("Must provide a new password.")
