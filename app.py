@@ -402,20 +402,24 @@ def passwordchange():
     # user reached route via POST
     else:
 
+        # get new password, password confirmation, & username
+        email = request.form.get("email")
+        currentpass = request.form.get("password")
+        newpass = request.form.get("newpass")
+        repeatpass = request.form.get("repeatpass")
+        
         # make sure user inputs a password, username and confirms password
-        if not username:
-            return apology("Must provide username.")
-
-        elif not newpassword:
+        if not email:
+            return apology("Must provide email.")
+                
+        elif not currentpass:
+            return apology("Must provide current password.")
+        
+        elif not newpass:
             return apology("Must provide a new password.")
 
-        elif not newconfirmation:
+        elif not repeatpass:
             return apology("Must confirm new password.")
-
-        # get new password, password confirmation, & username
-        username = request.form.get("username")
-        newpassword = request.form.get("new_password")
-        newconfirmation = request.form.get("new_confirmation")
 
         # check if old password equals new password
         rows = db2.execute("SELECT * FROM users WHERE username = ?", username)
