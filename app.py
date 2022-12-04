@@ -334,7 +334,7 @@ def register():
         
         # Ensure username was submitted
         if not email:
-            return apology("must provide username", 400)
+            return apology("must provide email address", 400)
         
         # Ensure password was submitted
         elif not password:
@@ -350,12 +350,11 @@ def register():
         elif not securityq2:
             return apology("must answer security question #2", 400)
 
-        # Checking that username and password match
+        # Checking that password and password confirmation match
         elif password != confirmation:
             return apology("passwords must match", 400)
 
-        # checking that username is unique
-        # TODO: fix this implementation of the users database 
+        # checking that email address is unique
         rows = db2.execute("SELECT * FROM users WHERE email = ?", email)
         if len(rows) > 0:
             return apology("email has already been used for another account", 400)
@@ -376,11 +375,11 @@ def register():
         if letters < 5 or digits < 1 or special_characters < 1:
             return apology("Password must contain at least 5 letters, 1 digit, and 1 special character.")
 
-        # 2nd personal touch, checks that password does not contain username
+        # 2nd personal touch, checks that password does not contain email address
         elif password.find(email) != -1:
             return apology("Password must not contain email")
 
-        # adding user's username and hashed password into database
+        # adding user's email and hashed password into database
         db2.execute("INSERT INTO users (email, hash) VALUES(?, ?)", (email, generate_password_hash(password)))
 
         # Confirm registration
