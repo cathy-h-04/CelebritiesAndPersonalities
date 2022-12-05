@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Settings
+Change Password
 {% endblock %} 
 
 {% block main %} 
@@ -21,22 +21,22 @@ Settings
 
               <div class="form-group">
                 <label class="form-label">Email</label>
-                <input type="email" class="form-control">
+                <input type="email" id="email" name="email" class="form-control">
               </div>
 
               <div class="form-group">
                 <label class="form-label">Current password</label>
-                <input type="password" class="form-control">
+                <input type="password" id="password" name="password" class="form-control">
               </div>
 
               <div class="form-group">
                 <label class="form-label">New password</label>
-                <input type="password" class="form-control">
+                <input type="password" id="newpass" name="newpass" class="form-control">
               </div>
 
               <div class="form-group">
                 <label class="form-label">Repeat new password</label>
-                <input type="password" class="form-control">
+                <input type="password" id="repeatpass" name="repeatpass" class="form-control">
               </div>
 
               <div class="text-right mt-3">
