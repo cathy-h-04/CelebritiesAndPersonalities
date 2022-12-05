@@ -232,10 +232,10 @@ def login():
 
         # Query database for email
         # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
-        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
         
         print(rows)
-        print(db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone())
+        print(db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall())
         # print(db.execute("SELECT * FROM users WHERE email = ?", email))
         # rows = db.execute("SELECT * FROM users 
         # WHERE email = ?", email)
@@ -246,9 +246,9 @@ def login():
         #     rows = db.fetchone()
         
         # TODO: implement this!!
-        # # Ensure email exists and password is correct
-        # if len(str(rows)) != 1 or not check_password_hash(rows[0]["hash"], password):
-        #     return apology("invalid email and/or password", 403)
+        # Ensure email exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows["password"][0], password):
+            return apology("invalid email and/or password", 403)
 
         # Remember which user has logged in
         # session["user_id"] = rows[0]["id"]
@@ -511,6 +511,7 @@ def register():
 
 # TODO: !!!! may need to change route
 @app.route("/changepass", methods=["GET", "POST"])
+@login_required
 def changepass():
     """Change password"""
     # user reached route via GET
