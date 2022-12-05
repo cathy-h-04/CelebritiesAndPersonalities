@@ -236,6 +236,8 @@ def login():
         
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
         
+        print("THIS IS WHAT ROWS IS:", rows)
+        
         #rows = db.execute("SELECT * FROM users").fetchall()
         
         #print(len(rows))
@@ -360,14 +362,23 @@ def test():
     if request.method == "POST":        
     
         # declaring each user's input as variables
-        mbti = request.form.get("mbti")
-        enne = request.form.get("enne")
-        name = request.form.get("name")
+        mbti = request.form.get("MBTIs")
+        print("MBTI", mbti)
+        enne = request.form.get("ENNEs")
+        print("ENNE", enne)
+        name = request.form.get("firstname")
+        print("NAME", name)
         
         # declaring each user's ratings as variables
-        mbti_rating = request.form.get("mbti_rating")
-        enne_rating = request.form.get("enne_rating")
-        name_rating = request.form.get("name_rating")
+        mbti_rating = int(request.form.get("mbtioptions"))
+        print("MBTI RATING", mbti_rating)
+        enne_rating = int(request.form.get("enneoptions"))
+        print("ENNE RATING", enne_rating)
+        name_rating = int(request.form.get("nameoptions"))
+        print("NAME RATING", name_rating)
+        
+        total_points = mbti_rating + enne_rating + name_rating
+        
             
             # User initial api information
         nationality = requests.get('https://api.nationalize.io/?name='+name)
@@ -379,6 +390,8 @@ def test():
         user_gen = gender.json()['gender']
         user_age = age.json()['age']
                 
+                
+        print("THIS IS THE SESSION: "+ str(session["user_id"]))
         for i in range(1, 10):
             points = 0
         
@@ -423,7 +436,11 @@ def test():
             #print(celeb_name, celeb_nat, celeb_gen, celeb_age, celeb_mbti, celeb_enne, points)
             
             db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
-            connection.commit()
+        connection.commit()
+
+            
+        return redirect("/results")
+        #render_template("results.html", total_points=total_points)
 
      # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -560,7 +577,11 @@ def changepass():
 @app.route("/results", methods=["GET"])
 @login_required
 def results():    
+    print("ID: "+ str(session["user_id"]))
     top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
+    for person in top10:
+        print(person[2])
+        print(person[3])
     return render_template("results.html", top10 = top10)
 
 # @app.route("/account", methods=["GET", "POST"])
