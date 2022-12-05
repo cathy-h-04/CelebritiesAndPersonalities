@@ -232,10 +232,15 @@ def login():
 
         # Query database for email
         # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
-        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
+        # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
         
-        print(rows)
-        print(db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall())
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
+        
+        #rows = db.execute("SELECT * FROM users").fetchall()
+        
+        #print(len(rows))
+        
+        #print(db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall())
         # print(db.execute("SELECT * FROM users WHERE email = ?", email))
         # rows = db.execute("SELECT * FROM users 
         # WHERE email = ?", email)
@@ -247,7 +252,9 @@ def login():
         
         # TODO: implement this!!
         # Ensure email exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows["password"][0], password):
+        #if len(rows) != 5
+        
+        if len(rows) == 0 or not check_password_hash(rows[2], password):
             return apology("invalid email and/or password", 403)
 
         # Remember which user has logged in
@@ -417,8 +424,6 @@ def test():
             
             db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
             connection.commit()
-            
-        top20 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 20", (session["user_id"],))
 
      # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -552,11 +557,11 @@ def changepass():
 
 
 # TODO: Code Result page
-@app.route("/results", methods=["GET", "POST"])
+@app.route("/results", methods=["GET"])
 @login_required
-def results():
-    if request.method == "GET":        
-        return render_template("results.html")
+def results():    
+    top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
+    return render_template("results.html", top10 = top10)
 
 # @app.route("/account", methods=["GET", "POST"])
 # @login_required
