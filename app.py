@@ -460,63 +460,64 @@ def register():
     if request.method == "POST":
 
         email = request.form.get("email")
-        # print(email)
+        print(email)
         password = request.form.get("password")
-        # print(password)
+        print(password)
         confirmation = request.form.get("confirmpassword")
         securityques1 = request.form.get("securityques1")
-        # print(securityques1)
+        print(securityques1)
         securityques2 = request.form.get("securityques2")
-        # print(securityques2)
+        print(securityques2)
 
-        # # Ensure password was submitted
-        # if not password:
-        #     return apology("must provide password", 400)
+        # Ensure password was submitted
+        if not password:
+            return apology("must provide password", 400)
 
-        # # Ensure email was submitted
-        # elif not email:
-        #     return apology("must provide email", 400)
+        # Ensure email was submitted
+        elif not email:
+            return apology("must provide email", 400)
 
-        # # Checking that user has confirmed password
-        # elif not confirmation:
-        #     return apology("must confirm password", 400)
+        # Checking that user has confirmed password
+        elif not confirmation:
+            return apology("must confirm password", 400)
         
-        # elif not securityques1:
-        #     return apology("Must confirm new password.")
+        elif not securityques1:
+            return apology("Must confirm new password.")
 
-        # elif not securityques2:
-        #     return apology("Must confirm new password.")
+        elif not securityques2:
+            return apology("Must confirm new password.")
 
-        # # Checking that email and password match
-        # elif password != confirmation:
-        #     return apology("passwords must match", 400)
+        # Checking that email and password match
+        elif password != confirmation:
+            return apology("passwords must match", 400)
 
         # checking that email is unique
         # TODO: fix this implementation of the users database 
         # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
-        # print("FIRST CHECK")
-        # if len(rows) > 0:
-        #     return apology("email already exists", 400)
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
+        print("FIRST CHECK")
+        if len(rows) > 0:
+            return apology("email already exists", 400)
 
         # # Checking that the password has at least one digit, 1 special character, and 5 letters in their password
-        # digits = 0
-        # letters = 0
-        # special_characters = 0
+        digits = 0
+        letters = 0
+        special_characters = 0
 
-        # for char in password:
-        #     if char.isalpha():
-        #         letters += 1
-        #     elif char.isdigit():
-        #         digits += 1
-        #     else:
-        #         special_characters += 1
+        for char in password:
+            if char.isalpha():
+                letters += 1
+            elif char.isdigit():
+                digits += 1
+            else:
+                special_characters += 1
 
-        # if letters < 5 or digits < 1 or special_characters < 1:
-        #     return apology("Password must contain at least 5 letters, 1 digit, and 1 special character.")
+        if letters < 5 or digits < 1 or special_characters < 1:
+            return apology("Password must contain at least 5 letters, 1 digit, and 1 special character.")
 
         # # 2nd personal touch, checks that password does not contain email
-        # elif password.find(email) != -1:
-        #     return apology("Password must not contain email")
+        elif password.find(email) != -1:
+            return apology("Password must not contain email")
 
         # adding user's email and hashed password into database
         print("CODE START")
