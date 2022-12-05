@@ -192,7 +192,7 @@ for i in range(1, 10):
     
     
     #output doesn't look correct - autoincremeent is off
-    db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
+    db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, 24, points))
     connection.commit()
     
     # db.execute("UPDATE celebs SET points = ? WHERE id = ?", (points, i))
@@ -204,7 +204,10 @@ for i in range(1, 10):
 #SELECT * FROM celebs WHERE id IN(SELECT celeb_id FROM points WHERE user_id = 24 ORDER BY points DESC LIMIT 5)
                                  
                                  
-top20 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 20", (session["user_id",))
+top20 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 20", (24,))
+
+for person in top20:
+    print(person[0])
 
           
     
