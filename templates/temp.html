@@ -50,6 +50,16 @@
 
             </div> 
 
+            {% for person in people %}  
+            <tr>
+              <th class="text-start">{{ person }}</th>
+              <th class="text-end">{{ person[2] }}</th>
+              <th class="text-end">{{ person[3] }}</th>
+              <th class="text-end">{{ person[4] }}</th>
+              <th class="text-end">{{ person[5] }} </tr>
+            </tr>
+            {% endfor %}
+
 
 
                               {% for person in people %}
@@ -67,3 +77,54 @@
             <h1>MBTI: {{ person[3] }}</h1>
             <h1>Enneagram: {{ person[4] }}</h1>
             <h1>Match Percentage: {{person[5] * 100}}%</h1>
+
+
+
+
+
+<section class="vh-100" style="background-color: #eee;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card rounded-3">
+          <div class="card-body p-4">
+
+            <h4 class="text-center my-3 pb-3">Match Results</h4>
+
+            <table class="table mb-4">
+              <thead>
+                <tr>
+                  <th scope="text-start">Rank:</th>
+                  <th scope="text-end">Name:</th>
+                  <th scope="text-end">MBTI:</th>
+                  <th scope="text-end">Enneagram:</th>
+                  <th scope="text-end">Match Index:</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for person in person %}  
+                  <tr>
+                    <th class="text-start">{{ person }}</th>
+                    <th class="text-end">{{ person[2] }}</th>
+                    <th class="text-end">{{ person[3] }}</th>
+                    <th class="text-end">{{ person[4] }}</th>
+                    <th class="text-end">{{ person[5] }} </tr>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% for person in shortlist %}  
+<tr>
+  <td class="text-end">{{ person[2] }}</th>
+  <td class="text-end">{{ person[3] }}</th>
+  <td class="text-end">{{ person[4] }}</th>
+  <td class="text-end">{{ person[5] * 100}} </tr>
+</tr>
+{% endfor %}
