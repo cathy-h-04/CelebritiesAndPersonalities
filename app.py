@@ -209,17 +209,24 @@ def forgotpass():
         if letters < 5 or digits < 1 or special_characters < 1:
             return apology("New password must contain at least 5 letters, 1 digit, and 1 special character.")
 
-        # # 2nd personal touch, checks that password does not contain email
+          # 2nd personal touch, checks that password does not contain email
         elif newpass.find(email) != -1:
             return apology("Password must not contain email")
 
         # check if old password equals new password
-        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
-        if check_password_hash(rows[0]["hash"], newpass):
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        if check_password_hash(rows[2], newpass):
             return apology("Repeated password", 403)
 
+        # check that user correctly inputted security question 1
+        if rows[3] != securityques1:
+           return apology("The answer to one or more security questions is incorrect", 403)
+ 
+        if rows[4] != securityques2:
+           return apology("The answer to one or more security questions is incorrect", 403)
+
         # update new password into database
-        db.execute("UPDATE users SET hash = ? WHERE email = ?", (generate_password_hash(newpass), email))
+        db.execute("UPDATE users SET password = ? WHERE email = ?", (generate_password_hash(newpass), email))
         connection.commit()
 
     # redirect to login page
@@ -281,7 +288,8 @@ def login():
 
         # Remember which user has logged in
         # session["user_id"] = rows[0]["id"]
-        session["user_id"] = rows[0]
+        session["user_id"] = rows[0][0]
+        print("FIRST CHECK THIS IS THE SESSION", session["user_id"])
         
 
         # Redirect user to home page
@@ -340,7 +348,7 @@ def test():
         user_age = age.json()['age']
                 
                 
-        # print("THIS IS THE SESSION: "+ str(session["user_id"]))
+        print("THIS IS THE SESSION DURING TEST: "+ str(session["user_id"]))
         for i in range(1, 11):
             points = 0
         
@@ -381,7 +389,8 @@ def test():
                     
                 if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
                     points += 1/3 * name_rating
-                                
+            
+            print(i, session["user_id"], points)
             db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
         connection.commit()
 
@@ -417,21 +426,21 @@ def register():
 
         # Ensure password was submitted
         if not password:
-            return apology("must provide password", 400)
+            return apology("Must provide password", 400)
 
         # Ensure email was submitted
         elif not email:
-            return apology("must provide email", 400)
+            return apology("Must provide email", 400)
 
         # Checking that user has confirmed password
         elif not confirmation:
-            return apology("must confirm password", 400)
+            return apology("Must confirm password", 400)
         
         elif not securityques1:
-            return apology("Must confirm new password.")
+            return apology("Must input the answer to first security question.")
 
         elif not securityques2:
-            return apology("Must confirm new password.")
+            return apology("Must input the answer to first security question.")
 
         # Checking that email and password match
         elif password != confirmation:
@@ -477,116 +486,53 @@ def register():
     # else:
     #     return render_template("register.html")
 
-# @app.route("/changepass", methods=["GET", "POST"])
-# @login_required
-# def changepass():
-#     """Change password"""
-#     # user reached route via GET
-#     # session.clear()
 
-#     # user reached route via POST
-#     if request.method == "POST":
 
-#         # get new password, password confirmation, & email
-#         email = request.form.get("email") 
-#         password = request.form.get("password")
-#         newpassword = request.form.get("newpass")
-#         newconfirmation = request.form.get("repeatpass")
-        
-#         # make sure user inputs a password, email and confirms password
-#         if not email:
-#             return apology("Must provide email.")
-        
-#         if not password:
-#             return apology("Must provide current pasword.")
+@app.route("/changepass", methods=["GET", "POST"])
+def changepass():
+    """Change password"""
 
-#         elif not newpassword:
-#             return apology("Must provide a new password.")
+    if request.method == "GET":
+        return render_template("changepass.html")
 
-#         elif not newconfirmation:
-#             return apology("Must confirm new password.")
+    # user reached route via POST
+    else:
 
-#         # check if old password equals new password
-#         # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
-#         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
-#         # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
-        
-#         print("THIS IS WHAT ROWS IS:", rows)
-        
-#         #rows = db.execute("SELECT * FROM users").fetchall()
-        
-#         #print(len(rows))
-        
-#         #print(db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall())
-#         # print(db.execute("SELECT * FROM users WHERE email = ?", email))
-#         # rows = db.execute("SELECT * FROM users 
-#         # WHERE email = ?", email)
-#         # row = db.fetchone()
+        # get new password, password confirmation, & username
+        email = request.form.get("email")
+        oldpassword = request.form.get("old_password")
+        newpassword = request.form.get("new_password")
+        newconfirmation = request.form.get("new_confirmation")
 
-#         # while rows is not None:
-#         #     print(rows)
-#         #     rows = db.fetchone()
-        
-#         # TODO: implement this!!
-#         # Ensure email exists and password is correct
-#         #if len(rows) != 5
-        
-#         if len(rows) == 0 or not check_password_hash(rows[2], password):
-#             return apology("invalid email and/or password", 403)
-        
-        
-#         if check_password_hash(rows[2], newpassword):
-#             return apology("Repeated password", 403)
-        
-#         # update new password into database
-#         db.execute("UPDATE users SET hash = ? WHERE email = ?", (generate_password_hash(newpassword), email))
-#         connection.commit()
-        
-#         # redirect to login page
-#         return redirect("/login")
-    
-#     if request.method == "GET":
-#         return render_template("changepass.html")
+        # make sure user inputs a password, username and confirms password
+        if not email:
+            return apology("Must provide email.")
 
-# @app.route("/changepass", methods=["GET", "POST"])
-# def changepass():
-#     """Change password"""
-#     # user reached route via GET
-#     session.clear()
+        elif not oldpassword:
+            return apology("Must provide the old password.")
 
-#     if request.method == "GET":
-#         return render_template("changepass.html")
+        elif not newpassword:
+            return apology("Must input the answer to first security question.")
 
-#     # user reached route via POST
-#     else:
+        elif not newconfirmation:
+            return apology("Must input the answer to second security question.")
 
-#         # get new password, password confirmation, & username
-#         email = request.form.get("email")
-#         newpassword = request.form.get("new_password")
-#         newconfirmation = request.form.get("new_confirmation")
+        # check if old password equals new password
+        # rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        if check_password_hash(rows[2], newpassword):
+            return apology("Repeated password", 403)
 
-#         # make sure user inputs a password, username and confirms password
-#         if not email:
-#             return apology("Must provide email.")
+        # 2nd personal touch, checks that password does not contain email
+        elif newpassword.find(email) != -1:
+            return apology("Password must not contain email")
 
-#         elif not newpassword:
-#             return apology("Must provide a new password.")
+        # update new password into database
+        db.execute("UPDATE users SET password = ? WHERE email = ?", (generate_password_hash(newpassword), email))
+        connection.commit()
 
-#         elif not newconfirmation:
-#             return apology("Must confirm new password.")
-
-#         # check if old password equals new password
-#         # rows = db.execute("SELECT * FROM users WHERE email = ?", email)
-#         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
-#         if check_password_hash(rows, newpassword):
-#             return apology("Repeated password", 403)
-
-#         # update new password into database
-#         db.execute("UPDATE users SET hash = ? WHERE email = ?", generate_password_hash(newpassword), email)
-#         connection.commit()
-
-#     # redirect to login page
-#     return redirect("/login")
+    # redirect to login page
+    return redirect("/login")
 
 
 
@@ -600,6 +546,7 @@ def results():
     shortlist = []
     for row in top10:
         shortlist.append(row)
+        print(row)
         
     print(shortlist)
     # for person in top10:
