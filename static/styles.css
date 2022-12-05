@@ -116,3 +116,9 @@ nav .navbar-brand
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.btn-outline
+{
+    border-color: #788AA3;
+    color: white;
+}
