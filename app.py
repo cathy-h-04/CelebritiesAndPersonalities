@@ -489,15 +489,8 @@ def register():
 
         # Checking that email and password match
         elif password != confirmation:
-            return apology("passwords must match", 400)
+            return apology("password and confirmation password must match", 400)
 
-        # checking that email is unique
-        # TODO: fix this implementation of the users database 
-        # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
-        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
-        print("FIRST CHECK")
-        if len(rows) > 0:
-            return apology("email already exists", 400)
 
         # # Checking that the password has at least one digit, 1 special character, and 5 letters in their password
         digits = 0
@@ -518,12 +511,18 @@ def register():
         # # 2nd personal touch, checks that password does not contain email
         elif password.find(email) != -1:
             return apology("Password must not contain email")
+        
+        # checking that email is unique for the account
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
+        print("FIRST CHECK")
+        if len(rows) > 0:
+            return apology("email already exists", 400)
 
         # adding user's email and hashed password into database
-        print("CODE START")
+        # print("CODE START")
         db.execute("INSERT INTO users (email, password, maiden, nickname) VALUES(?, ?, ?, ?)", (email, generate_password_hash(password), securityques1, securityques2))
         connection.commit()
-        print("CODE END")
+        # print("CODE END")
 
         # Confirm registration
         return redirect("/login")
