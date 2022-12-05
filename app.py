@@ -84,8 +84,8 @@ db = connection.cursor()
 
 
 #BEFORE RUNNING:
-db.execute("DELETE FROM points")
-db.execute("DELETE FROM sqlite_sequence where name='points'")
+#db.execute("DELETE FROM points")
+#db.execute("DELETE FROM sqlite_sequence where name='points'")
 # DELETE FROM points;
 # DELETE FROM sqlite_sequence where name='points';
     
