@@ -321,7 +321,7 @@ def test():
                 
                 
         # print("THIS IS THE SESSION: "+ str(session["user_id"]))
-        for i in range(1, 10):
+        for i in range(1, 11):
             points = 0
         
             celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i,)).fetchone()[0]
@@ -504,7 +504,7 @@ def changepass():
 @login_required
 def results():    
     print("ID: "+ str(session["user_id"]))
-    top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
+    top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 11", (session["user_id"],))
 
     shortlist = []
     for row in top10:
