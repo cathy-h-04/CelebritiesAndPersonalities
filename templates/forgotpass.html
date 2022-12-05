@@ -17,7 +17,7 @@ Forgot Password
               <p class="mb-2">Enter your registered email and answers to the security questions to reset password.
               </p>
             </div>
-            <form action="/changepass" method="post">
+            <form action="/forgotpass" method="post">
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="text" id="email" class="form-control" name="email" placeholder="Enter Your Email Address"
@@ -35,12 +35,12 @@ Forgot Password
               </div>
               <div class="mb-3">
                 <label for="passwordreset" class="form-label">Password Reset</label>
-                <input type="text" id="newpass" class="form-control" name="newpass" placeholder="Enter Your New Password"
+                <input type="password" id="newpass" class="form-control" name="newpass" placeholder="Enter Your New Password"
                   required="">
               </div>
               <div class="mb-3">
                 <label for="passwordconfirm" class="form-label">Password Confirmation</label>
-                <input type="text" id="confirmpass" class="form-control" name="confirmpass" placeholder="Confirm Your New Password"
+                <input type="password" id="confirmpass" class="form-control" name="confirmpass" placeholder="Confirm Your New Password"
                   required="">
               </div>
               <div class="mb-3 d-grid">
