@@ -232,8 +232,13 @@ def login():
 
         # Query database for email
         # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
-        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
-        # rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        
+        print(rows)
+        print(db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone())
+        # print(db.execute("SELECT * FROM users WHERE email = ?", email))
+        # rows = db.execute("SELECT * FROM users 
+        # WHERE email = ?", email)
         # row = db.fetchone()
 
         # while rows is not None:
@@ -246,7 +251,9 @@ def login():
         #     return apology("invalid email and/or password", 403)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        # session["user_id"] = rows[0]["id"]
+        session["user_id"] = rows[0]
+        
 
         # Redirect user to home page
         return redirect("/")
@@ -340,7 +347,7 @@ def logout():
     
     
 @app.route("/test", methods=["GET", "POST"])
-# @login_required
+@login_required
 def test():
      
     if request.method == "POST":        
@@ -415,7 +422,7 @@ def test():
 
      # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("account.html")
+        return render_template("test.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -550,11 +557,11 @@ def changepass():
 #     if request.method == "POST":        
 #         # TODO: add code for results here as necessary
 
-@app.route("/account", methods=["GET", "POST"])
-@login_required
-def account():
-    if request.method == "GET":
-        return render_template("account.html")
+# @app.route("/account", methods=["GET", "POST"])
+# @login_required
+# def account():
+#     if request.method == "GET":
+#         return render_template("account.html")
 
 
 # TODO: Code Compatibility Page 
@@ -570,7 +577,9 @@ def compatibility():
         
         if not celeb:
             return apology("Must input a celebrity")
+        
+        return render_template("compatibility.html")
 
-        #TODO: finish implementation of compatibility
+    #     #TODO: finish implementation of compatibility
     if request.method == "GET":
         return render_template("compatibility.html")
