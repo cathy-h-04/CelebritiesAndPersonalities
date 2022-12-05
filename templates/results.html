@@ -5,52 +5,41 @@ Match Results
 {% endblock %} 
 
 {% block main %} 
-
-
-<div class="card overflow-hidden">
-  <div class="row no-gutters row-bordered row-border-light">
-    <div class="col-md-3 pt-0">
-          
+<section class="vh-100" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-9 col-xl-7">
+          <div class="card rounded-3">
+            <div class="card-body p-4">
+  
+              <h4 class="text-center my-3 pb-3">Match Results</h4>
+  
+              <table class="table mb-4">
+                <thead>
+                  <tr>
+                    <th scope="text-start">Rank:</th>
+                    <th scope="text-end">Name:</th>
+                    <th scope="text-end">MBTI:</th>
+                    <th scope="text-end">Enneagram:</th>
+                    <th scope="text-end">Match Index:</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for person in shortlist %}  
+                    <tr>
+                      <td class="text-start">{{ loop.index }}</td>
+                      <td class="text-end">{{ person[2] }}</th>
+                      <td class="text-end">{{ person[3] }}</th>
+                      <td class="text-end">{{ person[4] }}</th>
+                      <td class="text-end">{{ person[5] * 100}} </tr>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <div class="tab-pane fade" id="account-results">
-          <div class="card-body pb-2">
-            <section class="vh-100" style="background-color: #eee;">
-              <div class="container py-5 h-100">
-                <div class="row d-flex justify-content-center align-items-center h-100">
-                  <div class="col col-lg-9 col-xl-7">
-                    <div class="card rounded-3">
-                      <div class="card-body p-4">
-            
-                        <h4 class="text-center my-3 pb-3">Match Results</h4>
-
-                        <table class="table mb-4">
-                          <thead>
-                              {% for person in shortlist %}
-                            <tr>
-                              <th scope="col">Name: {{ person[2] }}</th>
-                              <th scope="col">MBTI: {{ person[3] }}</th>
-                              <th scope="col">Enneagram: {{ person[4] }}</th>
-                              <th scope="col">Match Index: {{person[5]}}%/th>
-                            </tr>
-                              {% endfor %}
-                          </thead>
-                          <!-- Jinja to loop through top 10 -->
-                          <tbody>
-                            <tr>
-                              <th scope="row">1</th>
-                              <td>Ur Mom</td>
-                              <td>100%</td>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-          </div> 
-
-
+      </div>
+    </div>
+  </section>  
 {% endblock %}

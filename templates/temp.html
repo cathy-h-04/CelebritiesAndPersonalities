@@ -52,6 +52,15 @@
 
 
 
+                              {% for person in people %}
+                            <tr>
+                              <th scope="col">Name: {{ person[2] }}</th>
+                              <th scope="col">MBTI: {{ person[3] }}</th>
+                              <th scope="col">Enneagram: {{ person[4] }}</th>
+                              <th scope="col">Match Index: {{person[5]}}%/th>
+                            </tr>
+                              {% endfor %}
+
 
             <h2>NOOOOOO</h2>
             <h1>Name: {{ person[2] }}</h1>
