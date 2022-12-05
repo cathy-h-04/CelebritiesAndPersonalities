@@ -574,15 +574,20 @@ def changepass():
 
 
 # TODO: Code Result page
-@app.route("/results", methods=["GET"])
+@app.route("/results")
 @login_required
 def results():    
     print("ID: "+ str(session["user_id"]))
     top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
-    for person in top10:
-        print(person[2])
-        print(person[3])
-    return render_template("results.html", top10 = top10)
+
+    shortlist = []
+    for row in top10:
+        shortlist.append(row)
+        
+    print(shortlist)
+    # for person in top10:
+    #     print(person)
+    return render_template("results.html", shortlist = shortlist)
 
 # @app.route("/account", methods=["GET", "POST"])
 # @login_required
