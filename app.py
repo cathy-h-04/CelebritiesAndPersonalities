@@ -288,7 +288,8 @@ def login():
 
         # Remember which user has logged in
         # session["user_id"] = rows[0]["id"]
-        session["user_id"] = rows[0]
+        session["user_id"] = rows[0][0]
+        print("FIRST CHECK THIS IS THE SESSION", session["user_id"])
         
 
         # Redirect user to home page
@@ -347,7 +348,7 @@ def test():
         user_age = age.json()['age']
                 
                 
-        # print("THIS IS THE SESSION: "+ str(session["user_id"]))
+        print("THIS IS THE SESSION DURING TEST: "+ str(session["user_id"]))
         for i in range(1, 11):
             points = 0
         
@@ -388,7 +389,8 @@ def test():
                     
                 if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
                     points += 1/3 * name_rating
-                                
+            
+            print(i, session["user_id"], points)
             db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
         connection.commit()
 
@@ -540,11 +542,11 @@ def changepass():
 def results():    
     print("ID: "+ str(session["user_id"]))
     top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 11", (session["user_id"],))
-    print(top10)
 
     shortlist = []
     for row in top10:
         shortlist.append(row)
+        print(row)
         
     print(shortlist)
     # for person in top10:

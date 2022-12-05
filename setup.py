@@ -35,7 +35,6 @@
 #             );
 
 
-#FIX AND SEE WHICH ONES ARE NEEDED FOR SETUP
 
 import os
 
@@ -67,21 +66,21 @@ from sqlite3 import Error
 
 #EXECUTE THIS ONCE AT THE VERY BEGGINNING. 
 
-connection2 = sqlite3.connect("database.db", check_same_thread=False)
+connection = sqlite3.connect("database.db", check_same_thread=False)
 
-setup = connection2.cursor()
+db = connection.cursor()
 
-setup.execute("DELETE FROM points")
-setup.execute("DELETE FROM sqlite_sequence where name='points'")
-
-
-setup.execute("DELETE FROM users")
-setup.execute("DELETE FROM sqlite_sequence where name='users'")
+db.execute("DELETE FROM points")
+db.execute("DELETE FROM sqlite_sequence where name='points'")
 
 
+db.execute("DELETE FROM users")
+db.execute("DELETE FROM sqlite_sequence where name='users'")
 
-setup.execute("DELETE FROM celebs")
-setup.execute("DELETE FROM sqlite_sequence where name='celebs'")
+
+
+db.execute("DELETE FROM celebs")
+db.execute("DELETE FROM sqlite_sequence where name='celebs'")
 
 
 celebs = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
@@ -100,8 +99,8 @@ for person in data:
     enne = person_personality.split()[1]
     #print(person_name,mbti,enne)
 
-    setup.execute("INSERT INTO celebs (name, MBTI, enne) VALUES (?, ?, ?)", (person_name, mbti, enne))
-    connection2.commit()
+    db.execute("INSERT INTO celebs (name, MBTI, enne) VALUES (?, ?, ?)", (person_name, mbti, enne))
+    connection.commit()
     
     
 # CHECK AND SEE IF THIS SUCESFULLY INPUTS INTO DATABASE! SHOULD HAVE 600 ROWS
