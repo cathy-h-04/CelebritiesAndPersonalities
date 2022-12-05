@@ -119,42 +119,44 @@ Match Test
 
   <br></br>
   <h2>Nationality, Gender, & Age (Based on Name Generator)</h2>
-  <h5>Description: </h5>
+  <h5>Input Name Here: </h5>
   <input type="text" class="form-control" id="firstname" placeholder="First name">
 
   <br></br>
   <div class="mx-0 mx-sm-auto">
     <div class="text-center">
       <p>
-        <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like Enneagram to factor into your celebrity match rating?</strong>
+        <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like name analysis to factor into your celebrity match rating?</strong>
       </p>
     </div>
     <div class="btn-group" id="enneranking">
-        <input type="radio" class="btn-check" name="enneoptions" id="enneoption1" autocomplete="off" />
-        <label class="btn btn-secondary" for="enneoption1">1</label>
-        <input type="radio" class="btn-check" name="enneoptions" id="enneoption2" autocomplete="off" />
-        <label class="btn btn-secondary" for="enneoption2">2</label>
-        <input type="radio" class="btn-check" name="enneoptions" id="enneoption3" autocomplete="off" />
-        <label class="btn btn-secondary" for="enneoption3">3</label>
-        <input type="radio" class="btn-check" name="enneoptions" id="enneoption4" autocomplete="off" />
-        <label class="btn btn-secondary" for="enneoption4">4</label>
-        <input type="radio" class="btn-check" name="enneoptions" id="enneoption5" autocomplete="off" />
-        <label class="btn btn-secondary" for="enneoption5">5</label>
-        <input type="radio" class="btn-check" name="enneoptions" id="enneoption6" autocomplete="off" />
-        <label class="btn btn-secondary" for="enneoption6">6</label>
-        <input type="radio" class="btn-check" name="enneoptions" id="enneoption7" autocomplete="off" />
-        <label class="btn btn-secondary" for="enneoption7">7</label>
-        <input type="radio" class="btn-check" name="enneoptions" id="enneoption8" autocomplete="off" />
-        <label class="btn btn-secondary" for="enneoption8">8</label>
-        <input type="radio" class="btn-check" name="enneoptions" id="enneoption9" autocomplete="off" />
-        <label class="btn btn-secondary" for="enneoption9">9</label>
-        <input type="radio" class="btn-check" name="enneoptions" id="enneoption10" autocomplete="off" checked/>
-        <label class="btn btn-secondary" for="enneoption10">10</label>
+        <input type="radio" class="btn-check" name="nameoptions" id="nameoption1" autocomplete="off" />
+        <label class="btn btn-secondary" for="nameoption1">1</label>
+        <input type="radio" class="btn-check" name="nameoptions" id="nameoption2" autocomplete="off" />
+        <label class="btn btn-secondary" for="nameoption2">2</label>
+        <input type="radio" class="btn-check" name="nameoptions" id="nameoption3" autocomplete="off" />
+        <label class="btn btn-secondary" for="nameoption3">3</label>
+        <input type="radio" class="btn-check" name="nameoptions" id="nameoption4" autocomplete="off" />
+        <label class="btn btn-secondary" for="nameoption4">4</label>
+        <input type="radio" class="btn-check" name="nameoptions" id="nameoption5" autocomplete="off" />
+        <label class="btn btn-secondary" for="nameoption5">5</label>
+        <input type="radio" class="btn-check" name="nameoptions" id="nameoption6" autocomplete="off" />
+        <label class="btn btn-secondary" for="nameoption6">6</label>
+        <input type="radio" class="btn-check" name="nameoptions" id="nameoption7" autocomplete="off" />
+        <label class="btn btn-secondary" for="nameoption7">7</label>
+        <input type="radio" class="btn-check" name="nameoptions" id="nameoption8" autocomplete="off" />
+        <label class="btn btn-secondary" for="nameoption8">8</label>
+        <input type="radio" class="btn-check" name="nameoptions" id="nameoption9" autocomplete="off" />
+        <label class="btn btn-secondary" for="nameoption9">9</label>
+        <input type="radio" class="btn-check" name="nameoptions" id="nameoption10" autocomplete="off" checked/>
+        <label class="btn btn-secondary" for="nameoption10">10</label>
     </div>
   </div>
 
   <br></br>
-  <button type="button" id="submit" class="btn btn-submit" onclick="return Validate()">Submit</button>
+  <a href="/results">
+    <button type="button" id="submit" href="/results" class="btn btn-submit" onclick="return Validate()">Submit</button>
+  </a>
 
   <script type="text/javascript">
     function Validate() {

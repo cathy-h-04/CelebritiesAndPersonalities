@@ -517,7 +517,7 @@ def changepass():
     session.clear()
 
     if request.method == "GET":
-        return render_template("account.html")
+        return render_template("changepass.html")
 
     # user reached route via POST
     else:
@@ -551,11 +551,11 @@ def changepass():
 
 
 # TODO: Code Result page
-# @app.route("/results", methods=["GET", "POST"])
-# @login_required
-# def results():
-#     if request.method == "POST":        
-#         # TODO: add code for results here as necessary
+@app.route("/results", methods=["GET", "POST"])
+@login_required
+def results():
+    if request.method == "GET":        
+        return render_template("results.html")
 
 # @app.route("/account", methods=["GET", "POST"])
 # @login_required
