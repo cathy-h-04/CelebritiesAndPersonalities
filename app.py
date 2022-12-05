@@ -280,77 +280,6 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
-
-
-# @app.route("/test", methods=["GET", "POST"])
-# @login_required
-# def test():
-
-#     if request.method == "POST":        
-#         # declaring each user's input as variables
-#         mbti = request.form.get("mbti")
-#         enne = request.form.get("enne")
-#         name = request.form.get("name")
-        
-#         # declaring each user's ratings as variables
-#         mbti_rating = request.form.get("mbti_rating")
-#         enne_rating = request.form.get("enne_rating")
-#         name_rating = request.form.get("name_rating")
-        
-#         # User initial api information
-#         nationality = pip._vendor.requests.get('https://api.nationalize.io/?name='+name)
-#         gender = pip._vendor.requests.get('https://api.genderize.io/?name='+name)
-#         age = pip._vendor.requests.get('https://api.agify.io/?name='+name)
-
-#         # user-specific ai-generated nationality, gender, and age
-#         user_nat = (nationality.json()['country'][0])['country_id']
-#         user_gen = gender.json()['gender']
-#         user_age = age.json()['age']
-    
-        
-        
-#         celeb_count = db.execute("SELECT count(id) FROM celebs")
-            
-#         for i in range(celeb_count):
-#             points = 0
-#             celeb_enne = 0
-#             celeb_mbti = 0
-#             celeb_count = 0
-            
-#             celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", i)
-#             for i in range(0, 3):
-#                 if celeb_mbti[i] == mbti[i]:
-#                     points += 0.25 * mbti_rating 
-            
-        
-#             celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", i)
-        
-#             if celeb_enne[0] == enne:
-#                 points += enne_rating
-        
-#             celeb_name = db.execute("SELECT name FROM celebs WHERE id = ?", i)
-        
-#             celeb_nationality_search = requests.get('https://api.nationalize.io/?name='+celeb_name)
-#             celeb_gender_search = requests.get('https://api.genderize.io/?name='+celeb_name)
-#             celeb_age_search = requests.get('https://api.agify.io/?name='+celeb_name)
-            
-            
-#             if celeb_nat == user_nat:
-#                 points += 1/3 * name_rating
-            
-#             if celeb_gen == user_gen:
-#                 points += 1/3 * name_rating
-                
-#             if celeb_age == user_age:
-#                 points += 1/3 * name_rating
-                
-#             db.execute("UPDATE celebs SET points = ? WHERE id = ?", points, i)
-#             #db.execute("INSERT INTO celebs(points) VALUES(?) WHERE id = ?", points, i)
-
-
-#      # User reached route via GET (as by clicking a link or via redirect)
-#     else:
-#         return render_template("test.html")
     
     
     
@@ -377,7 +306,7 @@ def test():
         name_rating = int(request.form.get("nameoptions"))
         print("NAME RATING", name_rating)
         
-        total_points = mbti_rating + enne_rating + name_rating
+        # total_points = mbti_rating + enne_rating + name_rating
         
             
             # User initial api information
@@ -391,7 +320,7 @@ def test():
         user_age = age.json()['age']
                 
                 
-        print("THIS IS THE SESSION: "+ str(session["user_id"]))
+        # print("THIS IS THE SESSION: "+ str(session["user_id"]))
         for i in range(1, 10):
             points = 0
         
@@ -432,17 +361,14 @@ def test():
                     
                 if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
                     points += 1/3 * name_rating
-                    
-            #print(celeb_name, celeb_nat, celeb_gen, celeb_age, celeb_mbti, celeb_enne, points)
-            
+                                
             db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
         connection.commit()
 
             
         return redirect("/results")
-        #render_template("results.html", total_points=total_points)
 
-     # User reached route via GET (as by clicking a link or via redirect)
+    # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("test.html")
 
