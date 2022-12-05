@@ -234,7 +234,7 @@ def login():
         # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
         # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
         
-        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
         
         print("THIS IS WHAT ROWS IS:", rows)
         
@@ -256,7 +256,7 @@ def login():
         # Ensure email exists and password is correct
         #if len(rows) != 5
         
-        if len(rows) == 0 or not check_password_hash(rows[2], password):
+        if len(rows) == 0 or not check_password_hash(rows[0][2], password):
             return apology("invalid email and/or password", 403)
 
         # Remember which user has logged in
@@ -457,7 +457,6 @@ def register():
     # else:
     #     return render_template("register.html")
 
-# TODO: !!!! may need to change route
 @app.route("/changepass", methods=["GET", "POST"])
 @login_required
 def changepass():
@@ -472,13 +471,17 @@ def changepass():
     else:
 
         # get new password, password confirmation, & email
-        email = request.form.get("email")
+        email = request.form.get("email") 
+        password = request.form.get("password")
         newpassword = request.form.get("newpass")
         newconfirmation = request.form.get("repeatpass")
         
         # make sure user inputs a password, email and confirms password
         if not email:
             return apology("Must provide email.")
+        
+        if not password:
+            return apology("Must provide current pasword.")
 
         elif not newpassword:
             return apology("Must provide a new password.")
@@ -487,10 +490,37 @@ def changepass():
             return apology("Must confirm new password.")
 
         # check if old password equals new password
-        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
-        if check_password_hash(rows[0]["hash"], newpassword):
-            return apology("Repeated password", 403)
+        # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
+        # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
+        
+        print("THIS IS WHAT ROWS IS:", rows)
+        
+        #rows = db.execute("SELECT * FROM users").fetchall()
+        
+        #print(len(rows))
+        
+        #print(db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall())
+        # print(db.execute("SELECT * FROM users WHERE email = ?", email))
+        # rows = db.execute("SELECT * FROM users 
+        # WHERE email = ?", email)
+        # row = db.fetchone()
 
+        # while rows is not None:
+        #     print(rows)
+        #     rows = db.fetchone()
+        
+        # TODO: implement this!!
+        # Ensure email exists and password is correct
+        #if len(rows) != 5
+        
+        if len(rows) == 0 or not check_password_hash(rows[2], password):
+            return apology("invalid email and/or password", 403)
+        
+        
+        if check_password_hash(rows[2], newpassword):
+            return apology("Repeated password", 403)
+        
         # update new password into database
         db.execute("UPDATE users SET hash = ? WHERE email = ?", (generate_password_hash(newpassword), email))
         connection.commit()
