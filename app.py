@@ -462,7 +462,7 @@ def register():
 def changepass():
     """Change password"""
     # user reached route via GET
-    session.clear()
+    # session.clear()
 
     if request.method == "GET":
         return render_template("changepass.html")
