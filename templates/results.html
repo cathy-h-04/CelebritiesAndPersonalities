@@ -30,10 +30,11 @@ Match Results
   
                           <table class="table mb-4">
                             <thead>
+                                {% for match in matches %}
                               <tr>
-                                <th scope="col">Rank</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Match Percentage</th>
+                                <th scope="col">Rank: {{ match }}</th>
+                                <th scope="col">Name: {{ celeb_full_name }}</th>
+                                <th scope="col">Match Percentage: {{}}</th>
                               </tr>
                             </thead>
                             <!-- Jinja to loop through top 10 -->
