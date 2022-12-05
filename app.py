@@ -464,11 +464,8 @@ def changepass():
     # user reached route via GET
     # session.clear()
 
-    if request.method == "GET":
-        return render_template("changepass.html")
-
     # user reached route via POST
-    else:
+    if request.method == "POST":
 
         # get new password, password confirmation, & email
         email = request.form.get("email") 
@@ -524,9 +521,13 @@ def changepass():
         # update new password into database
         db.execute("UPDATE users SET hash = ? WHERE email = ?", (generate_password_hash(newpassword), email))
         connection.commit()
+        
+        # redirect to login page
+        return redirect("/login")
+    
+    if request.method == "GET":
+        return render_template("changepass.html")
 
-    # redirect to login page
-    return redirect("/login")
 
 
 # TODO: Code Result page
