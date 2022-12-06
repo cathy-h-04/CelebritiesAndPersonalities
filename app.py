@@ -1,27 +1,26 @@
-
 import os
 
 #importing sqlite3 for database use
 import sqlite3
 from sqlite3 import Error
 
-# from cs50 import SQL
+# Importing flask for testing
 from flask import Flask, flash, redirect, render_template, request, session
 
+# Importing flask_session for testing
 from flask_session import Session
-# from flask_session import Session
 from tempfile import mkdtemp
 
-# importing package for creating and checking password hashes
+# Importing package for creating and checking password hashes
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-# importing helper functions for apology message and requiring users to login to access page
+# Importing helper functions for apology message and requiring users to login to access page
 from helpers import apology, login_required
 
 import json
 
-# importing requests
+# Importing requests
 from pip._vendor import requests
 
 # establishing database connection
@@ -257,20 +256,24 @@ def test():
                     # Add 1/3 worth of name rating
                     points += 1/3 * name_rating
 
-            # 
+            # Adding 1/4 of mbti rating for every matching MBTI letter
             for j in range(0, 4):
                 if celeb_mbti[j] == mbti[j]:
                     points += (0.25 * mbti_rating )
                     
+            # If user and celeb have the same first number of enneagram, adding points worth user's enneagram rating
             if int(celeb_enne[0]) == enne:
                 points += enne_rating
                 
+            # Adding points worth 1/3 name rating if celeb and user's nationalize-generated nationality match
             if celeb_nat == user_nat:
                 points += 1/3 * name_rating
             
+            # Adding points worth 1/3 name rating if celeb and user's genderize-generated gender match
             if celeb_gen == user_gen:
                 points += 1/3 * name_rating
-                
+            
+            # Inserting points into the points database for celebs based on their level of match with users
             db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
         connection.commit()
 
