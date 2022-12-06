@@ -88,7 +88,8 @@ for i in range(20):
     
     name_exists = True
     
-    person_name = data[i]["mbti_profile"]
+    person_full_name = data[i]["mbti_profile"]
+    person_name = person_full_name.split()[0]
     person_personality = data[i]["personality_type"]
     print(person_name)
     print(person_personality)
@@ -112,7 +113,7 @@ for i in range(20):
         person_age = person_age_search.json()['age']
         print(person_name,mbti,enne,person_nat,person_gen,person_age )
 
-    db.execute("INSERT INTO celebs (name, MBTI, enne, nationality, gender, age) VALUES (?, ?, ?, ?, ?, ?)", (person_name, mbti, enne, person_nat, person_gen, person_age))
+    db.execute("INSERT INTO celebs (name, MBTI, enne, nationality, gender, age) VALUES (?, ?, ?, ?, ?, ?)", (person_full_name, mbti, enne, person_nat, person_gen, person_age))
     connection.commit()
 
     
