@@ -10,14 +10,14 @@ Our group decided to take on this project because we were fascinated by whether 
 
 # Todos BEFORE Running Cap App
 
-In order to run CAP app, ensure that you have Python and Flask installed. 
+In order to run CAP app, ensure that you have Python, Flask, and Flask-Session installed. 
 
 # How to Run Cap App
 
 Within VS code, ensure that you are within the CelebritiesAndPersonalities folder. 
+If necessary, cd into this folder. 
 
-If necessary, cd into this folder. Then, run “flask run” in terminal. 
-
+Then, run “flask run” in terminal. 
 
 When prompted, open the link to the site in a browser such as Google Chrome or Safari. From there, you can view and interact with our site. 
 

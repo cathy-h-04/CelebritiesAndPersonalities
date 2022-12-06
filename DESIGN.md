@@ -172,14 +172,14 @@ We also do not anticipate any changes to any individual attribute of a row in an
 # Specific SQL Queries:
 
 
-# Finding user information entered given the inputted email
+---------Finding user information entered given the inputted email
 
 rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
  
 We want to only grab the user information for one unique email, so a fetchone() call is sufficient. 
  
 —--------
-# Update new password into database
+---------Update new password into database
 
 db.execute("UPDATE users SET password = ? WHERE email = ?",(generate_password_hash(newpassword), email))
        
@@ -189,13 +189,13 @@ We update the users table with the new password, then tell the cursor to commit 
 
 —-------------
 
-# Get all information for that user using their inputted email name
+---------Get all information for that user using their inputted email name
 
 rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
      
 By the time they are logging in, even though it is not possible for a user to create more than one account with a single email, we use fetchall() just to be safe. As long as rows does not contain any values, the account is not stored within our system. 
  
-—-----------
+—-----------Inserting into users database
  
 db.execute("INSERT INTO users (email, password, maiden, nickname) VALUES(?, ?, ?, ?)", (email, generate_password_hash(password), securityques1, securityques2))
 connection.commit()
@@ -203,7 +203,7 @@ connection.commit()
 We insert the values obtained from the user input into the users table as tuples, then tell the cursor to commit these changes in the database. 
 —------------------
 
-# Retrieving celebrities with highest points count for given user and their input 
+---------Retrieving celebrities with highest points count for given user and their input 
 
 top10 = db.execute("SELECT DISTINCT user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
 
@@ -212,11 +212,11 @@ We find the top 10 celebrities with the highest match index points for the user.
 Ordering by descending points and limiting to 10 will give us the top 10 celebrities matched. 
 
 —----------------
-# Fetching information for user in users database given their id
+---------Fetching information for user in users database given their id
 
 rows = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchall()
  
-#  Deleting previous results for user
+---------Deleting previous results for user
 
 if len(rows) != 0:
       db.execute("DELETE FROM points WHERE user_id = ?", (session["user_id"],))
@@ -229,7 +229,7 @@ In order to do this, we query for the user_id with a SELECT statement, and delet
 
 —-----------------------
 for i in range(1, CELEB_COUNT + 1):
-# Setting points counter variable for each celeb to zero
+---------Setting points counter variable for each celeb to zero
        points = 0
       
        # Selecting appropriate information for each celebrity
