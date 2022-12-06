@@ -221,7 +221,9 @@ def test():
         if gender.json()['count'] == 0:
             name_exists = False
         
+        # If name exists in database, finding nationality and determining most likley nationality, gender, and age based on inputted name
         if name_exists:
+            # Nationality included here because, unlike gender and age APIs, will not run if name does not exist
             nationality = requests.get('https://api.nationalize.io/?name='+name)
             user_nat = (nationality.json()['country'][0])['country_id']
             user_gen = gender.json()['gender']
