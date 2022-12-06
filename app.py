@@ -229,25 +229,35 @@ def test():
             user_gen = gender.json()['gender']
             user_age = int(age.json()['age'])
 
+        # Fetching information for user in users database given their id
         rows = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchall()
 
+        #  Deleting previous results for user
         if len(rows) != 0:
             db.execute("DELETE FROM points WHERE id = ?", (session["user_id"],))
 
+        #  Iterating through all celebrities in our celebs database
         for i in range(1, CELEB_COUNT + 1):
+            # Setting points counter variable for each celeb to zero
             points = 0
         
+            # Selecting appropriate information for each celebrity
             celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_nat = db.execute("SELECT nationality FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_gen = db.execute("SELECT gender FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_age = db.execute("SELECT age FROM celebs WHERE id = ?", (i,)).fetchone()[0]
     
+            #  If the (agify-generated beforehand) age for celebrity is not None/N/A (meaning age exists)
             if celeb_age != "N/A" and celeb_age is not None:
+                # Casting celeb_age as int for next if
                 celeb_age = int(celeb_age)
+                # If agify-generated celeb_age is within 10 years of agify-generated user_age
                 if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
+                    # Add 1/3 worth of name rating
                     points += 1/3 * name_rating
 
+            # 
             for j in range(0, 4):
                 if celeb_mbti[j] == mbti[j]:
                     points += (0.25 * mbti_rating )
