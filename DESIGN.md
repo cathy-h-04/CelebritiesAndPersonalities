@@ -125,6 +125,17 @@ Across each of these pages where users create a new password, we require that th
 
 Our team knew that we needed a page to display a user’s results. We decided that we would display the top 10 matches so that the results are more digestible to the user, as we felt that displaying every celebrity in the database would be excessive and too much information for the user to sift through. We also wanted to provide a percent match (what percent of a perfect score is the celebrity’s point total) to provide the user with a quantitative metric for the ranking.
 
+
+# Creating the actual SQL Databases
+
+First, we went into SQlite by typing "sqlite3 database.db"
+
+We went ahead and created the tables in SQLite by executing the schema in "#SQL Decisions and Design"
+
+From there, we ran the file "setup.py" to populate the actual database.
+
+
+
 # SQL Decisions and Design
 
 Our group wanted to challenge ourselves in regards to SQL so that we could learn to implement SQL in the future without being dependent on any CS50 imports.
@@ -195,7 +206,7 @@ rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
      
 By the time they are logging in, even though it is not possible for a user to create more than one account with a single email, we use fetchall() just to be safe. As long as rows does not contain any values, the account is not stored within our system. 
  
-—-----------Inserting into users database
+—-----------Inserting into users
  
 db.execute("INSERT INTO users (email, password, maiden, nickname) VALUES(?, ?, ?, ?)", (email, generate_password_hash(password), securityques1, securityques2))
 connection.commit()
