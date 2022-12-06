@@ -430,24 +430,3 @@ def results():
         
     # returning results page and passing in the shortlist of celebrity matches    
     return render_template("results.html", shortlist = shortlist)
-
-
-# TODO: Code Compatibility Page 
-@app.route("/compatibility", methods=["GET", "POST"])
-@login_required
-def compatibility():
-
-    if request.method == "POST":
-        # checking that user has inputted the three characteristics for assessment
-        
-        # declaring each user's input as variables
-        celeb = request.form.get("name")
-        
-        if not celeb:
-            return apology("Must input a celebrity")
-        
-        return render_template("compatibility.html")
-
-    #     #TODO: finish implementation of compatibility
-    if request.method == "GET":
-        return render_template("compatibility.html")
