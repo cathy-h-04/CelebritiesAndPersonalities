@@ -385,18 +385,18 @@ def changepass():
         elif not newconfirmation:
             return apology("Must input confirm new password.")
 
-        # check if old password equals new password
-        # rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+        # Check if old password equals new password
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
         
-        # checking to see whether the inputted email exists within the database
+        # Checking to see whether the inputted email exists within the database
         if rows is None:
            return apology("invalid email address", 403)
        
+         # Check to see if new password has been repeated
         if check_password_hash(rows[2], newpassword):
             return apology("Repeated password", 403)
-        
-        # ensuring that old password matches the account specified
+    
+        # Ensuring that old password matches the account specified
         if len(rows) == 0 or not check_password_hash(rows[2], oldpassword):
             return apology("invalid email and/or password", 403)
 
@@ -407,25 +407,24 @@ def changepass():
         if oldpassword != newconfirmation:
            return apology("password and confirmation password must match", 400)
 
-        # update new password into database
+        # Update new password into database
         db.execute("UPDATE users SET password = ? WHERE email = ?", (generate_password_hash(newpassword), email))
         connection.commit()
 
-    # redirect to login page
+    # Redirect to login page
     return redirect("/login")
 
 
-
-# TODO: Code Result page
 @app.route("/results")
 @login_required
 def results():    
-    print("ID: "+ str(session["user_id"]))
+    # Selecting top 10 celebrity matches to display on page
     top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
 
-    # appending top 10 celebrities to shortlist
+    # Appending top 10 celebrities to shortlist
     shortlist = []
     for row in top10:
         shortlist.append(row)
 
+    # Displaying results page and passing in the top 10 celebrities
     return render_template("results.html", shortlist = shortlist)
