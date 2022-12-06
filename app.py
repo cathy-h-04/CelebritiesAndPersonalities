@@ -47,17 +47,20 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 # Index (home page of site)
 @app.route("/")
 def index():
     # Rendering our home page
     return render_template("index.html")
 
+
 # About (displaying page about site's creators)
 @app.route("/about", methods=["GET"])
 def about():
         # Rendering about page
         return render_template("about.html")
+
 
 # Methodology (displaying page showing our site's methodology)
 @app.route("/methodology", methods=["GET"])
@@ -66,7 +69,7 @@ def methodology():
         return render_template("methodology.html")
     
 
-# Forgot password (for if users forgot password and need to set new one)
+# Forgot password (used if users forgot password and need to set new one)
 @app.route("/forgotpass", methods=["GET", "POST"])
 def forgotpass():
     """Forgot password"""
@@ -166,6 +169,7 @@ def login():
         # Get all information for that user inputted using their inputted email name
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
         
+        # Check if email is in the database or if password matches the associated email in the database
         if len(rows) == 0 or not check_password_hash(rows[0][2], password):
             return apology("invalid email and/or password", 403)
 
@@ -178,6 +182,7 @@ def login():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
+
 
 # Logout (for logging out users from site)
 @app.route("/logout")
@@ -277,17 +282,18 @@ def test():
             db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
         connection.commit()
 
-            
         return redirect("/results")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("test.html")
     
+
 # Register (user registration)
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
+    # Forget any user_id
     session.clear()
     
     # Rendering register again if get method
@@ -370,8 +376,8 @@ def register():
 @login_required
 def changepass():
 
+    # Rendering changepass page if GET is used
     if request.method == "GET":
-        # Rendering changepass page if GET is used
         return render_template("changepass.html")
 
     # user reached route via POST
@@ -431,6 +437,7 @@ def changepass():
 @app.route("/results")
 @login_required
 def results():  
+    
     # Retrieving celebrities with highest points count for given user and their input  
     top10 = db.execute("SELECT DISTINCT user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
 
