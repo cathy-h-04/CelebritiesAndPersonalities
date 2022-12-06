@@ -157,21 +157,18 @@ def login():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         
-        # Get User Input
+        # Get user input
         email = request.form.get("email")
         password = request.form.get("password")
 
-        # sellecet all information for thaht user given their inputted email name
+        # Get all information for that user inputted using their inputted email name
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
         
         if len(rows) == 0 or not check_password_hash(rows[0][2], password):
             return apology("invalid email and/or password", 403)
 
         # Remember which user has logged in
-        # session["user_id"] = rows[0]["id"]
         session["user_id"] = rows[0][0]
-        print("FIRST CHECK THIS IS THE SESSION", session["user_id"])
-        
 
         # Redirect user to home page
         return redirect("/")
@@ -188,7 +185,7 @@ def logout():
     # Forget any user_id
     session.clear()
 
-    # Redirect user to login form
+    # Redirect user to login form since they've logged out
     return redirect("/")
     
     
@@ -198,7 +195,7 @@ def test():
      
     if request.method == "POST":        
     
-        # declaring each user's input as variables
+        # Declaring each user's input as variables
         mbti = request.form.get("MBTIs")
         print("MBTI", mbti)
         enne = request.form.get("ENNEs")
@@ -206,7 +203,7 @@ def test():
         name = request.form.get("firstname")
         print("NAME", name)
         
-        # declaring each user's ratings as variables
+        # Declaring each user's ratings as variables
         mbti_rating = int(request.form.get("mbtioptions"))
         print("MBTI RATING", mbti_rating)
         enne_rating = int(request.form.get("enneoptions"))
@@ -214,10 +211,11 @@ def test():
         name_rating = int(request.form.get("nameoptions"))
         print("NAME RATING", name_rating)
         
-            # User initial api information
+        # User initial API information ()
         gender = requests.get('https://api.genderize.io/?name='+name)
         age = requests.get('https://api.agify.io/?name='+name)
 
+        # setting inital name exists variable to True
         name_exists = True
             
         print(gender.json())
@@ -420,7 +418,7 @@ def changepass():
 
 # TODO: Code Result page
 @app.route("/results")
-@login_required
+# @login_required
 def results():    
     print("ID: "+ str(session["user_id"]))
     top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
