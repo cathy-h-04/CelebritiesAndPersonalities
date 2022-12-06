@@ -26,25 +26,8 @@ from pip._vendor import requests
 import sqlite3
 from sqlite3 import Error
 
-# def create_connection(path):
-#     connection = None
-#     try:
-#         connection = sqlite3.connect("os.path.basename(database.db)")
-#         print("Connection to SQLite DB successful")
-#     except Error as e:
-#         print("The error occurred")
-
-#     return connection
-
-# connection = create_connection("E:\\database.db")
-
-#ASK WHETHER THIS IS OKAY
-
 # print(celeb_count)
 connection = sqlite3.connect("database.db", check_same_thread=False)
-
-# connection2 = sqlite3.connect("users.db")
-# connection3 = sqlite3.connect("points.db")
 
 db = connection.cursor()
 
@@ -95,27 +78,6 @@ CELEB_COUNT = 338
 # DELETE FROM points;
 # DELETE FROM sqlite_sequence where name='points';
     
-# TODO: create a third table in which a user's top 20 matches are stored (include name as foreign key, celeb names, and percent matches)
-# celebs = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
-# characters = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
-
-# celeb_data = (celebs.json()["profiles"])
-# character_data = (characters.json()["profiles"])
-
-# data = celeb_data + character_data
-
-
-
-#QUESTION: SHOULD I JUST RUN THIS IN SQLITE?
-# for person in data:
-#     person_name = person["mbti_profile"]
-#     person_personality = person["personality_type"]
-#     mbti = person_personality.split()[0]
-#     enne = person_personality.split()[1]
-#     #print(person_name,mbti,enne)
-
-#     db.execute("INSERT INTO celebs (name, MBTI, enne) VALUES (?, ?, ?)", (person_name, mbti, enne))
-#     connection.commit()
 
 
 # Configure application
@@ -129,13 +91,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-
-# TODO: configure this for our database as necessary (not sure if this is okay or if we need change)
-#db = SQL("sqlite:///celebs.db")
-
-# # TODO: This code in finance makes sure API key is set, so we may want similar code
-# if not os.environ.get("API_KEY"):
-#     raise RuntimeError("API_KEY not set")
 
 # TODO: adjust this code below from finance pset to what we want
 @app.after_request
@@ -442,7 +397,7 @@ def register():
             return apology("Must input the answer to first security question.")
 
         elif not securityques2:
-            return apology("Must input the answer to first security question.")
+            return apology("Must input the answer to second security question.")
 
         # Checking that email and password match
         elif password != confirmation:
@@ -543,7 +498,7 @@ def changepass():
 @login_required
 def results():    
     print("ID: "+ str(session["user_id"]))
-    top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 11", (session["user_id"],))
+    top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
 
     shortlist = []
     for row in top10:
