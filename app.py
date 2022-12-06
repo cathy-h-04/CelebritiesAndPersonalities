@@ -1,6 +1,7 @@
 
 import os
 
+#importing sqlite3 for database use
 import sqlite3
 from sqlite3 import Error
 
@@ -11,20 +12,17 @@ from flask_session import Session
 # from flask_session import Session
 from tempfile import mkdtemp
 
+# importing package for creating and checking password hashes
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-# importing helper functions
+# importing helper functions for apology message and requiring users to login to access page
 from helpers import apology, login_required
 
 import json
 
+# importing requests
 from pip._vendor import requests
-#from tempfile import mkdtemp
-#app = Flask(__name__)
-
-import sqlite3
-from sqlite3 import Error
 
 # print(celeb_count)
 connection = sqlite3.connect("database.db", check_same_thread=False)
