@@ -10,7 +10,7 @@ Our group decided to take on this project because we were fascinated by whether 
 
 # Todos BEFORE Running Cap App
 
-In order to run CAP app, ensure that you have Python, Flask, and Flask-Session installed. 
+In order to run CAP app, ensure that you have the newest Python version, Flask, and Flask-Session installed. 
 
 # How to Run Cap App
 
