@@ -31,60 +31,11 @@ connection = sqlite3.connect("database.db", check_same_thread=False)
 
 db = connection.cursor()
 
+# Declaring count of celebrities in our database, 338, as a global variable
 CELEB_COUNT = 338
-
-
-# db2 = connection2.cursor()
-# db3 = connection3.cursor()
-
-# CREATE TABLE celebs (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-#                 name TEXT NOT NULL, 
-#                 MBTI TEXT NOT NULL, 
-#                 enne TEXT NOT NULL
-#             );
-
-
-
-# CREATE TABLE users (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-#                 email TEXT NOT NULL, 
-#                 password TEXT NOT NULL, 
-#                 maiden TEXT NOT NULL, 
-#                 nickname TEXT NOT NULL
-#             );
-
-
-
-# CREATE TABLE points (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-#                 celeb_id INTEGER NOT NULL,
-#                 user_id INTEGER NOT NULL,
-#                 points NUMERIC,
-#                 FOREIGN KEY(celeb_id) REFERENCES celebs(id),
-#                 FOREIGN KEY(user_id) REFERENCES users(id)
-#             );
-
-#db.execute("DROP TABLE celebs")
-
-#db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
-# db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
-#db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, maiden TEXT NOT NULL, nickname TEXT NOT NULL)")
-
-
-#BEFORE RUNNING:
-#db.execute("DELETE FROM points")
-#db.execute("DELETE FROM sqlite_sequence where name='points'")
-# DELETE FROM points;
-# DELETE FROM sqlite_sequence where name='points';
-    
-
 
 # Configure application
 app = Flask(__name__)
-
-# TODO: look into using custom filters with jinja if desired
-    # this filter was added for finance: app.jinja_env.filters["usd"] = usd
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -92,7 +43,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-# TODO: adjust this code below from finance pset to what we want
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -102,10 +52,9 @@ def after_request(response):
     return response
 
 
-# TODO: add any input necessary, although I don't think there is any necessary
 @app.route("/")
 def index():
-
+    # rendering our home page
     return render_template("index.html")
 
 
@@ -124,20 +73,19 @@ def methodology():
 @app.route("/forgotpass", methods=["GET", "POST"])
 def forgotpass():
     """Forgot password"""
-
+    # Rendering forgotpassword page if get method
     if request.method == "GET":
         return render_template("forgotpass.html")
 
     # user reached route via POST
     else:
 
-        # get new password, password confirmation, & email
+        # get user's inputted email, new password, password confirmation, and security answers
         email = request.form.get("email")
         newpass = request.form.get("newpass")
         confirmpass = request.form.get("confirmpass")
         securityques1 = request.form.get("securityques1")
         securityques2 = request.form.get("securityques2")
-
 
         # make sure user input's a password, email and confirms password
         if not email:
@@ -215,41 +163,8 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        # # Ensure email was submitted
-        # if not email:
-        #     return apology("must provide email", 403)
-
-        # # Ensure password was submitted
-        # elif not password:
-        #     return apology("must provide password", 403)
-        print(email)
-        print(password)
-
-        # Query database for email
-        # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
-        # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
-        
+        # sellecet all information for thaht user given their inputted email name
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
-        
-        print("THIS IS WHAT ROWS IS:", rows)
-        
-        #rows = db.execute("SELECT * FROM users").fetchall()
-        
-        #print(len(rows))
-        
-        #print(db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall())
-        # print(db.execute("SELECT * FROM users WHERE email = ?", email))
-        # rows = db.execute("SELECT * FROM users 
-        # WHERE email = ?", email)
-        # row = db.fetchone()
-
-        # while rows is not None:
-        #     print(rows)
-        #     rows = db.fetchone()
-        
-        # TODO: implement this!!
-        # Ensure email exists and password is correct
-        #if len(rows) != 5
         
         if len(rows) == 0 or not check_password_hash(rows[0][2], password):
             return apology("invalid email and/or password", 403)
@@ -279,8 +194,6 @@ def logout():
     return redirect("/")
     
     
-    
-    
 @app.route("/test", methods=["GET", "POST"])
 @login_required
 def test():
@@ -303,8 +216,6 @@ def test():
         name_rating = int(request.form.get("nameoptions"))
         print("NAME RATING", name_rating)
         
-        # total_points = mbti_rating + enne_rating + name_rating
-        
             # User initial api information
         gender = requests.get('https://api.genderize.io/?name='+name)
         age = requests.get('https://api.agify.io/?name='+name)
@@ -321,10 +232,6 @@ def test():
             user_nat = (nationality.json()['country'][0])['country_id']
             user_gen = gender.json()['gender']
             user_age = age.json()['age']
-            
-                
-                
-        print("THIS IS THE SESSION DURING TEST: "+ str(session["user_id"]))
 
         
         for i in range(1, CELEB_COUNT + 1):
