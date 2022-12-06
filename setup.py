@@ -1,19 +1,30 @@
+
 import os
 
 import sqlite3
 from sqlite3 import Error
 
+# from cs50 import SQL
+from flask import Flask, flash, redirect, render_template, request, session
+
+from flask_session import Session
+# from flask_session import Session
+from tempfile import mkdtemp
+
+from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
+
+# importing helper functions
+from helpers import apology, login_required
+
 import json
 
 from pip._vendor import requests
-
-#from flask_session import Session
 #from tempfile import mkdtemp
 #app = Flask(__name__)
 
 import sqlite3
 from sqlite3 import Error
-
 
 # FIRST CHECK:
     
