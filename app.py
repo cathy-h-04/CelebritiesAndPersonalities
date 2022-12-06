@@ -104,9 +104,6 @@ CELEB_COUNT = 338
 
 # data = celeb_data + character_data
 
-celeb_count = len(db.execute("SELECT * FROM celebs").fetchall())
-
-print(celeb_count)
 
 
 #QUESTION: SHOULD I JUST RUN THIS IN SQLITE?
