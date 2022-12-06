@@ -84,13 +84,13 @@ data = celeb_data + character_data
 
 #for person in data:
 
-for i in range(20):
+for person in data:
     
     name_exists = True
     
-    person_full_name = data[i]["mbti_profile"]
+    person_full_name = person["mbti_profile"]
     person_name = person_full_name.split()[0]
-    person_personality = data[i]["personality_type"]
+    person_personality = person["personality_type"]
     print(person_name)
     print(person_personality)
     mbti = person_personality.split()[0]
