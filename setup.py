@@ -70,9 +70,6 @@ db = connection.cursor()
 # db.execute("DELETE FROM sqlite_sequence where name='users'")
 
 
-db.execute("DELETE FROM celebs")
-db.execute("DELETE FROM sqlite_sequence where name='celebs'")
-
 
 celebs = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
 characters = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
@@ -91,8 +88,6 @@ for person in data:
     person_full_name = person["mbti_profile"]
     person_name = person_full_name.split()[0]
     person_personality = person["personality_type"]
-    print(person_name)
-    print(person_personality)
     mbti = person_personality.split()[0]
     enne = person_personality.split()[1]
     
