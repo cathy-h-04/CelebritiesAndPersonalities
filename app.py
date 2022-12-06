@@ -269,6 +269,7 @@ def login():
 
 
 @app.route("/logout")
+@login_required
 def logout():
 
     # Forget any user_id
@@ -452,6 +453,7 @@ def register():
 
 
 @app.route("/changepass", methods=["GET", "POST"])
+@login_required
 def changepass():
     """Change password"""
 
