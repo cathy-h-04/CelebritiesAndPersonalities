@@ -24,9 +24,8 @@ import json
 # importing requests
 from pip._vendor import requests
 
-# print(celeb_count)
+# establishing database connection
 connection = sqlite3.connect("database.db", check_same_thread=False)
-
 db = connection.cursor()
 
 # Declaring count of celebrities in our database, 338, as a global variable
@@ -52,32 +51,29 @@ def after_request(response):
 
 @app.route("/")
 def index():
-    # rendering our home page
+    # Rendering our home page
     return render_template("index.html")
 
 
-# TODO: adjust to what we want here (I think about is a static page though)
 @app.route("/about", methods=["GET"])
-#@app.route("/about", methods=["GET", "POST"])
 def about():
-        # User reached route via GET (as by clicking a link or via redirect)
+        # Rendering about page
         return render_template("about.html")
 
 @app.route("/methodology", methods=["GET"])
 def methodology():
-        # User reached route via GET (as by clicking a link or via redirect)
+        # Rendering methodology page
         return render_template("methodology.html")
     
 @app.route("/forgotpass", methods=["GET", "POST"])
 def forgotpass():
     """Forgot password"""
-    # Rendering forgotpassword page if get method
+    # rendering forgotpassword page if get method
     if request.method == "GET":
         return render_template("forgotpass.html")
 
     # user reached route via POST
     else:
-
         # get user's inputted email, new password, password confirmation, and security answers
         email = request.form.get("email")
         newpass = request.form.get("newpass")
@@ -85,7 +81,7 @@ def forgotpass():
         securityques1 = request.form.get("securityques1")
         securityques2 = request.form.get("securityques2")
 
-        # make sure user input's a password, email and confirms password
+        # make sure user inputs an email, password, confirmation, and security answers
         if not email:
             return apology("Must provide email.")
 
@@ -96,16 +92,18 @@ def forgotpass():
             return apology("Must confirm new password.")
 
         elif not securityques1:
-            return apology("Must confirm new password.")
+            return apology("Must answer both security questions.")
 
         elif not securityques2:
-            return apology("Must confirm new password.")
+            return apology("Must answer both secuirty questions.")
 
         # Checking that the password has at least one digit, 1 special character, and 5 letters in their password
+        # Declaring inital counter variables to zero
         digits = 0
         letters = 0
         special_characters = 0
 
+        # iterating through characters of password counting each type of character
         for char in newpass:
             if char.isalpha():
                 letters += 1
@@ -113,7 +111,8 @@ def forgotpass():
                 digits += 1
             else:
                 special_characters += 1
-
+                
+        # rendering error message if password does not meet specifications
         if letters < 5 or digits < 1 or special_characters < 1:
             return apology("New password must contain at least 5 letters, 1 digit, and 1 special character.")
 
