@@ -423,39 +423,9 @@ def results():
     print("ID: "+ str(session["user_id"]))
     top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
 
+    # appending top 10 celebrities to shortlist
     shortlist = []
     for row in top10:
         shortlist.append(row)
-        print(row)
-        
-    print(shortlist)
-    # for person in top10:
-    #     print(person)
+
     return render_template("results.html", shortlist = shortlist)
-
-# @app.route("/account", methods=["GET", "POST"])
-# @login_required
-# def account():
-#     if request.method == "GET":
-#         return render_template("account.html")
-
-
-# TODO: Code Compatibility Page 
-@app.route("/compatibility", methods=["GET", "POST"])
-@login_required
-def compatibility():
-
-    if request.method == "POST":
-        # checking that user has inputted the three characteristics for assessment
-        
-        # declaring each user's input as variables
-        celeb = request.form.get("name")
-        
-        if not celeb:
-            return apology("Must input a celebrity")
-        
-        return render_template("compatibility.html")
-
-    #     #TODO: finish implementation of compatibility
-    if request.method == "GET":
-        return render_template("compatibility.html")
