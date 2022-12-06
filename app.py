@@ -221,7 +221,7 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        # Get all information for that user inputted using their inputted email name
+        # Get all information for that user using their inputted email name
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
         
         if len(rows) == 0 or not check_password_hash(rows[0][2], password):
@@ -326,7 +326,7 @@ def register():
         
         # Checking that email is unique for the account
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
-        print("FIRST CHECK")
+
         if len(rows) > 0:
             return apology("email already exists", 400)
 
