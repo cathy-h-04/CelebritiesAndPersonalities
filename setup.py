@@ -106,7 +106,6 @@ for person in data:
         person_nat = (person_nationality_search.json()['country'][0])['country_id']
         person_gen = person_gender_search.json()['gender']
         person_age = person_age_search.json()['age']
-        print(person_name,mbti,enne,person_nat,person_gen,person_age )
 
     db.execute("INSERT INTO celebs (name, MBTI, enne, nationality, gender, age) VALUES (?, ?, ?, ?, ?, ?)", (person_full_name, mbti, enne, person_nat, person_gen, person_age))
     connection.commit()
