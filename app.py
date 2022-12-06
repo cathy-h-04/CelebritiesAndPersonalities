@@ -418,9 +418,9 @@ def changepass():
 
 # TODO: Code Result page
 @app.route("/results")
-# @login_required
+@login_required
 def results():    
-    # print("ID: "+ str(session["user_id"]))
+    print("ID: "+ str(session["user_id"]))
     top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
 
     shortlist = []
