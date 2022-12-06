@@ -39,12 +39,18 @@ from sqlite3 import Error
 # connection = create_connection("E:\\database.db")
 
 #ASK WHETHER THIS IS OKAY
+
+print(celeb_count)
 connection = sqlite3.connect("database.db", check_same_thread=False)
 
 # connection2 = sqlite3.connect("users.db")
 # connection3 = sqlite3.connect("points.db")
 
 db = connection.cursor()
+
+CELEB_COUNT = 338
+
+
 # db2 = connection2.cursor()
 # db3 = connection3.cursor()
 
@@ -90,13 +96,17 @@ db = connection.cursor()
 # DELETE FROM sqlite_sequence where name='points';
     
 # TODO: create a third table in which a user's top 20 matches are stored (include name as foreign key, celeb names, and percent matches)
-celebs = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
-characters = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
+# celebs = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
+# characters = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
 
-celeb_data = (celebs.json()["profiles"])
-character_data = (characters.json()["profiles"])
+# celeb_data = (celebs.json()["profiles"])
+# character_data = (characters.json()["profiles"])
 
-data = celeb_data + character_data
+# data = celeb_data + character_data
+
+celeb_count = len(db.execute("SELECT * FROM celebs").fetchall())
+
+print(celeb_count)
 
 
 #QUESTION: SHOULD I JUST RUN THIS IN SQLITE?
@@ -336,26 +346,35 @@ def test():
         
         # total_points = mbti_rating + enne_rating + name_rating
         
-            
             # User initial api information
-        nationality = requests.get('https://api.nationalize.io/?name='+name)
         gender = requests.get('https://api.genderize.io/?name='+name)
         age = requests.get('https://api.agify.io/?name='+name)
 
-            # user-specific ai-generated nationality, gender, and age
-        user_nat = (nationality.json()['country'][0])['country_id']
-        user_gen = gender.json()['gender']
-        user_age = age.json()['age']
+        name_exists = True
+            
+        if celeb_gender_search.json()['count'] == 0:
+            name_exists = False
+        
+        if name_exists:
+            nationality = requests.get('https://api.nationalize.io/?name='+name)
+            user_nat = (nationality.json()['country'][0])['country_id']
+            user_gen = gender.json()['gender']
+            user_age = age.json()['age']
+            
                 
                 
         print("THIS IS THE SESSION DURING TEST: "+ str(session["user_id"]))
-        for i in range(1, 11):
+
+        
+        for i in range(1, celeb_count + 1):
             points = 0
         
             celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_full_name = db.execute("SELECT name FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-            celeb_name = celeb_full_name.split()[0]
+            celeb_nat = db.execute("SELECT nationality FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_gen = db.execute("SELECT gender FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_age = db.execute("SELECT age FROM celebs WHERE id = ?", (i,)).fetchone()[0]
 
             
             for j in range(0, 4):
@@ -365,30 +384,14 @@ def test():
             if int(celeb_enne[0]) == enne:
                 points += enne_rating
                 
-
-            name_exists = True
+            if celeb_nat == user_nat:
+                points += 1/3 * name_rating
             
-            celeb_gender_search = requests.get('https://api.genderize.io/?name='+celeb_name)
-            celeb_age_search = requests.get('https://api.agify.io/?name='+celeb_name)
-            
-            if celeb_gender_search.json()['count'] == 0:
-                name_exists = False
-            
-            if name_exists:
-                celeb_nationality_search = requests.get('https://api.nationalize.io/?name='+celeb_name)
-                celeb_nat = (celeb_nationality_search.json()['country'][0])['country_id']
-                celeb_gen = celeb_gender_search.json()['gender']
-                celeb_age = celeb_age_search.json()['age']
+            if celeb_gen == user_gen:
+                points += 1/3 * name_rating
                 
-                
-                if celeb_nat == user_nat:
-                    points += 1/3 * name_rating
-                
-                if celeb_gen == user_gen:
-                    points += 1/3 * name_rating
-                    
-                if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
-                    points += 1/3 * name_rating
+            if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
+                points += 1/3 * name_rating
             
             print(i, session["user_id"], points)
             db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
