@@ -28,7 +28,7 @@ connection = sqlite3.connect("database.db", check_same_thread=False)
 db = connection.cursor()
 
 # Declaring count of celebrities in our database, 338, as a global variable
-CELEB_COUNT = 338
+CELEB_COUNT = 300
 
 # Configure application
 app = Flask(__name__)
@@ -38,7 +38,14 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# About (displaying page about site's creators)
+@app.route("/about", methods=["GET"])
+def about():
+        # Rendering about page
+        return render_template("about.html")
 
+
+# After_request function from finance pset
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -48,28 +55,69 @@ def after_request(response):
     return response
 
 
-# Index (home page of site)
-@app.route("/")
-def index():
-    # Rendering our home page
-    return render_template("index.html")
+# Change password (for users changing password))
+@app.route("/changepass", methods=["GET", "POST"])
+@login_required
+def changepass():
 
+    if request.method == "GET":
+        # Rendering changepass page if GET is used
+        return render_template("changepass.html")
 
-# About (displaying page about site's creators)
-@app.route("/about", methods=["GET"])
-def about():
-        # Rendering about page
-        return render_template("about.html")
+    # user reached route via POST
+    else:
 
+        # Creating variables for user-inputted info
+        email = request.form.get("email")
+        oldpassword = request.form.get("old_password")
+        newpassword = request.form.get("new_password")
+        newconfirmation = request.form.get("new_confirmation")
 
-# Methodology (displaying page showing our site's methodology)
-@app.route("/methodology", methods=["GET"])
-def methodology():
-        # Rendering methodology page
-        return render_template("methodology.html")
+        # Ensuring all fields have been completed
+        if not email:
+            return apology("Must provide email.")
+
+        elif not oldpassword:
+            return apology("Must provide the old password.")
+
+        elif not newpassword:
+            return apology("Must input new password.")
+
+        elif not newconfirmation:
+            return apology("Must input confirm new password.")
+
+        # Finding user information entered given the inputted email
+        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        
+        # Checking to see whether the inputted email exists within the database
+        if rows is None:
+           return apology("invalid email address", 403)
+       
+         # Check to see if new password has been repeated
+        if check_password_hash(rows[2], newpassword):
+            return apology("Repeated password", 403)
     
+        # Ensuring that old password matches the account specified
+        if len(rows) == 0 or not check_password_hash(rows[2], oldpassword):
+            return apology("invalid email and/or password", 403)
 
-# Forgot password (used if users forgot password and need to set new one)
+        # 2nd personal touch, checks that password does not contain email
+        if newpassword.find(email) != -1:
+            return apology("Password must not contain email")
+        
+        # Returning apology if old password is same as the new one
+        if oldpassword != newconfirmation:
+           return apology("password and confirmation password must match", 400)
+
+        # Update new password into database
+        db.execute("UPDATE users SET password = ? WHERE email = ?", (generate_password_hash(newpassword), email))
+        connection.commit()
+
+    # Redirect to login page
+    return redirect("/login")
+
+
+# Forgot password (for if users forgot password and need to set new one)
 @app.route("/forgotpass", methods=["GET", "POST"])
 def forgotpass():
     """Forgot password"""
@@ -152,6 +200,13 @@ def forgotpass():
     return redirect("/login")
 
 
+# Index (home page of site)
+@app.route("/")
+def index():
+    # Rendering our home page
+    return render_template("index.html")
+    
+
 # Login (for allowing users to login)
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -169,7 +224,6 @@ def login():
         # Get all information for that user inputted using their inputted email name
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
         
-        # Check if email is in the database or if password matches the associated email in the database
         if len(rows) == 0 or not check_password_hash(rows[0][2], password):
             return apology("invalid email and/or password", 403)
 
@@ -196,106 +250,19 @@ def logout():
     return redirect("/")
     
     
-# Test (for the celebrity matching test)
-@app.route("/test", methods=["GET", "POST"])
-@login_required
-def test():
-     
-    if request.method == "POST":        
-    
-        # Declaring user's input as variables
-        mbti = request.form.get("MBTIs")
-        enne = int(request.form.get("ENNEs")[0])
-        name = request.form.get("firstname")
-        
-        # Declaring user's ratings as variables
-        mbti_rating = int(request.form.get("mbtioptions"))
-        enne_rating = int(request.form.get("enneoptions"))
-        name_rating = int(request.form.get("nameoptions"))
-        
-        # User initial api information from genderize API
-        gender = requests.get('https://api.genderize.io/?name='+name)
-        age = requests.get('https://api.agify.io/?name='+name)
+# Methodology (displaying page showing our site's methodology)
+@app.route("/methodology", methods=["GET"])
+def methodology():
+        # Rendering methodology page
+        return render_template("methodology.html")
 
-        # Setting name_exists (in our api's database) initially to true
-        name_exists = True
-        
-        # Changing name_exists to false if name is not found in genderize API
-            # Note: Agify, genderize, and nationalize APIs used here all share the same database of names
-        if gender.json()['count'] == 0:
-            name_exists = False
-        
-        # If name exists in database, finding nationality and determining most likley nationality, gender, and age based on inputted name
-        if name_exists:
-            # Nationality included here because, unlike gender and age APIs, will not run if name does not exist
-            nationality = requests.get('https://api.nationalize.io/?name='+name)
-            user_nat = (nationality.json()['country'][0])['country_id']
-            user_gen = gender.json()['gender']
-            user_age = int(age.json()['age'])
-
-        # Fetching information for user in users database given their id
-        rows = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchall()
-
-        #  Deleting previous results for user
-        if len(rows) != 0:
-            db.execute("DELETE FROM points WHERE id = ?", (session["user_id"],))
-
-        #  Iterating through all celebrities in our celebs database
-        for i in range(1, CELEB_COUNT + 1):
-            # Setting points counter variable for each celeb to zero
-            points = 0
-        
-            # Selecting appropriate information for each celebrity
-            celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-            celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-            celeb_nat = db.execute("SELECT nationality FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-            celeb_gen = db.execute("SELECT gender FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-            celeb_age = db.execute("SELECT age FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-    
-            #  If the (agify-generated beforehand) age for celebrity is not None/N/A (meaning age exists)
-            if celeb_age != "N/A" and celeb_age is not None:
-                # Casting celeb_age as int for next if
-                celeb_age = int(celeb_age)
-                # If agify-generated celeb_age is within 10 years of agify-generated user_age
-                if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
-                    # Add 1/3 worth of name rating
-                    points += 1/3 * name_rating
-
-            # Adding 1/4 of mbti rating for every matching MBTI letter
-            for j in range(0, 4):
-                if celeb_mbti[j] == mbti[j]:
-                    points += (0.25 * mbti_rating )
-                    
-            # If user and celeb have the same first number of enneagram, adding points worth user's enneagram rating
-            if int(celeb_enne[0]) == enne:
-                points += enne_rating
-                
-            # Adding points worth 1/3 name rating if celeb and user's nationalize-generated nationality match
-            if celeb_nat == user_nat:
-                points += 1/3 * name_rating
-            
-            # Adding points worth 1/3 name rating if celeb and user's genderize-generated gender match
-            if celeb_gen == user_gen:
-                points += 1/3 * name_rating
-            
-            # Inserting points into the points database for celebs based on their level of match with users
-            db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
-        connection.commit()
-
-        return redirect("/results")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("test.html")
-    
 
 # Register (user registration)
 @app.route("/register", methods=["GET", "POST"])
 def register():
-
-    # Forget any user_id
+    # Forget any user id
     session.clear()
-    
+
     # Rendering register again if get method
     if request.method == "GET":
         return render_template("register.html")
@@ -370,74 +337,10 @@ def register():
         # Confirm registration
         return redirect("/login")
 
-
-# Change password (for users changing password))
-@app.route("/changepass", methods=["GET", "POST"])
-@login_required
-def changepass():
-
-    # Rendering changepass page if GET is used
-    if request.method == "GET":
-        return render_template("changepass.html")
-
-    # user reached route via POST
-    else:
-
-        # Creating variables for user-inputted info
-        email = request.form.get("email")
-        oldpassword = request.form.get("old_password")
-        newpassword = request.form.get("new_password")
-        newconfirmation = request.form.get("new_confirmation")
-
-        # Ensuring all fields have been completed
-        if not email:
-            return apology("Must provide email.")
-
-        elif not oldpassword:
-            return apology("Must provide the old password.")
-
-        elif not newpassword:
-            return apology("Must input new password.")
-
-        elif not newconfirmation:
-            return apology("Must input confirm new password.")
-
-        # Finding user information entered given the inputted email
-        rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
-        
-        # Checking to see whether the inputted email exists within the database
-        if rows is None:
-           return apology("invalid email address", 403)
-       
-         # Check to see if new password has been repeated
-        if check_password_hash(rows[2], newpassword):
-            return apology("Repeated password", 403)
-    
-        # Ensuring that old password matches the account specified
-        if len(rows) == 0 or not check_password_hash(rows[2], oldpassword):
-            return apology("invalid email and/or password", 403)
-
-        # 2nd personal touch, checks that password does not contain email
-        if newpassword.find(email) != -1:
-            return apology("Password must not contain email")
-        
-        # Returning apology if old password is same as the new one
-        if oldpassword != newconfirmation:
-           return apology("password and confirmation password must match", 400)
-
-        # Update new password into database
-        db.execute("UPDATE users SET password = ? WHERE email = ?", (generate_password_hash(newpassword), email))
-        connection.commit()
-
-    # Redirect to login page
-    return redirect("/login")
-
-
 # Results (for displaying top 10 celebrity matches)
 @app.route("/results")
 @login_required
 def results():  
-    
     # Retrieving celebrities with highest points count for given user and their input  
     top10 = db.execute("SELECT DISTINCT user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
 
@@ -450,3 +353,97 @@ def results():
         
     # Returning results page and passing in the shortlist of celebrity matches    
     return render_template("results.html", shortlist = shortlist)
+
+# Test (for the celebrity matching test)
+@app.route("/test", methods=["GET", "POST"])
+@login_required
+def test():
+     
+    if request.method == "POST":        
+    
+        # Declaring user's input as variables
+        mbti = request.form.get("MBTIs")
+        enne = int(request.form.get("ENNEs")[0])
+        name = request.form.get("firstname")
+        
+        # Declaring user's ratings as variables
+        mbti_rating = int(request.form.get("mbtioptions"))
+        enne_rating = int(request.form.get("enneoptions"))
+        name_rating = int(request.form.get("nameoptions"))
+        
+        # User initial api information from genderize API
+        gender = requests.get('https://api.genderize.io/?name='+name)
+        age = requests.get('https://api.agify.io/?name='+name)
+
+        # Setting name_exists (in our api's database) initially to true
+        name_exists = True
+        
+        # Changing name_exists to false if name is not found in genderize API
+            # Note: Agify, genderize, and nationalize APIs used here all share the same database of names
+        if gender.json()['count'] == 0:
+            name_exists = False
+        
+        # If name exists in database, finding nationality and determining most likley nationality, gender, and age based on inputted name
+        if name_exists:
+            # Nationality included here because, unlike gender and age APIs, will not run if name does not exist
+            nationality = requests.get('https://api.nationalize.io/?name='+name)
+            user_nat = (nationality.json()['country'][0])['country_id']
+            user_gen = gender.json()['gender']
+            user_age = int(age.json()['age'])
+
+        # Fetching information for user in users database given their id
+        rows = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchall()
+
+        #  Deleting previous results for user
+        if len(rows) != 0:
+            db.execute("DELETE FROM points WHERE user_id = ?", (session["user_id"],))
+            connection.commit()
+
+        #  Iterating through all celebrities in our celebs database
+        for i in range(1, CELEB_COUNT + 1):
+            # Setting points counter variable for each celeb to zero
+            points = 0
+        
+            # Selecting appropriate information for each celebrity
+            celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_nat = db.execute("SELECT nationality FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_gen = db.execute("SELECT gender FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_age = db.execute("SELECT age FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+    
+            #  If the (agify-generated beforehand) age for celebrity is not None/N/A (meaning age exists)
+            if celeb_age != "N/A" and celeb_age is not None:
+                # Casting celeb_age as int for next if
+                celeb_age = int(celeb_age)
+                # If agify-generated celeb_age is within 10 years of agify-generated user_age
+                if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
+                    # Add 1/3 worth of name rating
+                    points += 1/3 * name_rating
+
+            # Adding 1/4 of mbti rating for every matching MBTI letter
+            for j in range(0, 4):
+                if celeb_mbti[j] == mbti[j]:
+                    points += (0.25 * mbti_rating )
+                    
+            # If user and celeb have the same first number of enneagram, adding points worth user's enneagram rating
+            if int(celeb_enne[0]) == enne:
+                points += enne_rating
+                
+            # Adding points worth 1/3 name rating if celeb and user's nationalize-generated nationality match
+            if celeb_nat == user_nat:
+                points += 1/3 * name_rating
+            
+            # Adding points worth 1/3 name rating if celeb and user's genderize-generated gender match
+            if celeb_gen == user_gen:
+                points += 1/3 * name_rating
+            
+            # Inserting points into the points database for celebs based on their level of match with users
+            db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
+        connection.commit()
+
+            
+        return redirect("/results")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("test.html")
