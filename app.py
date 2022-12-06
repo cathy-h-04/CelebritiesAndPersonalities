@@ -469,10 +469,10 @@ def changepass():
             return apology("Must provide the old password.")
 
         elif not newpassword:
-            return apology("Must input the answer to first security question.")
+            return apology("Must input new password.")
 
         elif not newconfirmation:
-            return apology("Must input the answer to second security question.")
+            return apology("Must input confirm new password.")
 
         # check if old password equals new password
         # rows = db.execute("SELECT * FROM users WHERE email = ?", email)
