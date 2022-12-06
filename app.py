@@ -190,14 +190,13 @@ def logout():
     
     
     
-    
 @app.route("/test", methods=["GET", "POST"])
 @login_required
 def test():
      
     if request.method == "POST":        
     
-        # Declaring each user's input as variables
+        # declaring each user's input as variables
         mbti = request.form.get("MBTIs")
         print("MBTI", mbti)
         enne = int(request.form.get("ENNEs")[0])
@@ -205,7 +204,7 @@ def test():
         name = request.form.get("firstname")
         print("NAME", name)
         
-        # Declaring each user's ratings as variables
+        # declaring each user's ratings as variables
         mbti_rating = int(request.form.get("mbtioptions"))
         print("MBTI RATING", mbti_rating)
         enne_rating = int(request.form.get("enneoptions"))
@@ -213,9 +212,12 @@ def test():
         name_rating = int(request.form.get("nameoptions"))
         print("NAME RATING", name_rating)
         
-        # User initial API information ()
+        # total_points = mbti_rating + enne_rating + name_rating
+        
+            # User initial api information
         gender = requests.get('https://api.genderize.io/?name='+name)
         age = requests.get('https://api.agify.io/?name='+name)
+
 
         name_exists = True
         
@@ -226,11 +228,22 @@ def test():
             nationality = requests.get('https://api.nationalize.io/?name='+name)
             user_nat = (nationality.json()['country'][0])['country_id']
             user_gen = gender.json()['gender']
-            user_age = age.json()['age']
+            user_age = int(age.json()['age'])
+
+            print("USER NATIONALITY: ", user_nat)
+            print("USER GENDER: ", user_gen)
+            print("USER AGE: ", user_age)
+
+
             
                 
-                
         print("THIS IS THE SESSION DURING TEST: "+ str(session["user_id"]))
+
+        rows = db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchall()
+        print("ROWS FOR NOW:", rows)
+
+        if len(rows) != 0:
+            db.execute("DELETE FROM points WHERE id = ?", (session["user_id"],))
 
         
         for i in range(1, CELEB_COUNT + 1):
@@ -241,6 +254,13 @@ def test():
             celeb_nat = db.execute("SELECT nationality FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_gen = db.execute("SELECT gender FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_age = db.execute("SELECT age FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+    
+
+
+            if celeb_age != "N/A" and celeb_age is not None:
+                celeb_age = int(celeb_age)
+                if celeb_age < (user_age + 5) and celeb_age > (user_age - 5):
+                    points += 1/3 * name_rating
 
             
             for j in range(0, 4):
@@ -265,6 +285,81 @@ def test():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("test.html")
+    
+# @app.route("/test", methods=["GET", "POST"])
+# @login_required
+# def test():
+     
+#     if request.method == "POST":        
+    
+#         # Declaring each user's input as variables
+#         mbti = request.form.get("MBTIs")
+#         print("MBTI", mbti)
+#         enne = int(request.form.get("ENNEs")[0])
+#         print("ENNE", enne)
+#         name = request.form.get("firstname")
+#         print("NAME", name)
+        
+#         # Declaring each user's ratings as variables
+#         mbti_rating = int(request.form.get("mbtioptions"))
+#         print("MBTI RATING", mbti_rating)
+#         enne_rating = int(request.form.get("enneoptions"))
+#         print("ENNE RATING", enne_rating)
+#         name_rating = int(request.form.get("nameoptions"))
+#         print("NAME RATING", name_rating)
+        
+#         # User initial API information ()
+#         gender = requests.get('https://api.genderize.io/?name='+name)
+#         age = requests.get('https://api.agify.io/?name='+name)
+
+#         name_exists = True
+        
+#         if gender.json()['count'] == 0:
+#             name_exists = False
+        
+#         if name_exists:
+#             nationality = requests.get('https://api.nationalize.io/?name='+name)
+#             user_nat = (nationality.json()['country'][0])['country_id']
+#             user_gen = gender.json()['gender']
+#             user_age = age.json()['age']
+            
+                
+                
+#         print("THIS IS THE SESSION DURING TEST: "+ str(session["user_id"]))
+
+        
+#         for i in range(1, CELEB_COUNT + 1):
+#             points = 0
+        
+#             celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+#             celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+#             celeb_nat = db.execute("SELECT nationality FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+#             celeb_gen = db.execute("SELECT gender FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+#             celeb_age = db.execute("SELECT age FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+
+            
+#             for j in range(0, 4):
+#                 if celeb_mbti[j] == mbti[j]:
+#                     points += (0.25 * mbti_rating )
+                    
+#             if int(celeb_enne[0]) == enne:
+#                 points += enne_rating
+                
+#             if celeb_nat == user_nat:
+#                 points += 1/3 * name_rating
+            
+#             if celeb_gen == user_gen:
+#                 points += 1/3 * name_rating
+                
+#             db.execute("INSERT INTO points (celeb_id, user_id, points) VALUES (?, ?, ?)", (i, session["user_id"], points))
+#         connection.commit()
+
+            
+#         return redirect("/results")
+
+#     # User reached route via GET (as by clicking a link or via redirect)
+#     else:
+#         return render_template("test.html")
     
     
     
