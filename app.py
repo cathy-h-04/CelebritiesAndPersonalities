@@ -415,44 +415,21 @@ def changepass():
     return redirect("/login")
 
 
-
 @app.route("/results")
 @login_required
-def results():    
-    print("ID: "+ str(session["user_id"]))
-    top10 = db.execute("SELECT DISTINCT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
+def results():  
+    # Retrieving celebrities with highest points count for given user and their input  
+    top10 = db.execute("SELECT DISTINCT user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
 
-
+    # Creating list for celebrities
     shortlist = []
+    
+    # Populating shortlist with 10 highest scoring celebrities
     for row in top10:
         shortlist.append(row)
-        print(row)
         
-    print(shortlist)
-    # for person in top10:
-    #     print(person)
+    # returning results page and passing in the shortlist of celebrity matches    
     return render_template("results.html", shortlist = shortlist)
-
-# # TODO: Code Result page
-# @app.route("/results")
-# @login_required
-# def results():    
-#     print("ID: "+ str(session["user_id"]))
-#     top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 11", (session["user_id"],))
-
-#     # Appending top 10 celebrities to shortlist
-#     shortlist = []
-#     for row in top10:
-#         shortlist.append(row)
-
-#     # Displaying results page and passing in the top 10 celebrities
-#     return render_template("results.html", shortlist = shortlist)
-
-# @app.route("/account", methods=["GET", "POST"])
-# @login_required
-# def account():
-#     if request.method == "GET":
-#         return render_template("account.html")
 
 
 # TODO: Code Compatibility Page 
