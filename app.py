@@ -40,7 +40,7 @@ from sqlite3 import Error
 
 #ASK WHETHER THIS IS OKAY
 
-print(celeb_count)
+# print(celeb_count)
 connection = sqlite3.connect("database.db", check_same_thread=False)
 
 # connection2 = sqlite3.connect("users.db")
@@ -352,7 +352,9 @@ def test():
 
         name_exists = True
             
-        if celeb_gender_search.json()['count'] == 0:
+        print(gender.json())
+        
+        if gender.json()['count'] == 0:
             name_exists = False
         
         if name_exists:
