@@ -7,8 +7,8 @@ Match Test
 {% block main %}
 <body>
     <form action="/test" method="post">
+      <!-- MBTI Input -->
     <h2>MBTI (Myers-Briggs Type Indicator)</h2>
-    <h5>Description: </h5>
     <strong for="MBTI">Select your</strong>
     <select name="MBTIs" id="MBTIs" required>
       <option disabled selected value="">MBTI</option>
@@ -33,6 +33,7 @@ Match Test
     <br></br>
     <div class="mx-0 mx-sm-auto">
       <div class="text-center">
+        <!-- MBTI Preference Input -->
         <p>
           <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like MBTI to factor into your celebrity match rating?</strong>
         </p>
@@ -62,8 +63,8 @@ Match Test
     </div>
 
     <br></br>
+    <!-- Enneagram Input -->
     <h2>Enneagrams</h2>
-    <h5>Description: </h5>
     <strong for="Enne">Select your</strong>
     <select name="ENNEs" id="ENNEs">
       <option disabled selected value="">Enneagrams</option>
@@ -89,6 +90,7 @@ Match Test
 
     <br></br>
     <div class="mx-0 mx-sm-auto">
+      <!-- Enneagram Preference Input -->
       <div class="text-center">
         <p>
           <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like Enneagram to factor into your celebrity match rating?</strong>
@@ -119,12 +121,14 @@ Match Test
     </div>
 
     <br></br>
+    <!-- Name Analysis Input -->
     <h2>Nationality, Gender, & Age (Based on Name Generator)</h2>
     <h5>Input Name Here: </h5>
     <input type="text" class="form-control form-control-lg" id="firstname" name = "firstname" placeholder="First name">
 
     <br></br>
     <div class="mx-0 mx-sm-auto">
+      <!-- Name Analysis Preference Input -->
       <div class="text-center">
         <p>
           <strong>On a scale of 1-10 (1 being least, 10 being greatest), how much would you like name analysis to factor into your celebrity match rating?</strong>
@@ -155,11 +159,13 @@ Match Test
     </div>
 
     <br></br>
+    <!-- Submit Button -->
     <a href="/results">
       <button type="submit" id="submit" href="/results" class="btn btn-primary" onclick="return Validate()">Submit</button>
     </a>
   </form>
 
+  <!-- User Validation JS (Confirm that user inputted an answer) -->
     <script type="text/javascript">
       function Validate() {
         var ENNEs = document.getElementById("ENNEs");

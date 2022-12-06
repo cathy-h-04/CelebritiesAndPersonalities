@@ -11,9 +11,9 @@ Match Results
         <div class="col col-lg-9 col-xl-7">
           <div class="card rounded-3">
             <div class="card-body p-4">
-  
+              <!-- Title -->
               <h4 class="text-center my-3 pb-3">Match Results</h4>
-  
+              <!-- Row Names -->
               <table class="table mb-4">
                 <thead>
                   <tr>
@@ -24,6 +24,7 @@ Match Results
                     <th scope="text-end">Match Index:</th>
                   </tr>
                 </thead>
+                <!-- Jinja to iterate through the list of top 10 -->
                 <tbody>
                     {% for person in shortlist %}  
                     <tr>
