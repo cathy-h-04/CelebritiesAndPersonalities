@@ -104,9 +104,6 @@ CELEB_COUNT = 338
 
 # data = celeb_data + character_data
 
-celeb_count = len(db.execute("SELECT * FROM celebs").fetchall())
-
-print(celeb_count)
 
 
 #QUESTION: SHOULD I JUST RUN THIS IN SQLITE?
@@ -368,7 +365,7 @@ def test():
         print("THIS IS THE SESSION DURING TEST: "+ str(session["user_id"]))
 
         
-        for i in range(1, celeb_count + 1):
+        for i in range(1, CELEB_COUNT + 1):
             points = 0
         
             celeb_mbti = db.execute("SELECT MBTI FROM celebs WHERE id = ?", (i,)).fetchone()[0]
