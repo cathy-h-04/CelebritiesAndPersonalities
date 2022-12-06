@@ -103,7 +103,7 @@ def forgotpass():
         letters = 0
         special_characters = 0
 
-        # iterating through characters of password counting each type of character
+        # Iterating through characters of password counting each type of character
         for char in newpass:
             if char.isalpha():
                 letters += 1
@@ -112,7 +112,7 @@ def forgotpass():
             else:
                 special_characters += 1
                 
-        # rendering error message if password does not meet specifications
+        # Rendering error message if password does not meet specifications
         if letters < 5 or digits < 1 or special_characters < 1:
             return apology("New password must contain at least 5 letters, 1 digit, and 1 special character.")
 
@@ -120,29 +120,30 @@ def forgotpass():
         elif newpass.find(email) != -1:
             return apology("Password must not contain email")
 
-        # check if old password equals new password
+        # Check if old password equals new password
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
         
-        # checking to see whether the inputted email exists within the database
+        # Checking to see whether the inputted email exists within the database
         if rows is None:
            return apology("invalid email address", 403)
 
-        
+        # Ensuring the new password is not the same as the previous one
         if check_password_hash(rows[2], newpass):
             return apology("Repeated password", 403)
 
-        # check that user correctly inputted security question 1
+        # Checking that user correctly inputted security question 1
         if rows[3] != securityques1:
            return apology("The answer to one or more security questions is incorrect", 403)
  
+        # Checking that user correctly inputted security question 2
         if rows[4] != securityques2:
            return apology("The answer to one or more security questions is incorrect", 403)
 
-        # update new password into database
+        # Update new password in database
         db.execute("UPDATE users SET password = ? WHERE email = ?", (generate_password_hash(newpass), email))
         connection.commit()
 
-    # redirect to login page
+    # Redirect to login page
     return redirect("/login")
 
 
