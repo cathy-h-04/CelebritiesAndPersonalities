@@ -335,7 +335,7 @@ def test():
             celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_nat = db.execute("SELECT nationality FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_gen = db.execute("SELECT gender FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-            celeb_age = db.execute("SELECT age FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_age = int(db.execute("SELECT age FROM celebs WHERE id = ?", (i,)).fetchone()[0])
 
             
             for j in range(0, 4):
@@ -498,8 +498,11 @@ def changepass():
             return apology("invalid email and/or password", 403)
 
         # 2nd personal touch, checks that password does not contain email
-        elif newpassword.find(email) != -1:
+        if newpassword.find(email) != -1:
             return apology("Password must not contain email")
+        
+        if oldpassword != newconfirmation:
+           return apology("password and confirmation password must match", 400)
 
         # update new password into database
         db.execute("UPDATE users SET password = ? WHERE email = ?", (generate_password_hash(newpassword), email))
