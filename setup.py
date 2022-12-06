@@ -79,9 +79,6 @@ db.execute("DELETE FROM sqlite_sequence where name='users'")
 
 
 
-db.execute("DELETE FROM celebs")
-db.execute("DELETE FROM sqlite_sequence where name='celebs'")
-
 
 celebs = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
 characters = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
@@ -93,13 +90,25 @@ data = celeb_data + character_data
 
 
 for person in data:
+<<<<<<< HEAD
     person_name = person["mbti_profile"]
+=======
+    
+    name_exists = True
+    
+    person_full_name = person["mbti_profile"]
+    person_name = person_full_name.split()[0]
+>>>>>>> 8ca574c66c5d172f1889b164bfcd0542737efec5
     person_personality = person["personality_type"]
     mbti = person_personality.split()[0]
     enne = person_personality.split()[1]
     #print(person_name,mbti,enne)
 
+<<<<<<< HEAD
     db.execute("INSERT INTO celebs (name, MBTI, enne) VALUES (?, ?, ?)", (person_name, mbti, enne))
+=======
+    db.execute("INSERT INTO celebs (name, MBTI, enne, nationality, gender, age) VALUES (?, ?, ?, ?, ?, ?)", (person_full_name, mbti, enne, person_nat, person_gen, person_age))
+>>>>>>> 8ca574c66c5d172f1889b164bfcd0542737efec5
     connection.commit()
     
     
