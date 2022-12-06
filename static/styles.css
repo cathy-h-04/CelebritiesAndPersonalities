@@ -32,33 +32,6 @@ nav .navbar-brand
     border: 3px solid steelblue;
 }
 
-.column {
-    border: 3px solid steelblue;
-    float: left;
-    width: 32.75%;
-    padding: 10px;
-  }
-
-  .marginleft
-  {
-    margin-left: 12px;
-  }
-
-  .marginright
-  {
-    margin-right: 12px;
-  }
-
-  .btn-color
-  {
-    background-color: #788AA3;
-  }
-
-.btn-submit
-{
-    background: #788AA3;
-}
-
 .homepagedesign
 {
     position: relative;
@@ -122,3 +95,37 @@ nav .navbar-brand
     border-color: #788AA3;
     color: white;
 }
+
+.btn-primary
+{
+    background-color: #788AA3;
+    color:white;
+}
+
+.white
+{
+    color: white;
+}
+
+.page-wrapper {
+    margin: 15px;
+  }
+  
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  .column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+  }
+
+.responsive {
+    max-width: 70%;
+    height: auto;
+  }

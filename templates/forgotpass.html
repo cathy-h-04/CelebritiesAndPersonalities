@@ -5,7 +5,7 @@ Forgot Password
 {% endblock %}
 
 {% block main %}
-<body class="backdrop">
+<body class="font rhythmBlue backdrop">
   <div class="container d-flex flex-column forgotpasswordpage">
     <div class="row align-items-center justify-content-center
         min-vh-100">
@@ -13,33 +13,33 @@ Forgot Password
         <div class="card shadow-sm">
           <div class="card-body">
             <div class="mb-4">
-              <h5>Forgot Password?</h5>
+              <strong>Forgot Password?</strong>
               <p class="mb-2">Enter your registered email and answers to the security questions to reset password.
               </p>
             </div>
             <form action="/forgotpass" method="post">
               <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
+                <strong for="email" class="form-label">Email</strong>
                 <input type="text" id="email" class="form-control" name="email" placeholder="Enter Your Email Address"
                   required="">
               </div>
               <div class="mb-3">
-                <label for="securityques1" class="form-label">Security Question: What is your mother's maiden name?</label>
+                <strong for="securityques1" class="form-label">Security Question: What is your mother's maiden name?</strong>
                 <input type="text" id="securityques1" class="form-control" name="securityques1" placeholder="Enter Your Answer"
                   required="">
               </div>
               <div class="mb-3">
-                <label for="securityques2" class="form-label">Security Question: What is your childhood nickname?</label>
+                <strong for="securityques2" class="form-label">Security Question: What is your childhood nickname?</strong>
                 <input type="text" id="securityques2" class="form-control" name="securityques2" placeholder="Enter Your Answer"
                   required="">
               </div>
               <div class="mb-3">
-                <label for="passwordreset" class="form-label">Password Reset</label>
+                <strong for="passwordreset" class="form-label">Password Reset</strong>
                 <input type="password" id="newpass" class="form-control" name="newpass" placeholder="Enter Your New Password"
                   required="">
               </div>
               <div class="mb-3">
-                <label for="passwordconfirm" class="form-label">Password Confirmation</label>
+                <strong for="passwordconfirm" class="form-label">Password Confirmation</strong>
                 <input type="password" id="confirmpass" class="form-control" name="confirmpass" placeholder="Confirm Your New Password"
                   required="">
               </div>
