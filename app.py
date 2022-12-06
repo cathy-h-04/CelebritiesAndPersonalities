@@ -177,6 +177,12 @@ def forgotpass():
 
         # check if old password equals new password
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        
+        # checking to see whether the inputted email exists within the database
+        if rows is None:
+           return apology("invalid email address", 403)
+
+        
         if check_password_hash(rows[2], newpass):
             return apology("Repeated password", 403)
 
