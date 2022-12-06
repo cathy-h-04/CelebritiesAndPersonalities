@@ -53,6 +53,9 @@ db = connection.cursor()
 #                 name TEXT NOT NULL, 
 #                 MBTI TEXT NOT NULL, 
 #                 enne TEXT NOT NULL
+#                 nationality TEXT,
+#                 gender TEXT,
+#                 age NUMBER
 #             );
 
 
@@ -78,7 +81,7 @@ db = connection.cursor()
 
 #db.execute("DROP TABLE celebs")
 
-#db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
+#db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC, )")
 # db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
 #db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, maiden TEXT NOT NULL, nickname TEXT NOT NULL)")
 
@@ -90,13 +93,8 @@ db = connection.cursor()
 # DELETE FROM sqlite_sequence where name='points';
     
 # TODO: create a third table in which a user's top 20 matches are stored (include name as foreign key, celeb names, and percent matches)
-celebs = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
-characters = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
+                
 
-celeb_data = (celebs.json()["profiles"])
-character_data = (characters.json()["profiles"])
-
-data = celeb_data + character_data
 
 
 #QUESTION: SHOULD I JUST RUN THIS IN SQLITE?
