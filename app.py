@@ -490,6 +490,10 @@ def changepass():
        
         if check_password_hash(rows[2], newpassword):
             return apology("Repeated password", 403)
+        
+        # ensuring that old password matches the account specified
+        if len(rows) == 0 or not check_password_hash(rows[2], oldpassword):
+            return apology("invalid email and/or password", 403)
 
         # 2nd personal touch, checks that password does not contain email
         elif newpassword.find(email) != -1:
