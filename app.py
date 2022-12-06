@@ -48,23 +48,26 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-
+# Index (home page of site)
 @app.route("/")
 def index():
     # Rendering our home page
     return render_template("index.html")
 
-
+# About (displaying page about site's creators)
 @app.route("/about", methods=["GET"])
 def about():
         # Rendering about page
         return render_template("about.html")
 
+# Methodology (displaying page showing our site's methodology)
 @app.route("/methodology", methods=["GET"])
 def methodology():
         # Rendering methodology page
         return render_template("methodology.html")
     
+
+# Forgot password (for if users forgot password and need to set new one)
 @app.route("/forgotpass", methods=["GET", "POST"])
 def forgotpass():
     """Forgot password"""
@@ -147,7 +150,7 @@ def forgotpass():
     return redirect("/login")
 
 
-
+# Login (for allowing users to login)
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -177,7 +180,7 @@ def login():
     else:
         return render_template("login.html")
 
-
+# Logout (for logging out users from site)
 @app.route("/logout")
 @login_required
 def logout():
@@ -189,38 +192,32 @@ def logout():
     return redirect("/")
     
     
-    
+# Test (for the celebrity matching test)
 @app.route("/test", methods=["GET", "POST"])
 @login_required
 def test():
      
     if request.method == "POST":        
     
-        # declaring each user's input as variables
+        # Declaring user's input as variables
         mbti = request.form.get("MBTIs")
-        print("MBTI", mbti)
         enne = int(request.form.get("ENNEs")[0])
-        print("ENNE", enne)
         name = request.form.get("firstname")
-        print("NAME", name)
         
-        # declaring each user's ratings as variables
+        # Declaring user's ratings as variables
         mbti_rating = int(request.form.get("mbtioptions"))
-        print("MBTI RATING", mbti_rating)
         enne_rating = int(request.form.get("enneoptions"))
-        print("ENNE RATING", enne_rating)
         name_rating = int(request.form.get("nameoptions"))
-        print("NAME RATING", name_rating)
         
-        # total_points = mbti_rating + enne_rating + name_rating
-        
-            # User initial api information
+        # User initial api information from genderize API
         gender = requests.get('https://api.genderize.io/?name='+name)
         age = requests.get('https://api.agify.io/?name='+name)
 
-
+        # Setting name_exists (in our api's database) initially to true
         name_exists = True
         
+        # Changing name_exists to false if name is not found in genderize API
+            # Note: Agify, genderize, and nationalize APIs used here all share the same database of names
         if gender.json()['count'] == 0:
             name_exists = False
         
@@ -272,7 +269,7 @@ def test():
     else:
         return render_template("test.html")
     
-
+# Register (user registration)
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -353,13 +350,13 @@ def register():
         return redirect("/login")
 
 
-
+# Change password (for users changing password))
 @app.route("/changepass", methods=["GET", "POST"])
 @login_required
 def changepass():
-    """Change password"""
 
     if request.method == "GET":
+        # Rendering changepass page if GET is used
         return render_template("changepass.html")
 
     # user reached route via POST
@@ -415,6 +412,7 @@ def changepass():
     return redirect("/login")
 
 
+# Results (for displaying top 10 celebrity matches)
 @app.route("/results")
 @login_required
 def results():  
@@ -428,5 +426,5 @@ def results():
     for row in top10:
         shortlist.append(row)
         
-    # returning results page and passing in the shortlist of celebrity matches    
+    # Returning results page and passing in the shortlist of celebrity matches    
     return render_template("results.html", shortlist = shortlist)
