@@ -1,6 +1,7 @@
 
 import os
 
+#importing sqlite3 for database use
 import sqlite3
 from sqlite3 import Error
 
@@ -11,118 +12,27 @@ from flask_session import Session
 # from flask_session import Session
 from tempfile import mkdtemp
 
+# importing package for creating and checking password hashes
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-# importing helper functions
+# importing helper functions for apology message and requiring users to login to access page
 from helpers import apology, login_required
 
 import json
 
+# importing requests
 from pip._vendor import requests
-#from tempfile import mkdtemp
-#app = Flask(__name__)
 
-import sqlite3
-from sqlite3 import Error
-
-# def create_connection(path):
-#     connection = None
-#     try:
-#         connection = sqlite3.connect("os.path.basename(database.db)")
-#         print("Connection to SQLite DB successful")
-#     except Error as e:
-#         print("The error occurred")
-
-#     return connection
-
-# connection = create_connection("E:\\database.db")
-
-#ASK WHETHER THIS IS OKAY
-
-# print(celeb_count)
+# establishing database connection
 connection = sqlite3.connect("database.db", check_same_thread=False)
-
-# connection2 = sqlite3.connect("users.db")
-# connection3 = sqlite3.connect("points.db")
-
 db = connection.cursor()
 
+# Declaring count of celebrities in our database, 338, as a global variable
 CELEB_COUNT = 338
-
-
-# db2 = connection2.cursor()
-# db3 = connection3.cursor()
-
-# CREATE TABLE celebs (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-#                 name TEXT NOT NULL, 
-#                 MBTI TEXT NOT NULL, 
-#                 enne TEXT NOT NULL
-#             );
-
-
-
-# CREATE TABLE users (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-#                 email TEXT NOT NULL, 
-#                 password TEXT NOT NULL, 
-#                 maiden TEXT NOT NULL, 
-#                 nickname TEXT NOT NULL
-#             );
-
-
-
-# CREATE TABLE points (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-#                 celeb_id INTEGER NOT NULL,
-#                 user_id INTEGER NOT NULL,
-#                 points NUMERIC,
-#                 FOREIGN KEY(celeb_id) REFERENCES celebs(id),
-#                 FOREIGN KEY(user_id) REFERENCES users(id)
-#             );
-
-#db.execute("DROP TABLE celebs")
-
-#db.execute("CREATE TABLE if not exists celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
-# db.execute("CREATE TABLE celebs (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, MBTI TEXT NOT NULL, enne TEXT NOT NULL, points NUMERIC)")
-#db2.execute("CREATE TABLE if not exists users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, maiden TEXT NOT NULL, nickname TEXT NOT NULL)")
-
-
-#BEFORE RUNNING:
-#db.execute("DELETE FROM points")
-#db.execute("DELETE FROM sqlite_sequence where name='points'")
-# DELETE FROM points;
-# DELETE FROM sqlite_sequence where name='points';
-    
-# TODO: create a third table in which a user's top 20 matches are stored (include name as foreign key, celeb names, and percent matches)
-# celebs = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
-# characters = requests.get('https://api.personality-database.com/api/v1/profiles?offset=0&limit=100000&pid=1&sort=top&property_id=1')
-
-# celeb_data = (celebs.json()["profiles"])
-# character_data = (characters.json()["profiles"])
-
-# data = celeb_data + character_data
-
-
-
-#QUESTION: SHOULD I JUST RUN THIS IN SQLITE?
-# for person in data:
-#     person_name = person["mbti_profile"]
-#     person_personality = person["personality_type"]
-#     mbti = person_personality.split()[0]
-#     enne = person_personality.split()[1]
-#     #print(person_name,mbti,enne)
-
-#     db.execute("INSERT INTO celebs (name, MBTI, enne) VALUES (?, ?, ?)", (person_name, mbti, enne))
-#     connection.commit()
-
 
 # Configure application
 app = Flask(__name__)
-
-# TODO: look into using custom filters with jinja if desired
-    # this filter was added for finance: app.jinja_env.filters["usd"] = usd
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -130,14 +40,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-# TODO: configure this for our database as necessary (not sure if this is okay or if we need change)
-#db = SQL("sqlite:///celebs.db")
-
-# # TODO: This code in finance makes sure API key is set, so we may want similar code
-# if not os.environ.get("API_KEY"):
-#     raise RuntimeError("API_KEY not set")
-
-# TODO: adjust this code below from finance pset to what we want
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -147,44 +49,39 @@ def after_request(response):
     return response
 
 
-# TODO: add any input necessary, although I don't think there is any necessary
 @app.route("/")
 def index():
-
+    # Rendering our home page
     return render_template("index.html")
 
 
-# TODO: adjust to what we want here (I think about is a static page though)
 @app.route("/about", methods=["GET"])
-#@app.route("/about", methods=["GET", "POST"])
 def about():
-        # User reached route via GET (as by clicking a link or via redirect)
+        # Rendering about page
         return render_template("about.html")
 
 @app.route("/methodology", methods=["GET"])
 def methodology():
-        # User reached route via GET (as by clicking a link or via redirect)
+        # Rendering methodology page
         return render_template("methodology.html")
     
 @app.route("/forgotpass", methods=["GET", "POST"])
 def forgotpass():
     """Forgot password"""
-
+    # rendering forgotpassword page if get method
     if request.method == "GET":
         return render_template("forgotpass.html")
 
     # user reached route via POST
     else:
-
-        # get new password, password confirmation, & email
+        # get user's inputted email, new password, password confirmation, and security answers
         email = request.form.get("email")
         newpass = request.form.get("newpass")
         confirmpass = request.form.get("confirmpass")
         securityques1 = request.form.get("securityques1")
         securityques2 = request.form.get("securityques2")
 
-
-        # make sure user input's a password, email and confirms password
+        # make sure user inputs an email, password, confirmation, and security answers
         if not email:
             return apology("Must provide email.")
 
@@ -195,16 +92,18 @@ def forgotpass():
             return apology("Must confirm new password.")
 
         elif not securityques1:
-            return apology("Must confirm new password.")
+            return apology("Must answer both security questions.")
 
         elif not securityques2:
-            return apology("Must confirm new password.")
+            return apology("Must answer both secuirty questions.")
 
         # Checking that the password has at least one digit, 1 special character, and 5 letters in their password
+        # Declaring inital counter variables to zero
         digits = 0
         letters = 0
         special_characters = 0
 
+        # Iterating through characters of password counting each type of character
         for char in newpass:
             if char.isalpha():
                 letters += 1
@@ -212,7 +111,8 @@ def forgotpass():
                 digits += 1
             else:
                 special_characters += 1
-
+                
+        # Rendering error message if password does not meet specifications
         if letters < 5 or digits < 1 or special_characters < 1:
             return apology("New password must contain at least 5 letters, 1 digit, and 1 special character.")
 
@@ -220,23 +120,30 @@ def forgotpass():
         elif newpass.find(email) != -1:
             return apology("Password must not contain email")
 
-        # check if old password equals new password
+        # Check if old password equals new password
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        
+        # Checking to see whether the inputted email exists within the database
+        if rows is None:
+           return apology("invalid email address", 403)
+
+        # Ensuring the new password is not the same as the previous one
         if check_password_hash(rows[2], newpass):
             return apology("Repeated password", 403)
 
-        # check that user correctly inputted security question 1
+        # Checking that user correctly inputted security question 1
         if rows[3] != securityques1:
            return apology("The answer to one or more security questions is incorrect", 403)
  
+        # Checking that user correctly inputted security question 2
         if rows[4] != securityques2:
            return apology("The answer to one or more security questions is incorrect", 403)
 
-        # update new password into database
+        # Update new password in database
         db.execute("UPDATE users SET password = ? WHERE email = ?", (generate_password_hash(newpass), email))
         connection.commit()
 
-    # redirect to login page
+    # Redirect to login page
     return redirect("/login")
 
 
@@ -254,41 +161,8 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        # # Ensure email was submitted
-        # if not email:
-        #     return apology("must provide email", 403)
-
-        # # Ensure password was submitted
-        # elif not password:
-        #     return apology("must provide password", 403)
-        print(email)
-        print(password)
-
-        # Query database for email
-        # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()[0]
-        # rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()[0]
-        
+        # sellecet all information for thaht user given their inputted email name
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall()
-        
-        print("THIS IS WHAT ROWS IS:", rows)
-        
-        #rows = db.execute("SELECT * FROM users").fetchall()
-        
-        #print(len(rows))
-        
-        #print(db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchall())
-        # print(db.execute("SELECT * FROM users WHERE email = ?", email))
-        # rows = db.execute("SELECT * FROM users 
-        # WHERE email = ?", email)
-        # row = db.fetchone()
-
-        # while rows is not None:
-        #     print(rows)
-        #     rows = db.fetchone()
-        
-        # TODO: implement this!!
-        # Ensure email exists and password is correct
-        #if len(rows) != 5
         
         if len(rows) == 0 or not check_password_hash(rows[0][2], password):
             return apology("invalid email and/or password", 403)
@@ -308,6 +182,7 @@ def login():
 
 
 @app.route("/logout")
+@login_required
 def logout():
 
     # Forget any user_id
@@ -315,8 +190,6 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
-    
-    
     
     
 @app.route("/test", methods=["GET", "POST"])
@@ -341,8 +214,6 @@ def test():
         name_rating = int(request.form.get("nameoptions"))
         print("NAME RATING", name_rating)
         
-        # total_points = mbti_rating + enne_rating + name_rating
-        
             # User initial api information
         gender = requests.get('https://api.genderize.io/?name='+name)
         age = requests.get('https://api.agify.io/?name='+name)
@@ -359,10 +230,6 @@ def test():
             user_nat = (nationality.json()['country'][0])['country_id']
             user_gen = gender.json()['gender']
             user_age = age.json()['age']
-            
-                
-                
-        print("THIS IS THE SESSION DURING TEST: "+ str(session["user_id"]))
 
         
         for i in range(1, CELEB_COUNT + 1):
@@ -373,7 +240,7 @@ def test():
             celeb_enne = db.execute("SELECT enne FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_nat = db.execute("SELECT nationality FROM celebs WHERE id = ?", (i,)).fetchone()[0]
             celeb_gen = db.execute("SELECT gender FROM celebs WHERE id = ?", (i,)).fetchone()[0]
-            celeb_age = db.execute("SELECT age FROM celebs WHERE id = ?", (i,)).fetchone()[0]
+            celeb_age = int(db.execute("SELECT age FROM celebs WHERE id = ?", (i,)).fetchone()[0])
 
             
             for j in range(0, 4):
@@ -442,7 +309,7 @@ def register():
             return apology("Must input the answer to first security question.")
 
         elif not securityques2:
-            return apology("Must input the answer to first security question.")
+            return apology("Must input the answer to second security question.")
 
         # Checking that email and password match
         elif password != confirmation:
@@ -491,6 +358,7 @@ def register():
 
 
 @app.route("/changepass", methods=["GET", "POST"])
+@login_required
 def changepass():
     """Change password"""
 
@@ -514,20 +382,32 @@ def changepass():
             return apology("Must provide the old password.")
 
         elif not newpassword:
-            return apology("Must input the answer to first security question.")
+            return apology("Must input new password.")
 
         elif not newconfirmation:
-            return apology("Must input the answer to second security question.")
+            return apology("Must input confirm new password.")
 
         # check if old password equals new password
         # rows = db.execute("SELECT * FROM users WHERE email = ?", email)
         rows = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        
+        # checking to see whether the inputted email exists within the database
+        if rows is None:
+           return apology("invalid email address", 403)
+       
         if check_password_hash(rows[2], newpassword):
             return apology("Repeated password", 403)
+        
+        # ensuring that old password matches the account specified
+        if len(rows) == 0 or not check_password_hash(rows[2], oldpassword):
+            return apology("invalid email and/or password", 403)
 
         # 2nd personal touch, checks that password does not contain email
-        elif newpassword.find(email) != -1:
+        if newpassword.find(email) != -1:
             return apology("Password must not contain email")
+        
+        if oldpassword != newconfirmation:
+           return apology("password and confirmation password must match", 400)
 
         # update new password into database
         db.execute("UPDATE users SET password = ? WHERE email = ?", (generate_password_hash(newpassword), email))
@@ -543,7 +423,7 @@ def changepass():
 @login_required
 def results():    
     print("ID: "+ str(session["user_id"]))
-    top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 11", (session["user_id"],))
+    top10 = db.execute("SELECT celeb_id, user_id, name, MBTI, enne, points FROM points JOIN celebs ON points.celeb_id = celebs.id WHERE user_id = ? ORDER BY points DESC LIMIT 10", (session["user_id"],))
 
     shortlist = []
     for row in top10:
