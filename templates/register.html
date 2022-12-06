@@ -15,9 +15,12 @@ Register
             <div class="card-body p-4 p-md-5">
               <form action="/register" method = "post">
                 <div>
+                  <!-- Title -->
                   <h3 class="mb-4 pb-2 pb-md-0 md-mb-5 rhythmBlue">Register</h3>
+                  <!-- Reminder for Password Requirements -->
                   <strong class="rhythmBlue">Note: Password must contain at least 5 letters, 1 numeric digit, and 1 special character.</strong>  
                 </div>
+                <!-- Email Input -->
                 <div class="row">
                   <div class="mb-4">
                     <div class="form-outline">
@@ -25,35 +28,35 @@ Register
                     </div>
                   </div>
                 </div>
-
+                <!-- Password Input -->
                 <div class="row">
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
                         <input type="password" autocomplete="off" autofocus id="password" name="password" placeholder="Password" class="form-control form-control-lg" />
                     </div>
-
+                    <!-- Confirmation Password Input -->
                   </div>
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
                       <input type="password" autocomplete="off" autofocus id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" class="form-control form-control-lg" />
                     </div>
                 </div>
-
+                <!-- Security Question #1 Input -->
                 <div class="row">
                     <div class="col-md-6 mb-4">
                       <div class="form-outline">
                         <strong class="rhythmBlue">Security Question: What is your mother's maiden name?</strong>
                           <input type="text" autocomplete="off" autofocus id="securityques1" name="securityques1" placeholder="Answer" class="form-control form-control-lg" />
                       </div>
-
-                    </div>
+                <!-- Security Question #2 Input -->
+                    </div>  
                     <div class="col-md-6 mb-4">
                       <div class="form-outline">
                         <strong class="rhythmBlue">Security Question: What is your childhood nickname?</strong>
                           <input type="text" id="securityques2" name="securityques2" placeholder="Answer" class="form-control form-control-lg" />
                       </div>
                   </div>
-
+                  <!-- Submit Button -->
                 <div class="mt-4 pt-2">
                   <input class="btn btn-primary btn-lg" type="submit" value="Submit" />
                 </div>

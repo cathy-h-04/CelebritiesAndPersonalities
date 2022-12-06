@@ -1,39 +1,30 @@
-/* copied from finance - adjust for us!!! */
-
 /* Size for brand */
-nav .navbar-brand
-{
+nav .navbar-brand {
     font-size: xx-large;
 }
 
-.font
-{
+.font {
     font-family: "Times New Roman", Times, serif;
 }
 
-.creatorbg
-{
+.creatorb {
     background-color: #788AA3;
 }
 
-.creatorprofile
-{
+.creatorprofile {
     background-color: #7992A3;
     color: white;
 }
 
-.left
-{
+.left {
     text-align: left;
 }
 
-.boxed
-{
+.boxed {
     border: 3px solid steelblue;
 }
 
-.homepagedesign
-{
+.homepagedesign {
     position: relative;
     width: 100%;
     height: 0;
@@ -47,8 +38,7 @@ nav .navbar-brand
     will-change: transform;
 }
 
-.framestyle
-{
+.framestyle {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -59,18 +49,15 @@ nav .navbar-brand
     margin: 0;
 }
 
-.backdrop
-{
+.backdrop {
     background: whitesmoke;
 }
 
-.shadowBlue
-{
+.shadowBlue {
     color: #788AA3;
 }
 
-.rhythmBlue
-{
+.rhythmBlue {
     color: #666A86;
 }
 
@@ -78,7 +65,7 @@ nav .navbar-brand
     width: 100%;
     padding: 3px 20px;
     text-align: left;
-  }
+}
 
 .navbar-color {
     color: dimgray;
@@ -90,20 +77,17 @@ nav .navbar-brand
     -webkit-text-fill-color: transparent;
 }
 
-.btn-outline
-{
+.btn-outline{
     border-color: #788AA3;
     color: white;
 }
 
-.btn-primary
-{
+.btn-primary {
     background-color: #788AA3;
     color:white;
 }
 
-.white
-{
+.white {
     color: white;
 }
 
