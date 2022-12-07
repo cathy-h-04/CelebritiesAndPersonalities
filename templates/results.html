@@ -29,10 +29,10 @@ Match Results
                     {% for person in shortlist %}  
                     <tr>
                       <td class="text-start">{{ loop.index }}</td>
+                      <td class="text-end">{{ person[1] }}</th>
                       <td class="text-end">{{ person[2] }}</th>
                       <td class="text-end">{{ person[3] }}</th>
-                      <td class="text-end">{{ person[4] }}</th>
-                      <td class="text-end">{{ (person[5] * 100)|int }} </tr>
+                      <td class="text-end">{{ (person[4] * 100)|int }} </tr>
                     </tr>
                     {% endfor %}
                 </tbody>
